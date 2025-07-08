@@ -18,7 +18,7 @@ public class Aduana {
     private AduanaService service;
 
     //MÉTODO GET
-    //RUTA: localhost8080/apiAduana/datosAduana
+    //RUTA: localhost:8080/apiAduana/datosAduana
     @GetMapping("/datosAduana")
     public List<DTOAduana> getAduana() {
         return service.obtenerAduana();

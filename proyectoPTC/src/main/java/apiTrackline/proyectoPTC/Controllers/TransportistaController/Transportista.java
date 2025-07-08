@@ -2,13 +2,15 @@ package apiTrackline.proyectoPTC.Controllers.TransportistaController;
 
 import apiTrackline.proyectoPTC.Models.DTO.DTOTransportista;
 import apiTrackline.proyectoPTC.Services.TransportistaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/apiTransportista")
 public class Transportista {
     @Autowired
     private TransportistaService service;
@@ -23,21 +25,21 @@ public class Transportista {
     //Crear un nuevo transportista
     //Ruta: POST localhost:8080/apiTransportista/postTransportista
     @PostMapping("/postTransportista")
-    public String postTransportista(@RequestBody DTOTransportista dto) {
+    public String postTransportista(@Valid @RequestBody DTOTransportista dto) {
         return service.post(dto);
     }
 
     //Actualiza completamente a un transportista
     //Ruta: PUT localhost:8080/apiTransportista/updateTransportista/{id}
     @PutMapping("/updateTransportista/{id}")
-    public String updateTransportista(@PathVariable Long id, @RequestBody DTOTransportista dto) {
+    public String updateTransportista(@PathVariable Long id, @Valid @RequestBody DTOTransportista dto) {
         return service.update(id, dto);
     }
 
     //Actualiza parcialmente a un transportista
     //Ruta: PATCH localhost:8080/apiTransportista/updateTransportistaPartial/{id}
     @PatchMapping("/updateTransportistaPartial/{id}")
-    public String patchTransportista(@PathVariable Long id, @RequestBody DTOTransportista dto) {
+    public String patchTransportista(@PathVariable Long id,@Valid @RequestBody DTOTransportista dto) {
         return service.patch(id, dto);
     }
 

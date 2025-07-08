@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,14 +32,16 @@ public class DTOTransportista {
     @Size(max = 15, message = "El teléfono no debe exceder 15 caracteres.")
     private String telefono;
 
+    @Email(message = "El correo debe ser valido ")
     @Size(max = 100, message = "El correo no debe exceder 100 caracteres.")
     private String correo;
 
     @Size(max = 20, message = "El NIT no debe exceder 20 caracteres.")
     private String nit;
 
-    @ManyToOne
+
     @NotNull(message = "El ID del usuario es obligatorio.")
-    @JoinColumn(name = "IDUSUARIO")
-    private UsuarioEntity idUsuario;
+    private Long idUsuario;
+
+    private String nombreUsuario;
 }

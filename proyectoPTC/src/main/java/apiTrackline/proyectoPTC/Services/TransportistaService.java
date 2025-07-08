@@ -31,16 +31,21 @@ public class TransportistaService {
     //Convierte Entity a DTO
     private DTOTransportista convertirADTO(TransportistaEntity t) {
         DTOTransportista dto = new DTOTransportista();
+        dto.setIdTransportista(t.getIdTransportista());
+
+        if (t.getIdUsuario() != null) {
+            dto.setIdUsuario(t.getIdUsuario().getIdUsuario());
+            dto.setNombreUsuario(t.getIdUsuario().getUsuario()); // Accede al campo "usuario" de UsuarioEntity
+        }
         dto.setNombre(t.getNombre());
         dto.setApellido(t.getApellido());
         dto.setTelefono(t.getTelefono());
         dto.setCorreo(t.getCorreo());
         dto.setNit(t.getNit());
-        dto.setIdUsuario(t.getUsuario());
         return dto;
     }
 
-    //Post
+    // POST - Crear transportista
     public String post(DTOTransportista dto) {
         try {
             TransportistaEntity t = new TransportistaEntity();
@@ -50,10 +55,12 @@ public class TransportistaService {
             t.setCorreo(dto.getCorreo());
             t.setNit(dto.getNit());
 
-            Optional<UsuarioEntity> usuario = userRepo.findById(t.getIdTransportista());
+            // Buscar el usuario por el ID que viene en el DTO
+            Optional<UsuarioEntity> usuario = userRepo.findById(dto.getIdUsuario());
+
             if (usuario.isPresent()) {
-                t.setUsuario(usuario.get());
-                repo.save(t);
+                t.setIdUsuario(usuario.get()); // Asignar el usuario si existe
+                repo.save(t); // Guardar transportista
                 return "Transportista creado correctamente";
             } else {
                 return "Error: ID de usuario no encontrado";
@@ -62,6 +69,7 @@ public class TransportistaService {
             return "Error al crear el transportista: " + e.getMessage();
         }
     }
+
 
     // Put
     public String update(Long id, DTOTransportista dto) {
@@ -74,12 +82,19 @@ public class TransportistaService {
             t.setCorreo(dto.getCorreo());
             t.setNit(dto.getNit());
 
+            // Si también quieres actualizar el usuario:
+            if (dto.getIdUsuario() != null) {
+                Optional<UsuarioEntity> usuario = userRepo.findById(dto.getIdUsuario());
+                usuario.ifPresent(t::setIdUsuario);
+            }
+
             repo.save(t);
-            return "Información del embarque actualizada correctamente";
+            return "Información del transportista actualizada correctamente";
         } else {
-            return "Error: ";
+            return "Error: Transportista no encontrado";
         }
     }
+
 
     //Patch
     public String patch(Long id, DTOTransportista dto) {
@@ -92,9 +107,10 @@ public class TransportistaService {
             if (dto.getTelefono() != null) t.setTelefono(dto.getTelefono());
             if (dto.getCorreo() != null) t.setCorreo(dto.getCorreo());
             if (dto.getNit() != null) t.setNit(dto.getNit());
+
             if (dto.getIdUsuario() != null) {
-                Optional<UsuarioEntity> usuario = userRepo.findById(dto.getIdUsuario().getIdUsuario());
-                usuario.ifPresent(t::setUsuario);
+                Optional<UsuarioEntity> usuario = userRepo.findById(dto.getIdUsuario());
+                usuario.ifPresent(t::setIdUsuario);
             }
 
             repo.save(t);

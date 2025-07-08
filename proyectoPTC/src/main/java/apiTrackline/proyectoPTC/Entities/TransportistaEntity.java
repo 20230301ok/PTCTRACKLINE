@@ -36,5 +36,5 @@ public class TransportistaEntity {
 
     @ManyToOne
     @JoinColumn(name = "IDUSUARIO", referencedColumnName = "IDUSUARIO")
-    private UsuarioEntity usuario;
+    private UsuarioEntity idUsuario;
 }

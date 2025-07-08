@@ -21,8 +21,8 @@ public class AduanaEntity {
     @Column(name = "IDADUANA")
     private Long idAduana;
 
-    @ManyToMany
-    @JoinColumn(name = "IDTIPOSERVICIO")
+    @ManyToOne
+    @JoinColumn(name = "IDTIPOSERVICIO", referencedColumnName = "IDTIPOSERVICIO")
     private TipoServicioEntity idTipoServicio;
 
     @Column(name = "DM")
