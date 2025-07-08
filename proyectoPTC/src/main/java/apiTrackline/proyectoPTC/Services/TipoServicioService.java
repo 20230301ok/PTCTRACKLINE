@@ -31,39 +31,4 @@ public class TipoServicioService {
         dto.setTipoServicio(servicio.getTipoServicio());
         return dto;
     }
-
-    public String agregarTipoServicio(DTOTipoServicio dto) {
-        try {
-            TipoServicioEntity ts = new TipoServicioEntity();
-            ts.setTipoServicio(dto.getTipoServicio());
-
-            repo.save(ts);
-            return "Tipo de servicio agregado correctamente";
-        } catch (Exception e) {
-            return "Error al agregar el tipo de servicio: " + e.getMessage();
-        }
-    }
-
-    public String actualizarTipoServicio(Long id, DTOTipoServicio dto) {
-        Optional<TipoServicioEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            TipoServicioEntity ts = optional.get();
-
-            if (dto.getTipoServicio() != null) {
-                ts.setTipoServicio(dto.getTipoServicio());
-            }
-            repo.save(ts);
-            return "Tipo de servicio actualizado ";
-        }
-        return "Servicio no encontrado";
-    }
-
-    public String eliminarTipoServicio(Long id) {
-        if (repo.existsById(id)) {
-            repo.deleteById(id);
-            return "Tipo de servicio eliminado correctamente";
-        }
-        return "Tipo de servicio no encontrado";
-    }
-
 }

@@ -24,5 +24,5 @@ public class UsuarioEntity {
 
     @ManyToOne
     @JoinColumn(name = "IDROL", referencedColumnName = "IDROL")
-    private Long idRol;
+    private RolesEntity idRol;
 }

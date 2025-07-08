@@ -26,56 +26,11 @@ public class RolesService {
                 .collect(Collectors.toList());
         return collect;
     }
-
-    //Convierte los datos del usuario a DTO
-    private DTOTipoServicio convertirATipoServicioDTO(TipoServicioEntity servicio){
-        DTOTipoServicio dto = new DTOTipoServicio();
-        dto.setIdTipoServicio(servicio.getIdTipoServicio());
-        dto.setTipoServicio(servicio.getTipoServicio());
-        return dto;
-    }
-
     //Convertir a roles DTO
     private DTORoles convertirArolesDTO(RolesEntity rolesEntity){
         DTORoles dtoRoles = new DTORoles();
         dtoRoles.setIdRol(rolesEntity.getIdRol());
         dtoRoles.setRol(rolesEntity.getRol());
         return dtoRoles;
-    }
-
-    //Método POST
-    public String agregarRoles(DTORoles dto) {
-        try {
-            RolesEntity rolesEntity = new RolesEntity();
-            rolesEntity.setRol(dto.getRol());
-
-            repo.save(rolesEntity);
-            return "Roles agregado correctamente";
-        } catch (Exception e) {
-            return "Error al agregar el rol " + e.getMessage();
-        }
-    }
-
-    //Método actualizar
-    public String actualizarRoles(DTORoles dto, Long id){
-        Optional<RolesEntity> optional = repo.findById(id);
-        if(optional.isPresent()){
-            RolesEntity roles = optional.get();
-            if(dto.getRol() != null){
-                roles.setRol(dto.getRol());
-            }
-            repo.save(roles);
-            return "Rol actualizado ";
-        }
-        return "Rol no encontrado";
-    }
-
-    //Método eliminar
-    public String eliminarRol(Long id) {
-        if (repo.existsById(id)) {
-            repo.deleteById(id);
-            return "Rol eliminado correctamente";
-        }
-        return "Rol no encontrado";
     }
 }

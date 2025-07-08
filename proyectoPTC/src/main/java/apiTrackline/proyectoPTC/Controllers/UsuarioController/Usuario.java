@@ -23,13 +23,13 @@ public class Usuario {
     // Método para actualizar un usuario
     //La ruta sería localhost:8080/apiUser/updateUser
     @PutMapping("/updateUser/{id}")
-    public String updateUser(@PathVariable("id") long id, @RequestBody DTOUsuario userDto){
+    public String updateUser(@PathVariable Long id, @RequestBody DTOUsuario userDto){
         return service.update(id, userDto);
     }
 
     @DeleteMapping("/deleteUser/{id}")
     //La ruta sería localhost:8080/apiUser/deleteUser
-    public String deleteUser(@PathVariable("id") long id) {
+    public String deleteUser(@PathVariable Long id) {
         return service.delete(id);
     }
 
