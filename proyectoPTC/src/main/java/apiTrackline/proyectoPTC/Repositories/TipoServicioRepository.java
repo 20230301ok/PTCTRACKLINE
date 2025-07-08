@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository //Indica que hay in repositorio de métodos
 
 //Heredamos todo lo de JPARepository
-public interface TipoRepositoryRepository extends JpaRepository<TipoServicioEntity, Long>{
+public interface TipoServicioRepository extends JpaRepository<TipoServicioEntity, Long>{
 }

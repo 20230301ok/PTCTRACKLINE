@@ -18,7 +18,7 @@ public class TransportistaService {
     private TransportistaRepository repo;
 
     @Autowired
-    private UsuarioRepository userRepo;
+    private UsuarioRepository usuarioRepo;
 
     // Obtener todos los transportistas y los convierte a DTO
     public List<DTOTransportista> getData() {
@@ -56,7 +56,7 @@ public class TransportistaService {
             t.setNit(dto.getNit());
 
             // Buscar el usuario por el ID que viene en el DTO
-            Optional<UsuarioEntity> usuario = userRepo.findById(dto.getIdUsuario());
+            Optional<UsuarioEntity> usuario = usuarioRepo.findById(dto.getIdUsuario());
 
             if (usuario.isPresent()) {
                 t.setIdUsuario(usuario.get()); // Asignar el usuario si existe
@@ -82,9 +82,9 @@ public class TransportistaService {
             t.setCorreo(dto.getCorreo());
             t.setNit(dto.getNit());
 
-            // Si también quieres actualizar el usuario:
+            // Si también se quiere actualizar el usuario:
             if (dto.getIdUsuario() != null) {
-                Optional<UsuarioEntity> usuario = userRepo.findById(dto.getIdUsuario());
+                Optional<UsuarioEntity> usuario = usuarioRepo.findById(dto.getIdUsuario());
                 usuario.ifPresent(t::setIdUsuario);
             }
 
@@ -109,10 +109,9 @@ public class TransportistaService {
             if (dto.getNit() != null) t.setNit(dto.getNit());
 
             if (dto.getIdUsuario() != null) {
-                Optional<UsuarioEntity> usuario = userRepo.findById(dto.getIdUsuario());
+                Optional<UsuarioEntity> usuario = usuarioRepo.findById(dto.getIdUsuario());
                 usuario.ifPresent(t::setIdUsuario);
             }
-
             repo.save(t);
             return "Transportista actualizado parcialmente.";
         }

@@ -22,6 +22,7 @@ public class UsuarioEntity {
     @Column(name = "CONTRASENIA")
     private String contrasenia;
 
-    @Column(name = "IDROL")
+    @ManyToOne
+    @JoinColumn(name = "IDROL", referencedColumnName = "IDROL")
     private Long idRol;
 }

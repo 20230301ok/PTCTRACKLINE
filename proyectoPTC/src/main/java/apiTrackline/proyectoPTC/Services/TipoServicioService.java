@@ -2,7 +2,7 @@ package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.TipoServicioEntity;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTipoServicio;
-import apiTrackline.proyectoPTC.Repositories.TipoRepositoryRepository;
+import apiTrackline.proyectoPTC.Repositories.TipoServicioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class TipoServicioService {
     @Autowired
-    TipoRepositoryRepository repo;
+    TipoServicioRepository repo;
 
     // Método público que usa el repositorio y convierte entidades a DTOs
     //Método HTTP GET (obtener datos)
@@ -52,7 +52,6 @@ public class TipoServicioService {
             if (dto.getTipoServicio() != null) {
                 ts.setTipoServicio(dto.getTipoServicio());
             }
-
             repo.save(ts);
             return "Tipo de servicio actualizado ";
         }

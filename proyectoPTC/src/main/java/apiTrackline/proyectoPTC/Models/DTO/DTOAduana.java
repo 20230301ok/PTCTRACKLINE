@@ -13,6 +13,7 @@ public class DTOAduana {
 
     @NotBlank(message = "El id del tipo de servicio es obligatorio")
     private Long idTipoServicio;
+
     private String nombreTipoServicio;
 
     @Size(max = 50, message = "El máximo de caracteres para DM es 50")
