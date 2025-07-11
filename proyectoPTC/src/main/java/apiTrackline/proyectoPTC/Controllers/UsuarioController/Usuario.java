@@ -8,39 +8,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/apiUser")
+@RequestMapping("/apiUsuario")
 public class Usuario {
     @Autowired //Inyectamos la clase UserService
     private UsuarioService service;
 
     //Se usa GetMapping porque es el metodo HTTP que usaremos
-    //La ruta sería localhost:8080/apiUser/dataUser
-    @GetMapping("/dataUser")
+    //La ruta sería localhost:8080/apiUsuario/dataUsuario
+    @GetMapping("/dataUsuario")
     public List<DTOUsuario> getUser(){
         return service.getData();
     }
 
     // Método para actualizar un usuario
-    //La ruta sería localhost:8080/apiUser/updateUser
-    @PutMapping("/updateUser/{id}")
+    //La ruta sería localhost:8080/apiUsuario/updateUsuario
+    @PutMapping("/updateUsuario/{id}")
     public String updateUser(@PathVariable Long id, @RequestBody DTOUsuario userDto){
         return service.update(id, userDto);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    //La ruta sería localhost:8080/apiUser/deleteUser
+    @DeleteMapping("/deleteUsuario/{id}")
+    //La ruta sería localhost:8080/apiUsuario/deleteUsuario
     public String deleteUser(@PathVariable Long id) {
         return service.delete(id);
     }
 
-    @PostMapping("/postUser")
-    //La ruta sería localhost:8080/apiUser/postUser
+    @PostMapping("/postUsuario")
+    //La ruta sería localhost:8080/apiUsuario/postUsuario
     public String postUser(@RequestBody DTOUsuario userDto) {
         return service.post(userDto);
     }
 
-    @PatchMapping("/updateUserPartial/{id}")
-    //La ruta sería localhost:8080/apiUser/updateUserPartial
+    @PatchMapping("/patchUsuario/{id}")
+    //La ruta sería localhost:8080/apiUsuario/patchUsuario
     public String patchUser(@PathVariable Long id, @RequestBody DTOUsuario dto) {
         return service.patchUser(id, dto);
     }

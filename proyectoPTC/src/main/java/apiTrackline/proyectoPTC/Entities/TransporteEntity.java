@@ -13,8 +13,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class TransporteEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_id_T")
-    @SequenceGenerator(name = "seq_id_T", sequenceName = "seq_id_T", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
     @Column(name = "IDTRANSPORTE")
     private Long idTransporte;
 

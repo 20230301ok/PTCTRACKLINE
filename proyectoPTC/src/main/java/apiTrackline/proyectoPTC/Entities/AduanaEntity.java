@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 @Table(name = "TB_ADUANA")
 public class AduanaEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_id_AD")
-    @SequenceGenerator(name = "seq_id_AD", sequenceName = "seq_id_AD", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
     @Column(name = "IDADUANA")
     private Long idAduana;
 

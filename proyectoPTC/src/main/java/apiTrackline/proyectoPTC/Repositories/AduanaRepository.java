@@ -1,7 +1,7 @@
 package apiTrackline.proyectoPTC.Repositories;
 
-import apiTrackline.proyectoPTC.Entities.AduanaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import apiTrackline.proyectoPTC.Entities.AduanaEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository

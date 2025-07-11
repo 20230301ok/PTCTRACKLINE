@@ -1,5 +1,6 @@
 package apiTrackline.proyectoPTC.Repositories;
 
+
 import apiTrackline.proyectoPTC.Entities.SelectivoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

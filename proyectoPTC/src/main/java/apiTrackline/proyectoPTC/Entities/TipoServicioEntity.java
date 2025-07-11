@@ -15,8 +15,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class TipoServicioEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_id_TS")
-    @SequenceGenerator(name = "seq_id_TS", sequenceName = "seq_id_TS", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
     @Column(name = "IDTIPOSERVICIO")
     private Long idTipoServicio;
 
