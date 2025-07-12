@@ -10,20 +10,12 @@ import lombok.ToString;
 @Table(name = "TB_SELECTIVO")
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
 public class SelectivoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
-    @Column(name = "idSelectivo")
+    @Column(name = "IDSELECTIVO")
     private Long idSelectivo;
 
-    @Column(name = "verde")
-    private Boolean verde;
-
-    @Column(name = "amarillo")
-    private Boolean amarillo;
-
-    @Column(name = "rojo")
-    private Boolean rojo;
+    @Column(name = "COLORSELECTIVO")
+    private String colorSelectivo;
 }

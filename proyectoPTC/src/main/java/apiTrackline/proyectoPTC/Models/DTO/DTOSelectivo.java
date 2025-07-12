@@ -7,7 +7,5 @@ import lombok.Setter;
 public class DTOSelectivo {
     private Long idSelectivo;
 
-    private Boolean verde;
-    private Boolean amarillo;
-    private Boolean rojo;
+    private String colorSelectivo;
 }

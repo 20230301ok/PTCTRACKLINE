@@ -41,7 +41,7 @@ public class DTOTransportista {
     @Size(max = 20, message = "El NIT no debe exceder 20 caracteres.", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private String nit;
 
-    @NotNull(message = "El ID del usuario es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
+    //@NotNull(message = "El ID del usuario es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
     private Long idUsuario;
 
     private String nombreUsuario;
