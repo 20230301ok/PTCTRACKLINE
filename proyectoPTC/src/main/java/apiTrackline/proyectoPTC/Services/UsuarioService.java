@@ -55,6 +55,9 @@ public class UsuarioService {
     public String update(long id, DTOUsuario dtoUsuario){
         Optional<UsuarioEntity> optionalUser = repo.findById(id);
         if (optionalUser.isPresent()) {
+            if (repo.existsByUsuarioAndIdUsuarioNot(dtoUsuario.getUsuario(), id)) {
+                return "Error: El nombre de usuario ya está en uso por otro usuario";
+            }
             UsuarioEntity user = optionalUser.get();
             user.setUsuario(dtoUsuario.getUsuario());
             user.setContrasenia(dtoUsuario.getContrasenia());
@@ -84,30 +87,41 @@ public class UsuarioService {
     //Método HTTP POST(Insertar)
     public String post(DTOUsuario dtoUser) {
         try {
+            //Verificar que no haya un nombre de usuario igual al momento de crear el usuario
+            if (repo.existsByUsuario(dtoUser.getUsuario())) {
+                return "Error: El nombre de usuario ya existe.";
+            }
+
             UsuarioEntity user = new UsuarioEntity();
             user.setUsuario(dtoUser.getUsuario());
             user.setContrasenia(dtoUser.getContrasenia());
-            // Buscar el usuario por el ID que viene en el DTO
+
             Optional<RolesEntity> roles = rolesRepo.findById(dtoUser.getIdRol());
 
+            //Si el id del rol existe, se crea correctamente el usuario
             if (roles.isPresent()) {
-                user.setIdRol(roles.get()); // Asignar el rol si existe
-                repo.save(user); // Guardar usuario
+                user.setIdRol(roles.get());
+                repo.save(user);
                 return "Usuario creado correctamente";
-            } else {
+            }
+            else { //Si no se encuentra el id de rol, se muestra el error
                 return "Error: ID de rol no encontrado";
             }
+
         } catch (Exception e) {
             return "Error al crear el usuario: " + e.getMessage();
         }
     }
+
 
     //Método HTTP PATCH(actualizar un solo campo) por id
     public String patchUser(Long id, DTOUsuario dto) {
         Optional<UsuarioEntity> optional = repo.findById(id);
         if (optional.isPresent()) {
             UsuarioEntity user = optional.get();
-
+            if (repo.existsByUsuarioAndIdUsuarioNot(dto.getUsuario(), id)) {
+                return "Error: El nombre de usuario ya está en uso por otro usuario";
+            }
             if (dto.getUsuario() != null) {
                 user.setUsuario(dto.getUsuario());
             }

@@ -98,16 +98,20 @@ public class AduanaService {
             entity.setDigitador(dto.getDigitador());
             entity.setTramitador(dto.getTramitador());
 
-            // Si también se quiere actualizar el tipo de servicio:
+            // Validar si el nuevo idTipoServicio existe
             if (dto.getIdTipoServicio() != null) {
                 Optional<TipoServicioEntity> tipoServicio = tipoServiciorepo.findById(dto.getIdTipoServicio());
-                tipoServicio.ifPresent(entity::setIdTipoServicio);
+                if (tipoServicio.isPresent()) {
+                    entity.setIdTipoServicio(tipoServicio.get());
+                } else {
+                    return "Error: El ID de tipo de servicio ingresado no existe";
+                }
             }
 
             repo.save(entity);
             return "Información de la aduana actualizada correctamente";
         } else {
-            return "Error: Transportista no encontrado";
+            return "Error: Aduana no encontrada";
         }
     }
 
@@ -116,7 +120,7 @@ public class AduanaService {
         if (optional.isPresent()) {
             AduanaEntity entity = optional.get();
 
-            if (dto.getDM() != null) entity.setDigitador(dto.getDigitador());
+            if (dto.getDM() != null) entity.setDM(dto.getDM());
             if (dto.getPrimeraModalidad() != null) entity.setPrimeraModalidad(dto.getPrimeraModalidad());
             if (dto.getSegundaModalidad() != null) entity.setSegundaModalidad(dto.getSegundaModalidad());
             if (dto.getDigitador() != null) entity.setDigitador(dto.getDigitador());
@@ -124,12 +128,17 @@ public class AduanaService {
 
             if (dto.getIdTipoServicio() != null) {
                 Optional<TipoServicioEntity> tipoServicio = tipoServiciorepo.findById(dto.getIdTipoServicio());
-                tipoServicio.ifPresent(entity::setIdTipoServicio);
+                if(tipoServicio.isPresent()){
+                    entity.setIdTipoServicio(tipoServicio.get());
+                }
+                else {
+                    return "Error: El ID de tipo de servicio ingresado no existe";
+                }
             }
             repo.save(entity);
             return "Aduana actualizada parcialmente.";
         }
-        return "Transportista no encontrado.";
+        return "Aduana no encontrada.";
     }
 
     //ELiminar

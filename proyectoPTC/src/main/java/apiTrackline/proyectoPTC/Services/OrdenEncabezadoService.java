@@ -58,7 +58,8 @@ public class OrdenEncabezadoService {
 
             repo.save(orden);
             return "Orden creada correctamente";
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             return "Error al crear la orden: " + e.getMessage();
         }
     }

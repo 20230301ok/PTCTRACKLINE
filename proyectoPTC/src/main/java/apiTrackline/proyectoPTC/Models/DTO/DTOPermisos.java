@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DTORoles {
+public class DTOPermisos {
 
-    private Long idRol;
-
-    private String rol;
+    private Long idPermiso;
+    private String nombrePermiso;
 }

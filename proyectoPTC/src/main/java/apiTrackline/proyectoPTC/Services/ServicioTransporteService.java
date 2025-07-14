@@ -97,6 +97,7 @@ public class ServicioTransporteService {
             if (dto.getTarjetaCirculacion() != null) {
                 serviciotrans.setTarjetaCirculacion(dto.getTarjetaCirculacion());
             }
+            repo.save(serviciotrans);
             return "Servicio de transporte actualizado parcialmente";
         }
         return "Servicio de transporte no encontrado";

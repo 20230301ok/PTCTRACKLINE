@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 
 //Heredamos todo lo de JPARepository
 public interface OrdenEncabezadoRepository extends JpaRepository<OrdenEncabezadoEntity, Long> {
-
 }

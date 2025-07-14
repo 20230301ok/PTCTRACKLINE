@@ -1,7 +1,7 @@
 package apiTrackline.proyectoPTC.Models.DTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,18 +13,23 @@ import lombok.ToString;
 @Getter
 @Setter
 public class DTOUsuario {
+
     private Long idUsuario;
 
-    @NotBlank(message = "El nombre de usuario no puede estar vacío")
-    @Size(max = 30, message = "El máximo de caracteres para el nombre de usuario es 30")
+    @NotBlank(message = "El nombre de usuario no puede estar vacío", groups = {OnCreate.class, OnUpdate.class})
+    @Size(max = 50, message = "El máximo de caracteres para el nombre de usuario es 50", groups = {OnCreate.class, OnUpdate.class})
     private String usuario;
 
-    @Size(max = 16, message = "El máximo de caracteres para la contraseña es 16")
+    @NotBlank(message = "La contraseña del usuario no puede estar vacía", groups = {OnCreate.class, OnUpdate.class})
+    @Size(max = 16, message = "El máximo de caracteres para la contraseña es 16", groups = {OnCreate.class, OnUpdate.class})
     private String contrasenia;
 
+    @NotNull(message = "El rol del usuario no puede estar vacío", groups = {OnCreate.class, OnUpdate.class})
     private Long idRol;
 
     private String rol;
+
+    public interface OnCreate {}
+    public interface OnUpdate {}
+    public interface OnPatch {}
 }
-
-
