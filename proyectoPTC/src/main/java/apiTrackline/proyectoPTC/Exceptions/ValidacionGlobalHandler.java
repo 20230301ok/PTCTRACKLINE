@@ -46,7 +46,7 @@ public class ValidacionGlobalHandler {
                 if (ref.getFrom() instanceof java.util.Date || ref.getFrom().toString().contains("Date")) {
                     mensaje = "El formato de fecha es inválido. Use 'dd-MM-yyyy'.";
                 } else {
-                    mensaje = "El valor enviado no es válido para el campo: " + campo + ". Use 'dd-MM-yyyy'.";
+                    mensaje = "El valor enviado no es válido para el campo: " + campo + ". Verifique los datos";
                 }
 
                 errores.put(campo, mensaje);

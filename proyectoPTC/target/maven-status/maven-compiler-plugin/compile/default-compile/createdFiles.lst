@@ -35,6 +35,7 @@ apiTrackline\proyectoPTC\ServletInitializer.class
 apiTrackline\proyectoPTC\Controllers\InfoEmbarqueController\InfoEmbargue.class
 apiTrackline\proyectoPTC\Entities\AduanaEntity.class
 apiTrackline\proyectoPTC\Controllers\TransportistaController\Transportista.class
+apiTrackline\proyectoPTC\Repositories\RecoleccionRepository.class
 apiTrackline\proyectoPTC\Controllers\ServicioTransporteController\ServicioTransporte.class
 apiTrackline\proyectoPTC\Repositories\RolesRepository.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnCreate.class
@@ -50,6 +51,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTORoles.class
 apiTrackline\proyectoPTC\Entities\ServicioTransporteEntity.class
 apiTrackline\proyectoPTC\Controllers\SelectivoController\Selectivo.class
 apiTrackline\proyectoPTC\Models\DTO\DTOUsuario$OnCreate.class
+apiTrackline\proyectoPTC\Entities\RecoleccionEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOInfoEmbarque.class
 apiTrackline\proyectoPTC\Entities\TransporteEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnUpdate.class
@@ -67,8 +69,11 @@ apiTrackline\proyectoPTC\Models\DTO\DTOTransporte.class
 apiTrackline\proyectoPTC\Models\DTO\DTOUsuario.class
 apiTrackline\proyectoPTC\Services\ServicioTransporteService.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTipoFinanciamientos.class
+apiTrackline\proyectoPTC\Models\DTO\DTORecoleccion.class
+apiTrackline\proyectoPTC\Controllers\RecoleccionController\Recoleccion.class
 apiTrackline\proyectoPTC\Entities\SelectivoEntity.class
 apiTrackline\proyectoPTC\Entities\TransportistaEntity.class
+apiTrackline\proyectoPTC\Services\RecoleccionService.class
 apiTrackline\proyectoPTC\Models\DTO\DTOServicioTransporte.class
 apiTrackline\proyectoPTC\Repositories\PermisosRepository.class
 apiTrackline\proyectoPTC\Repositories\TipoFinanciamientosRepository.class
