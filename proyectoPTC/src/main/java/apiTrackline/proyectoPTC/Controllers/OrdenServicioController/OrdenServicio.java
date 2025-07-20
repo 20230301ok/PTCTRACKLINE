@@ -1,5 +1,7 @@
 package apiTrackline.proyectoPTC.Controllers.OrdenServicioController;
 
+import apiTrackline.proyectoPTC.Models.DTO.DTOOrdenServicio;
+import apiTrackline.proyectoPTC.Services.OrdenServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

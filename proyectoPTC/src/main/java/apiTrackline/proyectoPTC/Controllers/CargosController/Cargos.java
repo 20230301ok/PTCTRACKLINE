@@ -15,21 +15,29 @@ public class Cargos {
     @Autowired
     private CargosService service;
 
+    //METODO GET
+    //RUTA: localhost:8080/apiCargos/data
     @GetMapping("/data")
     public List<DTOCargos> getAll() {
         return service.getData();
     }
 
+    //METODO POST
+    //RUTA: localhost:8080/apiCargos/create
     @PostMapping("/create")
     public String create(@Validated(DTOCargos.OnCreate.class) @RequestBody DTOCargos dto) {
         return service.post(dto);
     }
 
+    //METODO PUT
+    //RUTA: localhost:8080/apiCargos/update/id
     @PutMapping("/update/{id}")
     public String update(@PathVariable Long id, @Validated(DTOCargos.OnUpdate.class) @RequestBody DTOCargos dto) {
         return service.update(id, dto);
     }
 
+    //METODO PATCH
+    //RUTA: localhost:8080/apiCargos/patch/id
     @PatchMapping("/patch/{id}")
     public String patch(@PathVariable Long id, @Validated(DTOCargos.OnPatch.class) @RequestBody DTOCargos dto) {
         return service.patch(id, dto);

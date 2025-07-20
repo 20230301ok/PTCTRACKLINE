@@ -1,8 +1,10 @@
 package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.CargosEntity;
+import apiTrackline.proyectoPTC.Entities.TipoDatoContableEntity;
 import apiTrackline.proyectoPTC.Models.DTO.DTOCargos;
 import apiTrackline.proyectoPTC.Repositories.CargosRepository;
+import apiTrackline.proyectoPTC.Repositories.TipoDatoContableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,38 +54,50 @@ public class CargosService {
 
     public String update(Long id, DTOCargos dto) {
         Optional<CargosEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            CargosEntity c = optional.get();
-            c.setMonto(dto.getMonto());
-
-            if (dto.getIdTipoDatoContable() != null) {
-                Optional<TipoDatoContableEntity> tipo = tipoDatoRepo.findById(dto.getIdTipoDatoContable());
-                tipo.ifPresent(c::setTipoDatoContable);
-            }
-
-            repo.save(c);
-            return "Cargo actualizado correctamente.";
-        } else {
+        if (optional.isEmpty()) {
             return "Cargo no encontrado.";
         }
+
+        CargosEntity c = optional.get();
+        c.setMonto(dto.getMonto());
+
+        if (dto.getIdTipoDatoContable() != null) {
+            Optional<TipoDatoContableEntity> tipo = tipoDatoRepo.findById(dto.getIdTipoDatoContable());
+            if (tipo.isEmpty()) {
+                return "Tipo de dato contable no encontrado.";
+            }
+            c.setTipoDatoContable(tipo.get());
+        }
+
+        repo.save(c);
+        return "Cargo actualizado correctamente.";
     }
+
 
     public String patch(Long id, DTOCargos dto) {
         Optional<CargosEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            CargosEntity c = optional.get();
-            if (dto.getMonto() != null) c.setMonto(dto.getMonto());
-
-            if (dto.getIdTipoDatoContable() != null) {
-                Optional<TipoDatoContableEntity> tipo = tipoDatoRepo.findById(dto.getIdTipoDatoContable());
-                tipo.ifPresent(c::setTipoDatoContable);
-            }
-
-            repo.save(c);
-            return "Cargo actualizado parcialmente.";
+        if (optional.isEmpty()) {
+            return "Cargo no encontrado.";
         }
-        return "Cargo no encontrado.";
+
+        CargosEntity c = optional.get();
+
+        if (dto.getMonto() != null) {
+            c.setMonto(dto.getMonto());
+        }
+
+        if (dto.getIdTipoDatoContable() != null) {
+            Optional<TipoDatoContableEntity> tipo = tipoDatoRepo.findById(dto.getIdTipoDatoContable());
+            if (tipo.isEmpty()) {
+                return "Tipo de dato contable no encontrado.";
+            }
+            c.setTipoDatoContable(tipo.get());
+        }
+
+        repo.save(c);
+        return "Cargo actualizado parcialmente.";
     }
+
 
     public String delete(Long id) {
         if (repo.existsById(id)) {

@@ -12,6 +12,7 @@ public class DTOCargos {
     private Long idCargos;
 
     @NotNull(message = "El ID del tipo de dato contable es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
+    @Positive(message = "El ID de datos contable no puede ser negativa")
     private Long idTipoDatoContable;
 
     private String nombreTipoDatoContable;
