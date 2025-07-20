@@ -6,17 +6,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "TB_TRANSPORTISTAS")
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-public class TransportistaEntity {
+@Table(name = "TB_CLIENTES")
+@Entity
+public class ClientesEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
-    @Column(name = "IDTRANSPORTISTA")
-    private Long idTransportista;
+    @Column(name = "CLIENTENIT")
+    private String clienteNit;
 
     @Column(name = "NOMBRE")
     private String nombre;
@@ -30,10 +30,10 @@ public class TransportistaEntity {
     @Column(name = "CORREO")
     private String correo;
 
-    @Column(name = "NIT")
-    private String nit;
+    @Column(name = "CODEMPRESA")
+    private String codEmpresa;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "IDUSUARIO", referencedColumnName = "IDUSUARIO")
-    private UsuarioEntity usuarioT;
+    private UsuarioEntity usuario;
 }

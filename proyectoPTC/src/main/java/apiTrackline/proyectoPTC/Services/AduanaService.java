@@ -24,12 +24,18 @@ public class AduanaService {
     @Autowired
     private TipoServicioRepository tipoServiciorepo;
 
+    //El metodo pide una lista porque en el front end solo se puede mostrar un DTO
     public List<DTOAduana> obtenerAduana(){
         List<AduanaEntity> aduana = repo.findAll();
+        //Se guarda en una lista de tipoEntity todos las aduanas encontrados en la base
+        //Es una lista de tipo Entity porque en la base de datos solo puede tener ENTITY
+        //Así que se obtiene de una lista de entity
         List<DTOAduana> collect = aduana.stream()
                 .map(this::convertirAAduanaDTO)
                 .collect(Collectors.toList());
         return collect;
+        //TODO LO QUE SALE DE LA BASE SALE COMO ENTIDAD
+        //TODO LO QUE ENTRA A LA BASE DEBE ENTRAR COMO ENTIDAD
     }
 
     // Método que convierte una entidad AduanaEntity a un objeto DTOAduana
@@ -39,11 +45,11 @@ public class AduanaService {
         // Se asigna el ID de la aduana directamente desde la entidad
         dto.setIdAduana(aduanaEntity.getIdAduana());
         // Verificamos si el objeto relacionado "TipoServicio" no es nulo (evitamos NullPointerException)
-        if (aduanaEntity.getIdTipoServicio() != null) {
+        if (aduanaEntity.getTipoServicio() != null) {
             // Se obtiene el ID del tipo de servicio relacionado
-            dto.setIdTipoServicio(aduanaEntity.getIdTipoServicio().getIdTipoServicio());
+            dto.setIdTipoServicio(aduanaEntity.getTipoServicio().getIdTipoServicio());
             // También se obtiene el nombre del tipo de servicio
-            dto.setNombreTipoServicio(aduanaEntity.getIdTipoServicio().getTipoServicio());
+            dto.setNombreTipoServicio(aduanaEntity.getTipoServicio().getTipoServicio());
         } else {
             // Si es nulo, se dejan en null ambos campos
             dto.setIdTipoServicio(null);
@@ -64,6 +70,7 @@ public class AduanaService {
     public String agregarAduana(DTOAduana dtoAduana){
         try
         {
+            //Se guardan en un entity los datos de tipo dto
             AduanaEntity entity = new AduanaEntity();
             entity.setDM(dtoAduana.getDM());
             entity.setPrimeraModalidad(dtoAduana.getPrimeraModalidad());
@@ -75,7 +82,7 @@ public class AduanaService {
             Optional<TipoServicioEntity> aduana = tipoServiciorepo.findById(dtoAduana.getIdTipoServicio());
 
             if (aduana.isPresent()) {
-                entity.setIdTipoServicio(aduana.get()); // Asignar el tipo servicio si existe
+                entity.setTipoServicio(aduana.get()); // Asignar el tipo servicio si existe
                 repo.save(entity); // Guardar aduana
                 return "Transportista creado correctamente";
             } else {
@@ -102,7 +109,7 @@ public class AduanaService {
             if (dto.getIdTipoServicio() != null) {
                 Optional<TipoServicioEntity> tipoServicio = tipoServiciorepo.findById(dto.getIdTipoServicio());
                 if (tipoServicio.isPresent()) {
-                    entity.setIdTipoServicio(tipoServicio.get());
+                    entity.setTipoServicio(tipoServicio.get());
                 } else {
                     return "Error: El ID de tipo de servicio ingresado no existe";
                 }
@@ -129,7 +136,7 @@ public class AduanaService {
             if (dto.getIdTipoServicio() != null) {
                 Optional<TipoServicioEntity> tipoServicio = tipoServiciorepo.findById(dto.getIdTipoServicio());
                 if(tipoServicio.isPresent()){
-                    entity.setIdTipoServicio(tipoServicio.get());
+                    entity.setTipoServicio(tipoServicio.get());
                 }
                 else {
                     return "Error: El ID de tipo de servicio ingresado no existe";

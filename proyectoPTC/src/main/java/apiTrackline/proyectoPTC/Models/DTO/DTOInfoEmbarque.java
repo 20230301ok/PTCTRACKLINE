@@ -2,6 +2,7 @@ package apiTrackline.proyectoPTC.Models.DTO;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,7 @@ public class DTOInfoEmbarque {
     @Size(max = 50, message = "El campo 'proveedorRef' debe tener como máximo 50 caracteres")
     private String proveedorRef;
 
-    @Min(value = 0, message = "El número de bultos no puede ser negativo")
+    @Positive(message = "El número de bultos no puede ser negativo")
     private Long bultos;
 
     // Solo letras y espacios
@@ -29,9 +30,10 @@ public class DTOInfoEmbarque {
     @Size(max = 50, message = "El campo 'tipo' debe tener como máximo 50 caracteres")
     private String tipo;
 
-    @Min(value = 0, message = "Los kilos no pueden ser negativos")
+
+    @Positive(message = "El número de kilos no puede ser negativos")
     private Double kilos;
 
-    @Min(value = 0, message = "El volumen no puede ser negativo")
+    @Positive(message = "El volumen no puede ser negativo")
     private Double volumen;
 }

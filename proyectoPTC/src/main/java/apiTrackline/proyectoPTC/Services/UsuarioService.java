@@ -38,11 +38,11 @@ public class UsuarioService {
         dto.setContrasenia(user.getContrasenia());
 
         // Verificamos si el objeto relacionado "id rol" no es nulo (evitamos NullPointerException)
-        if (user.getIdRol() != null) {
+        if (user.getRol() != null) {
             // Se obtiene el ID del rol relacionado
-            dto.setIdRol(user.getIdRol().getIdRol());
+            dto.setIdRol(user.getRol().getIdRol());
             // También se obtiene el nombre del rol
-            dto.setRol(user.getIdRol().getRol());
+            dto.setRol(user.getRol().getRol());
         } else {
             // Si es nulo, se dejan en null ambos campos
             dto.setIdRol(null);
@@ -62,9 +62,9 @@ public class UsuarioService {
             user.setUsuario(dtoUsuario.getUsuario());
             user.setContrasenia(dtoUsuario.getContrasenia());
             // Si también se quiere actualizar el rol:
-            if (user.getIdRol() != null) {
+            if (user.getRol() != null) {
                 Optional<RolesEntity> usuario = rolesRepo.findById(dtoUsuario.getIdRol());
-                usuario.ifPresent(user::setIdRol);
+                usuario.ifPresent(user::setRol);
             }
             repo.save(user);
             return "Usuario actualizado correctamente";
@@ -100,7 +100,7 @@ public class UsuarioService {
 
             //Si el id del rol existe, se crea correctamente el usuario
             if (roles.isPresent()) {
-                user.setIdRol(roles.get());
+                user.setRol(roles.get());
                 repo.save(user);
                 return "Usuario creado correctamente";
             }
@@ -130,7 +130,7 @@ public class UsuarioService {
             }
             if (dto.getIdRol() != null) {
                 Optional<RolesEntity> usuario = rolesRepo.findById(dto.getIdRol());
-                usuario.ifPresent(user::setIdRol);
+                usuario.ifPresent(user::setRol);
             }
 
             repo.save(user);

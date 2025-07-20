@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "TB_TIPOSERVICIO")
 @Getter
@@ -21,4 +24,8 @@ public class TipoServicioEntity {
 
     @Column(name = "TIPOSERVICIO")
     private String tipoServicio;
+
+    //Atributo extra para hacer una relación
+    @OneToMany(mappedBy = "tipoServicio", cascade = CascadeType.ALL)
+    private List<TipoServicioEntity> Servicios = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package apiTrackline.proyectoPTC.Entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -7,16 +8,17 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "TB_TRANSPORTISTAS")
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-public class TransportistaEntity {
+@Table(name = "TB_EMPLEADOS")
+public class EmpleadosEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
-    @Column(name = "IDTRANSPORTISTA")
-    private Long idTransportista;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "IDEMPLEADO")
+    private Long idEmpleado;
 
     @Column(name = "NOMBRE")
     private String nombre;
@@ -25,7 +27,7 @@ public class TransportistaEntity {
     private String apellido;
 
     @Column(name = "TELEFONO")
-    private String telefono;
+    private  String telefono;
 
     @Column(name = "CORREO")
     private String correo;
@@ -33,7 +35,7 @@ public class TransportistaEntity {
     @Column(name = "NIT")
     private String nit;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "IDUSUARIO", referencedColumnName = "IDUSUARIO")
-    private UsuarioEntity usuarioT;
+    private UsuarioEntity usuarioEmpleado;
 }

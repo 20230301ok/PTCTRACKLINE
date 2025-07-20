@@ -20,9 +20,10 @@ public class AduanaEntity {
     @Column(name = "IDADUANA")
     private Long idAduana;
 
+    //LLave foránea hacia la tabla tb_tipoServicio
     @ManyToOne
     @JoinColumn(name = "IDTIPOSERVICIO", referencedColumnName = "IDTIPOSERVICIO")
-    private TipoServicioEntity idTipoServicio;
+    private TipoServicioEntity tipoServicio;
 
     @Column(name = "DM")
     private String DM;

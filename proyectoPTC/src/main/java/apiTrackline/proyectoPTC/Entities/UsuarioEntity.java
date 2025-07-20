@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "TB_USUARIOS")
 @Getter @Setter @ToString @EqualsAndHashCode
@@ -21,7 +24,19 @@ public class UsuarioEntity {
     @Column(name = "CONTRASENIA")
     private String contrasenia;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "IDROL", referencedColumnName = "IDROL")
-    private RolesEntity idRol;
+    private RolesEntity Rol;
+
+    //Atributo extra para hacer una relación a la tabla transportista
+    @OneToOne(mappedBy = "usuarioT", cascade = CascadeType.ALL)
+    private TransportistaEntity transportistas;
+
+    //Atributo extra para hacer una relación a la tabla Cliente
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private ClientesEntity clientes ;
+
+    @OneToOne(mappedBy = "usuarioEmpleado", cascade = CascadeType.ALL)
+    private EmpleadosEntity empleados;
+
 }

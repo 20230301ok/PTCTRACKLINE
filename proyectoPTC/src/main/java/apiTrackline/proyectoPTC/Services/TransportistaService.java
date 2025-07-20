@@ -1,8 +1,12 @@
 package apiTrackline.proyectoPTC.Services;
 
+import apiTrackline.proyectoPTC.Entities.ClientesEntity;
+import apiTrackline.proyectoPTC.Entities.EmpleadosEntity;
 import apiTrackline.proyectoPTC.Entities.TransportistaEntity;
 import apiTrackline.proyectoPTC.Entities.UsuarioEntity;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTransportista;
+import apiTrackline.proyectoPTC.Repositories.ClientesRepository;
+import apiTrackline.proyectoPTC.Repositories.EmpleadosRepository;
 import apiTrackline.proyectoPTC.Repositories.TransportistaRepository;
 import apiTrackline.proyectoPTC.Repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +18,20 @@ import java.util.stream.Collectors;
 
 @Service
 public class TransportistaService {
+
     @Autowired
     private TransportistaRepository repo;
 
     @Autowired
     private UsuarioRepository usuarioRepo;
 
-    // Obtener todos los transportistas y los convierte a DTO
+    @Autowired
+    private EmpleadosRepository empleadosRepo;
+
+    @Autowired
+    private ClientesRepository clientesRepo;
+
+    // Obtener todos los transportistas y convertirlos a DTO
     public List<DTOTransportista> getData() {
         List<TransportistaEntity> lista = repo.findAll();
         return lista.stream()
@@ -28,21 +39,33 @@ public class TransportistaService {
                 .collect(Collectors.toList());
     }
 
-    //Convierte Entity a DTO
     private DTOTransportista convertirADTO(TransportistaEntity t) {
         DTOTransportista dto = new DTOTransportista();
         dto.setIdTransportista(t.getIdTransportista());
-
-        if (t.getIdUsuario() != null) {
-            dto.setIdUsuario(t.getIdUsuario().getIdUsuario());
-            dto.setNombreUsuario(t.getIdUsuario().getUsuario()); // Accede al campo "usuario" de UsuarioEntity
-        }
         dto.setNombre(t.getNombre());
         dto.setApellido(t.getApellido());
         dto.setTelefono(t.getTelefono());
         dto.setCorreo(t.getCorreo());
         dto.setNit(t.getNit());
+
+        if (t.getUsuarioT() != null) {
+            UsuarioEntity u = t.getUsuarioT();
+            dto.setIdUsuario(u.getIdUsuario());
+            dto.setNombreUsuario(u.getUsuario());
+            if (u.getRol() != null) {
+                dto.setIdRol(u.getRol().getIdRol());
+                dto.setNombreRol(u.getRol().getRol());
+            }
+        }
         return dto;
+    }
+
+    private boolean usuarioYaAsignado(Long idUsuario, Long idTransportistaActual) {
+        boolean usadoPorEmpleado = empleadosRepo.existsByUsuarioEmpleado_IdUsuario(idUsuario);
+        boolean usadoPorCliente = clientesRepo.existsByUsuario_IdUsuario(idUsuario);
+        boolean usadoPorOtroTransportista = repo.existsByUsuarioT_IdUsuarioAndIdTransportistaNot(idUsuario, idTransportistaActual);
+
+        return usadoPorEmpleado || usadoPorCliente || usadoPorOtroTransportista;
     }
 
     // POST - Crear transportista
@@ -55,23 +78,27 @@ public class TransportistaService {
             t.setCorreo(dto.getCorreo());
             t.setNit(dto.getNit());
 
-            // Buscar el usuario por el ID que viene en el DTO
-            Optional<UsuarioEntity> usuario = usuarioRepo.findById(dto.getIdUsuario());
+            if (dto.getIdUsuario() != null) {
+                if (usuarioYaAsignado(dto.getIdUsuario(), -1L)) {
+                    return "Error: El usuario ya está asignado a otro registro";
+                }
 
-            if (usuario.isPresent()) {
-                t.setIdUsuario(usuario.get()); // Asignar el usuario si existe
-                repo.save(t); // Guardar transportista
-                return "Transportista creado correctamente";
-            } else {
-                return "Error: ID de usuario no encontrado";
+                Optional<UsuarioEntity> usuario = usuarioRepo.findById(dto.getIdUsuario());
+                if (usuario.isPresent()) {
+                    t.setUsuarioT(usuario.get());
+                } else {
+                    return "Error: ID de usuario no encontrado";
+                }
             }
+
+            repo.save(t);
+            return "Transportista creado correctamente";
         } catch (Exception e) {
             return "Error al crear el transportista: " + e.getMessage();
         }
     }
 
-
-    // Put
+    // PUT - Actualización completa
     public String update(Long id, DTOTransportista dto) {
         Optional<TransportistaEntity> optional = repo.findById(id);
         if (optional.isPresent()) {
@@ -82,10 +109,17 @@ public class TransportistaService {
             t.setCorreo(dto.getCorreo());
             t.setNit(dto.getNit());
 
-            // Si también se quiere actualizar el usuario:
             if (dto.getIdUsuario() != null) {
+                if (usuarioYaAsignado(dto.getIdUsuario(), id)) {
+                    return "Error: El usuario ya está asignado a otro registro";
+                }
+
                 Optional<UsuarioEntity> usuario = usuarioRepo.findById(dto.getIdUsuario());
-                usuario.ifPresent(t::setIdUsuario);
+                if (usuario.isPresent()) {
+                    t.setUsuarioT(usuario.get());
+                } else {
+                    return "Error: ID de usuario no encontrado";
+                }
             }
 
             repo.save(t);
@@ -95,8 +129,7 @@ public class TransportistaService {
         }
     }
 
-
-    //Patch
+    // PATCH - Actualización parcial
     public String patch(Long id, DTOTransportista dto) {
         Optional<TransportistaEntity> optional = repo.findById(id);
         if (optional.isPresent()) {
@@ -109,16 +142,26 @@ public class TransportistaService {
             if (dto.getNit() != null) t.setNit(dto.getNit());
 
             if (dto.getIdUsuario() != null) {
+                if (usuarioYaAsignado(dto.getIdUsuario(), id)) {
+                    return "Error: El usuario ya está asignado a otro registro";
+                }
+
                 Optional<UsuarioEntity> usuario = usuarioRepo.findById(dto.getIdUsuario());
-                usuario.ifPresent(t::setIdUsuario);
+                if (usuario.isPresent()) {
+                    t.setUsuarioT(usuario.get());
+                } else {
+                    return "Error: ID de usuario no encontrado";
+                }
             }
+
             repo.save(t);
-            return "Transportista actualizado parcialmente.";
+            return "Transportista actualizado parcialmente";
+        } else {
+            return "Error: Transportista no encontrado";
         }
-        return "Transportista no encontrado.";
     }
 
-    //ELiminar
+    // DELETE
     public String delete(Long id) {
         Optional<TransportistaEntity> optional = repo.findById(id);
         if (optional.isPresent()) {

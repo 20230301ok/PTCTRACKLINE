@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransportistaRepository extends JpaRepository<TransportistaEntity, Long> {
+    boolean existsByUsuarioT_IdUsuario(Long idUsuario);
+    boolean existsByUsuarioT_IdUsuarioAndIdTransportistaNot(Long idUsuario, Long idUsuarioActual);
 }

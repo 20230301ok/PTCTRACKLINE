@@ -1,4 +1,6 @@
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\AduanaController\Aduana.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\ClientesController\Clientes.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\EmpleadosController\EmpleadosController.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\InfoEmbarqueController\InfoEmbargue.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\OrdenEncabezadoController\OrdenEncabezado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\PermisosController\Permisos.java
@@ -12,6 +14,8 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\TransportistaController\Transportista.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\UsuarioController\Usuario.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\AduanaEntity.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\ClientesEntity.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\EmpleadosEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\InfoEmbarqueEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\OrdenEncabezadoEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\PermisosEntity.java
@@ -26,6 +30,8 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\UsuarioEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ValidacionGlobalHandler.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOAduana.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOClientes.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOEmpleados.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOInfoEmbarque.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOOrdenEncabezado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOPermisos.java
@@ -40,6 +46,8 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOUsuario.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\ProyectoPtcApplication.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\AduanaRepository.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\ClientesRepository.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\EmpleadosRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\InfoEmbarqueRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\OrdenEncabezadoRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\PermisosRepository.java
@@ -53,6 +61,8 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\TransportistaRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\UsuarioRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\AduanaService.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\ClientesService.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\EmpleadosService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\InfoEmbarqueService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\OrdenEncabezadoService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\PermisosService.java
