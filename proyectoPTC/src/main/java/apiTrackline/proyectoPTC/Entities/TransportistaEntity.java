@@ -33,7 +33,8 @@ public class TransportistaEntity {
     @Column(name = "NIT")
     private String nit;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "IDUSUARIO", referencedColumnName = "IDUSUARIO")
     private UsuarioEntity usuarioT;
+
 }

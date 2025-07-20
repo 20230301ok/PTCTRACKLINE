@@ -1,6 +1,5 @@
 package apiTrackline.proyectoPTC.Entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

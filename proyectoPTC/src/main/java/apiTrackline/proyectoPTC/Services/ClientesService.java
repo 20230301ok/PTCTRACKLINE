@@ -1,12 +1,14 @@
 package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.ClientesEntity;
+import apiTrackline.proyectoPTC.Entities.OrdenEncabezadoEntity;
 import apiTrackline.proyectoPTC.Entities.UsuarioEntity;
 import apiTrackline.proyectoPTC.Models.DTO.DTOClientes;
 import apiTrackline.proyectoPTC.Repositories.ClientesRepository;
 import apiTrackline.proyectoPTC.Repositories.EmpleadosRepository;
 import apiTrackline.proyectoPTC.Repositories.TransportistaRepository;
 import apiTrackline.proyectoPTC.Repositories.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -159,12 +161,13 @@ public class ClientesService {
     }
 
 
-    public String eliminarCliente(String nit){
-        Optional<ClientesEntity> optional = repo.findById(nit);
-        if(optional.isPresent()){
+    public String eliminarCliente(String nit) {
+        Optional<ClientesEntity> optional = repo.findById(nit); //Elimina por  ID identificado
+        if (optional.isPresent()){
             repo.deleteById(nit);
-            return "Cliente eliminado";
+            return "Orden eliminada correctamente";
+        } else {
+            return "Orden no encontrada";
         }
-        return "Cliente no encontrado con NIT: " + nit;
     }
 }

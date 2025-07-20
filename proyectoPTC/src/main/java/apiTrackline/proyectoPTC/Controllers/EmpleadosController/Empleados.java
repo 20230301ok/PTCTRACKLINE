@@ -1,6 +1,5 @@
 package apiTrackline.proyectoPTC.Controllers.EmpleadosController;
 
-import apiTrackline.proyectoPTC.Models.DTO.DTOClientes;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEmpleados;
 import apiTrackline.proyectoPTC.Services.EmpleadosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/apiEmpleados")
-public class EmpleadosController {
+public class Empleados {
 
     @Autowired
     private EmpleadosService service;

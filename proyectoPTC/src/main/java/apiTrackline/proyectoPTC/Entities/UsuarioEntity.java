@@ -28,15 +28,12 @@ public class UsuarioEntity {
     @JoinColumn(name = "IDROL", referencedColumnName = "IDROL")
     private RolesEntity Rol;
 
-    //Atributo extra para hacer una relación a la tabla transportista
-    @OneToOne(mappedBy = "usuarioT", cascade = CascadeType.ALL)
-    private TransportistaEntity transportistas;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<ClientesEntity> clientes;
 
-    //Atributo extra para hacer una relación a la tabla Cliente
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private ClientesEntity clientes ;
+    @OneToMany(mappedBy = "usuarioEmpleado", cascade = CascadeType.ALL)
+    private List<EmpleadosEntity> empleados;
 
-    @OneToOne(mappedBy = "usuarioEmpleado", cascade = CascadeType.ALL)
-    private EmpleadosEntity empleados;
-
+    @OneToMany(mappedBy = "usuarioT", cascade = CascadeType.ALL)
+    private List<TransportistaEntity> transportistas;
 }
