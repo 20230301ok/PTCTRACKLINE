@@ -62,4 +62,7 @@ public class OrdenServicioEntity {
     @OneToMany(mappedBy = "OrdenServicio", cascade = CascadeType.ALL)
     private List<ViajeEntity> viajes;
 
+    @OneToMany(mappedBy = "OrdenServicioEstados", cascade = CascadeType.ALL)
+    private List<EstadosEntity> estados;
+
 }

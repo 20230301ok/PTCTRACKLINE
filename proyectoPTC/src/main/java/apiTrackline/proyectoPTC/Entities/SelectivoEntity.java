@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @Table(name = "TB_SELECTIVO")
 @Getter
@@ -17,4 +19,7 @@ public class SelectivoEntity {
 
     @Column(name = "COLORSELECTIVO")
     private String colorSelectivo;
+
+    @OneToMany(mappedBy = "Selectivo", cascade = CascadeType.ALL)
+    private List<EstadosEntity> estados;
 }
