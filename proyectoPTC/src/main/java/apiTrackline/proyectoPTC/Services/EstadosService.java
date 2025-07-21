@@ -45,7 +45,7 @@ public class EstadosService {
         dto.setEquipoTransporte(entity.getEquipoTransporte());
         dto.setCarga(entity.getCarga());
         dto.setEnCamino(entity.getEnCamino());
-        dto.setEntrega(entity.getEntrega());
+        dto.setEntregada(entity.getEntregada());
         dto.setFacturacion(entity.getFacturacion());
 
         if (entity.getOrdenServicioEstados() != null)
@@ -71,7 +71,7 @@ public class EstadosService {
             entity.setEquipoTransporte(dto.getEquipoTransporte());
             entity.setCarga(dto.getCarga());
             entity.setEnCamino(dto.getEnCamino());
-            entity.setEntrega(dto.getEntrega());
+            entity.setEntregada(dto.getEntregada());
             entity.setFacturacion(dto.getFacturacion());
 
             if (dto.getIdOrdenServicio() != null) {
@@ -105,7 +105,7 @@ public class EstadosService {
             entity.setEquipoTransporte(dto.getEquipoTransporte());
             entity.setCarga(dto.getCarga());
             entity.setEnCamino(dto.getEnCamino());
-            entity.setEntrega(dto.getEntrega());
+            entity.setEntregada(dto.getEntregada());
             entity.setFacturacion(dto.getFacturacion());
 
             if (dto.getIdOrdenServicio() != null) {
@@ -139,7 +139,7 @@ public class EstadosService {
             if (dto.getEquipoTransporte() != null) entity.setEquipoTransporte(dto.getEquipoTransporte());
             if (dto.getCarga() != null) entity.setCarga(dto.getCarga());
             if (dto.getEnCamino() != null) entity.setEnCamino(dto.getEnCamino());
-            if (dto.getEntrega() != null) entity.setEntrega(dto.getEntrega());
+            if (dto.getEntregada() != null) entity.setEntregada(dto.getEntregada());
             if (dto.getFacturacion() != null) entity.setFacturacion(dto.getFacturacion());
 
             if (dto.getIdOrdenServicio() != null) {

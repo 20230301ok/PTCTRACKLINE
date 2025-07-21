@@ -7,6 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name = "TB_ESTADOS")
 public class EstadosEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,16 +19,38 @@ public class EstadosEntity {
     @JoinColumn(name = "IDSELECTIVO", referencedColumnName = "IDSELECTIVO")
     private SelectivoEntity Selectivo;
 
+
+    @Column(name = "DOCUMENTOS")
     private Boolean documentos;
+
+    @Column(name = "CLASIFICACION")
     private Boolean clasificacion;
+
+    @Column(name = "DIGITACION")
     private Boolean digitacion;
+
+    @Column(name = "REGISTRO")
     private Boolean registro;
+
+    @Column(name = "PAGO")
     private Boolean pago;
+
+    @Column(name = "LEVANTEPAGO")
     private Boolean levantePago;
+
+    @Column(name = "EQUIPOTRANSPORTE")
     private Boolean equipoTransporte;
+
+    @Column(name = "CARGA")
     private Boolean carga;
+
+    @Column(name = "ENCAMINO")
     private Boolean enCamino;
-    private Boolean entrega;
+
+    @Column(name = "ENTREGADA")
+    private Boolean entregada;
+
+    @Column(name = "FACTURACION")
     private Boolean facturacion;
 
     //Estados -------- Ordenes de servicio

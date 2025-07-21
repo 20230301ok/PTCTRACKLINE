@@ -20,9 +20,9 @@ public class TrackingEntity {
     @JoinColumn(name = "IDVIAJE")
     private ViajeEntity idViaje;
 
-//    @ManyToOne
-//    @JoinColumn(name = "IDESTADO")
-//    private EstadoEntity idEstado;
+    @ManyToOne
+    @JoinColumn(name = "IDESTADO")
+    private EstadosEntity idEstado;
 
     @Column(name = "HORAESTIMADAPARTIDA")
     private LocalDateTime horaEstimadaPartida;

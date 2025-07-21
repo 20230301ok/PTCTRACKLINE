@@ -2,6 +2,7 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\CargosController\Cargos.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\ClientesController\Clientes.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\EmpleadosController\Empleados.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\EstadosController\Estados.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\FinanciamientoController\Financiamiento.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\InfoEmbarqueController\InfoEmbargue.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Controllers\ObservacionesController\Observaciones.java
@@ -25,6 +26,7 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\CargosEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\ClientesEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\EmpleadosEntity.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\EstadosEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\FinanciamientoEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\InfoEmbarqueEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\ObservacionesEntity.java
@@ -49,6 +51,7 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOCargos.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOClientes.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOEmpleados.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOEstados.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOFinanciamiento.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOInfoEmbarque.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOObservaciones.java
@@ -73,6 +76,7 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\CargosRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\ClientesRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\EmpleadosRepository.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\EstadosRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\FinanciamientoRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\InfoEmbarqueRepository.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Repositories\ObservacionesRepository.java
@@ -96,6 +100,7 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\CargosService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\ClientesService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\EmpleadosService.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\EstadosService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\FinanciamientoService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\InfoEmbarqueService.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Services\ObservacionesService.java

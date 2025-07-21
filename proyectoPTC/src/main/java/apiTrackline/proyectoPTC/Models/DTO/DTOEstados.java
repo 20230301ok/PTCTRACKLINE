@@ -23,7 +23,7 @@ public class DTOEstados {
     private Boolean equipoTransporte;
     private Boolean carga;
     private Boolean enCamino;
-    private Boolean entrega;
+    private Boolean entregada;
     private Boolean facturacion;
 
     @Positive(message = "El idOrdenServicio no puede ser negativo", groups = {OnCreate.class, OnPatch.class, OnUpdate.class})

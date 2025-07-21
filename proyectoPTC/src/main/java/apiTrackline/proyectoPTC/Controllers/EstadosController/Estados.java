@@ -24,28 +24,28 @@ public class Estados {
     }
 
     // POST: Crear un nuevo estado
-    // Ruta: POST /apiEstados/agregar
+    // Ruta: POST localhost:8080/apiEstados/agregar
     @PostMapping("/agregar")
     public String agregar(@RequestBody @Validated({DTOEstados.OnCreate.class, Default.class}) DTOEstados dto) {
         return service.agregarEstado(dto);
     }
 
     // PUT: Actualizar completamente un estado
-    // Ruta: PUT /apiEstados/actualizar/{id}
+    // Ruta: PUT localhost:8080/apiEstados/actualizar/{id}
     @PutMapping("/actualizar/{id}")
     public String actualizar(@PathVariable Long id, @RequestBody @Validated({DTOEstados.OnUpdate.class}) DTOEstados dto) {
         return service.actualizarEstado(id, dto);
     }
 
     // PATCH: Actualizar parcialmente un estado
-    // Ruta: PATCH /apiEstados/patch/{id}
+        // Ruta: PATCH localhost:8080/apiEstados/patch/{id}
     @PatchMapping("/patch/{id}")
     public String patch(@PathVariable Long id, @RequestBody @Validated({DTOEstados.OnPatch.class}) DTOEstados dto) {
         return service.patchEstado(id, dto);
     }
 
     // DELETE: Eliminar un estado por su ID
-    // Ruta: DELETE /apiEstados/eliminar/{id}
+    // Ruta: DELETE localhost:8080/apiEstados/eliminar/{id}
     @DeleteMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id) {
         return service.eliminarEstado(id);
