@@ -28,7 +28,7 @@ public class ValidacionGlobalHandler {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    // Este método captura errores de formato en el cuerpo de la petición, como fechas mal escritas o tipos numéricos inválidos.
+    // Este metodo captura errores de formato en el cuerpo de la petición, como fechas mal escritas o tipos numéricos inválidos.
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> manejarErroresDeLectura(HttpMessageNotReadableException ex) {
         Map<String, String> errores = new HashMap<>();

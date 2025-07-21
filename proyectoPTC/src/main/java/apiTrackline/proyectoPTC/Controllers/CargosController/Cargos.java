@@ -43,6 +43,8 @@ public class Cargos {
         return service.patch(id, dto);
     }
 
+    //METODO DELETE
+    //RUTA: localhost:8080/apiCargos/delete/id
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         return service.delete(id);

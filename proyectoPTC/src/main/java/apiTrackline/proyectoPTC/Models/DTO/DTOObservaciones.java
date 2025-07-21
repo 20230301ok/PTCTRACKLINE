@@ -13,11 +13,13 @@ public class DTOObservaciones {
 
     @NotNull(message = "El ID del selectivo es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
     private Long idSelectivo;
+    private String colorSelectivo;
 
-    @Size(max = 50, message = "La observación no debe exceder los 50 caracteres.", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
+
+    @Size(max = 50, message = "El campo 'observaciones' no debe exceder los 50 caracteres.", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private String observaciones;
 
-    private String colorSelectivo;
+
 
     // Grupos de validación
     public interface OnCreate {}

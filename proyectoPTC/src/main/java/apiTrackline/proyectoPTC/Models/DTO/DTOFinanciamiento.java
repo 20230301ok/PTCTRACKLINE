@@ -13,12 +13,11 @@ public class DTOFinanciamiento {
 
     @NotNull(message = "El ID del tipo de financiamiento es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
     private Long idTipoFinanciamiento;
-
     private String nombreTipoFinanciamiento;
 
     @NotNull(message = "El monto es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
-    @DecimalMin(value = "0.00", message = "El monto no puede ser negativo.", groups = {OnCreate.class, OnUpdate.class})
-    private Double monto;
+    @DecimalMin(value = "0.00", message = "El monto no puede ser negativo.", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
+    private Long monto;
 
     public interface OnCreate {}
     public interface OnUpdate {}

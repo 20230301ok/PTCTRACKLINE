@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "TB_ORDENENCABEZADO")
 @Getter @Setter @ToString @EqualsAndHashCode
-public class OrdenEncabezadoEntity {
+public class    OrdenEncabezadoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
     @Column(name = "IDORDENENCABEZADO")

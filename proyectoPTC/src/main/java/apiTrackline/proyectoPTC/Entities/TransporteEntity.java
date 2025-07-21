@@ -6,21 +6,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Getter @Setter @EqualsAndHashCode @ToString
 @Entity
 @Table(name = "TB_TRANSPORTE")
-@Getter
-@Setter
-@EqualsAndHashCode
 public class TransporteEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDTRANSPORTE")
     private Long idTransporte;
 
     @ManyToOne
-    @JoinColumn(name = "IDTRANSPORTISTA") private TransportistaEntity idTransportista;
+    @JoinColumn(name = "IDTRANSPORTISTA", referencedColumnName = "IDTRANSPORTISTA")
+    private TransportistaEntity transportista;
 
     @ManyToOne
-    @JoinColumn(name = "IDSERVICIOTRANSPORTE") private TransportistaEntity idServicioTransporte;
-
+    @JoinColumn(name = "IDSERVICIOTRANSPORTE", referencedColumnName = "IDSERVICIOTRANSPORTE")
+    private ServicioTransporteEntity servicioTransporte;
 }

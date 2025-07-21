@@ -21,5 +21,5 @@ public class CargosEntity {
     private TipoDatoContableEntity tipoDatoContable;
 
     @Column(name = "MONTO")
-    private Double monto;
+    private Long monto;
 }

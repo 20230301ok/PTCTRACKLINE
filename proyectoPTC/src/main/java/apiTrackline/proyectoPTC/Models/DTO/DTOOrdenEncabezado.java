@@ -54,7 +54,7 @@ public class DTOOrdenEncabezado {
     private String encargado2;
 
     @JsonProperty("NIT2")
-    @Size(max = 18, message = "El campo para el NIT(1) tiene un máximo de 18 caracteres", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
+    @Size(max = 18, message = "El campo para el NIT(2) tiene un máximo de 18 caracteres", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private String NIT2;
 
     @Size(max = 10, message = "El campo para el registro de IVA(2) tiene un máximo de 10 caracteres", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})

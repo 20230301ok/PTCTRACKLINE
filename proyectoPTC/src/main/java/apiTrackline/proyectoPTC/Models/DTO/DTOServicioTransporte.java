@@ -22,6 +22,5 @@ public class DTOServicioTransporte {
 
     @Size(max = 50, message = "La capacidad no debe exceder 50 caracteres.")
     private String capacidad;
-
 }
 

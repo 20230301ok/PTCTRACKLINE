@@ -20,5 +20,5 @@ public class OrdenPermisosEntity {
     private PermisosEntity idPermiso;
     
     @Column(name = "MARCADO")
-    private Long marcado;
+    private Boolean marcado;
 }

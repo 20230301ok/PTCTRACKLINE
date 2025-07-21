@@ -24,5 +24,5 @@ public class FinanciamientoEntity {
     private TipoFinanciamientosEntity tipoFinanciamiento;
 
     @Column(name = "MONTO")
-    private Double monto;
+    private Long monto;
 }
