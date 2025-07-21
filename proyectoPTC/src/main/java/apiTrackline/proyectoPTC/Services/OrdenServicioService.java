@@ -291,36 +291,249 @@ public class OrdenServicioService {
 
 
     public String update(Long id, DTOOrdenServicio dto) {
-        Optional<OrdenServicioEntity> optional = repo.findById(id);
-        if (optional.isEmpty()) return "Orden de servicio no encontrada";
+        try {
+            Optional<OrdenServicioEntity> optional = repo.findById(id);
+            if (optional.isEmpty()) return "Error: Orden de servicio no encontrada";
 
-        OrdenServicioEntity entity = optional.get();
-        entity.setClienteNIT(dto.getClienteNIT());
-        setRelaciones(dto, entity);
-        repo.save(entity);
-        return "Orden de servicio actualizada correctamente";
+            OrdenServicioEntity entity = optional.get();
+
+            // Cliente
+            if (dto.getClienteNIT() != null) {
+                Optional<ClientesEntity> clientes = clientesRepository.findById(dto.getClienteNIT());
+                if (clientes.isPresent()) {
+                    entity.setCliente(clientes.get());
+                    entity.setClienteNIT(dto.getClienteNIT());
+                } else {
+                    return "Error: Cliente no encontrado";
+                }
+            }
+            // Orden Encabezado
+            if (dto.getIdOrdenEncabezado() != null) {
+                Optional<OrdenEncabezadoEntity> ordenEncabezado = ordenEncabezadoRepo.findById(dto.getIdOrdenEncabezado());
+                if (ordenEncabezado.isPresent()) {
+                    entity.setIdOrdenEncabezado(ordenEncabezado.get());
+                } else {
+                    return "Error: Orden encabezado no encontrado";
+                }
+            } else {
+                entity.setIdOrdenEncabezado(null);
+            }
+
+            // Info Embarque
+            if (dto.getIdInfoEmbarque() != null) {
+                Optional<InfoEmbarqueEntity> infoEmbarque = infoEmbarqueRepo.findById(dto.getIdInfoEmbarque());
+                if (infoEmbarque.isPresent()) {
+                    entity.setIdInfoEmbarque(infoEmbarque.get());
+                } else {
+                    return "Error: Info embarque no encontrada";
+                }
+            } else {
+                entity.setIdInfoEmbarque(null);
+            }
+
+            // Aduana
+            if (dto.getIdAduana() != null) {
+                Optional<AduanaEntity> aduana = aduanaRepo.findById(dto.getIdAduana());
+                if (aduana.isPresent()) {
+                    entity.setAduana(aduana.get());
+                } else {
+                    return "Error: Aduana no encontrada";
+                }
+            } else {
+                entity.setAduana(null);
+            }
+
+            // Transporte
+            if (dto.getIdTransporte() != null) {
+                Optional<TransporteEntity> transporte = transporteRepo.findById(dto.getIdTransporte());
+                if (transporte.isPresent()) {
+                    entity.setIdTransporte(transporte.get());
+                } else {
+                    return "Error: Transporte no encontrado";
+                }
+            } else {
+                entity.setIdTransporte(null);
+            }
+
+            // Recolección
+            if (dto.getIdRecoleccion() != null) {
+                Optional<RecoleccionEntity> recoleccion = recoleccionRepo.findById(dto.getIdRecoleccion());
+                if (recoleccion.isPresent()) {
+                    entity.setIdRecoleccion(recoleccion.get());
+                } else {
+                    return "Error: Recolección no encontrada";
+                }
+            } else {
+                entity.setIdRecoleccion(null);
+            }
+
+            // Cargos
+            if (dto.getIdCargos() != null) {
+                Optional<CargosEntity> cargos = cargosRepo.findById(dto.getIdCargos());
+                if (cargos.isPresent()) {
+                    entity.setIdCargos(cargos.get());
+                } else {
+                    return "Error: Cargos no encontrados";
+                }
+            } else {
+                entity.setIdCargos(null);
+            }
+
+            // Financiamiento
+            if (dto.getIdFinanciamiento() != null) {
+                Optional<FinanciamientoEntity> financiamiento = financiamientoRepo.findById(dto.getIdFinanciamiento());
+                if (financiamiento.isPresent()) {
+                    entity.setIdFinanciamiento(financiamiento.get());
+                } else {
+                    return "Error: Financiamiento no encontrado";
+                }
+            } else {
+                entity.setIdFinanciamiento(null);
+            }
+
+            // Observaciones
+            if (dto.getIdObservaciones() != null) {
+                Optional<ObservacionesEntity> observaciones = observacionesRepo.findById(dto.getIdObservaciones());
+                if (observaciones.isPresent()) {
+                    entity.setIdObservaciones(observaciones.get());
+                } else {
+                    return "Error: Observaciones no encontradas";
+                }
+            } else {
+                entity.setIdObservaciones(null);
+            }
+
+            repo.save(entity);
+            return "Orden de servicio actualizada correctamente";
+
+        } catch (Exception e) {
+            return "Error al actualizar orden de servicio: " + e.getMessage();
+        }
     }
+
+
 
     public String patch(Long id, DTOOrdenServicio dto) {
-        Optional<OrdenServicioEntity> optional = repo.findById(id);
-        if (optional.isEmpty()) return "Orden de servicio no encontrada";
+        try {
+            Optional<OrdenServicioEntity> optional = repo.findById(id);
+            if (optional.isEmpty()) return "Error: Orden de servicio no encontrada";
 
-        if (dto.getFechaOrden() != null &&(dto.getFechaOrden())) {
-            return "Fecha inválida: debe ser entre 1990 y hoy.";
+            OrdenServicioEntity entity = optional.get();
+
+            // Cliente
+            if (dto.getClienteNIT() != null) {
+                Optional<ClientesEntity> clientes = clientesRepository.findById(dto.getClienteNIT());
+                if (clientes.isPresent()) {
+                    entity.setCliente(clientes.get());
+                    entity.setClienteNIT(dto.getClienteNIT());
+                } else {
+                    return "Error: Cliente no encontrado";
+                }
+            }
+
+            // Orden Encabezado
+            if (dto.getIdOrdenEncabezado() != null) {
+                Optional<OrdenEncabezadoEntity> ordenEncabezado = ordenEncabezadoRepo.findById(dto.getIdOrdenEncabezado());
+                if (ordenEncabezado.isPresent()) {
+                    entity.setIdOrdenEncabezado(ordenEncabezado.get());
+                } else {
+                    return "Error: Orden encabezado no encontrado";
+                }
+            }
+
+            // Info Embarque
+            if (dto.getIdInfoEmbarque() != null) {
+                Optional<InfoEmbarqueEntity> infoEmbarque = infoEmbarqueRepo.findById(dto.getIdInfoEmbarque());
+                if (infoEmbarque.isPresent()) {
+                    entity.setIdInfoEmbarque(infoEmbarque.get());
+                } else {
+                    return "Error: Info embarque no encontrada";
+                }
+            }
+
+            // Aduana
+            if (dto.getIdAduana() != null) {
+                Optional<AduanaEntity> aduana = aduanaRepo.findById(dto.getIdAduana());
+                if (aduana.isPresent()) {
+                    entity.setAduana(aduana.get());
+                } else {
+                    return "Error: Aduana no encontrada";
+                }
+            }
+
+            // Transporte
+            if (dto.getIdTransporte() != null) {
+                Optional<TransporteEntity> transporte = transporteRepo.findById(dto.getIdTransporte());
+                if (transporte.isPresent()) {
+                    entity.setIdTransporte(transporte.get());
+                } else {
+                    return "Error: Transporte no encontrado";
+                }
+            }
+
+            // Recolección
+            if (dto.getIdRecoleccion() != null) {
+                Optional<RecoleccionEntity> recoleccion = recoleccionRepo.findById(dto.getIdRecoleccion());
+                if (recoleccion.isPresent()) {
+                    entity.setIdRecoleccion(recoleccion.get());
+                } else {
+                    return "Error: Recolección no encontrada";
+                }
+            }
+
+            // Cargos
+            if (dto.getIdCargos() != null) {
+                Optional<CargosEntity> cargos = cargosRepo.findById(dto.getIdCargos());
+                if (cargos.isPresent()) {
+                    entity.setIdCargos(cargos.get());
+                } else {
+                    return "Error: Cargos no encontrados";
+                }
+            }
+
+            // Financiamiento
+            if (dto.getIdFinanciamiento() != null) {
+                Optional<FinanciamientoEntity> financiamiento = financiamientoRepo.findById(dto.getIdFinanciamiento());
+                if (financiamiento.isPresent()) {
+                    entity.setIdFinanciamiento(financiamiento.get());
+                } else {
+                    return "Error: Financiamiento no encontrado";
+                }
+            }
+
+            // Observaciones
+            if (dto.getIdObservaciones() != null) {
+                Optional<ObservacionesEntity> observaciones = observacionesRepo.findById(dto.getIdObservaciones());
+                if (observaciones.isPresent()) {
+                    entity.setIdObservaciones(observaciones.get());
+                } else {
+                    return "Error: Observaciones no encontradas";
+                }
+            }
+
+            repo.save(entity);
+            return "Orden de servicio actualizada parcialmente.";
+
+        } catch (Exception e) {
+            return "Error al hacer patch en orden de servicio: " + e.getMessage();
         }
-
-        OrdenServicioEntity entity = optional.get();
-        if (dto.getClienteNIT() != null) entity.setClienteNIT(dto.getClienteNIT());
-        (dto, entity);
-        repo.save(entity);
-        return "Orden de servicio actualizada parcialmente.";
     }
+
 
     public String delete(Long id) {
-        if (!repo.existsById(id)) return "Orden de servicio no encontrada";
-        repo.deleteById(id);
-        return "Orden de servicio eliminada correctamente";
+        try {
+            Optional<OrdenServicioEntity> optional = repo.findById(id);
+            if (optional.isEmpty()) {
+                return "Error: Orden de servicio no encontrada";
+            }
+
+            repo.deleteById(id);
+            return "Orden de servicio eliminada correctamente";
+        } catch (Exception e) {
+            return "Error al eliminar orden de servicio: " + e.getMessage();
+        }
     }
+
 
 
 }

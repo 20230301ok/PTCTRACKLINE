@@ -10,6 +10,7 @@ apiTrackline\proyectoPTC\Repositories\UsuarioRepository.class
 apiTrackline\proyectoPTC\Models\DTO\DTOOrdenEncabezado$OnPatch.class
 apiTrackline\proyectoPTC\Controllers\AduanaController\Aduana.class
 apiTrackline\proyectoPTC\Models\DTO\DTOCargos$OnCreate.class
+apiTrackline\proyectoPTC\Models\DTO\DTOOrdenServicio$OnUpdate.class
 apiTrackline\proyectoPTC\Repositories\OrdenEncabezadoRepository.class
 apiTrackline\proyectoPTC\Services\UsuarioService.class
 apiTrackline\proyectoPTC\Repositories\ViajeRepository.class
@@ -86,6 +87,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOFinanciamiento$OnUpdate.class
 apiTrackline\proyectoPTC\Entities\ViajeEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOOrdenEncabezado$OnUpdate.class
 apiTrackline\proyectoPTC\Services\PermisosService.class
+apiTrackline\proyectoPTC\Models\DTO\DTOOrdenServicio$OnCreate.class
 apiTrackline\proyectoPTC\Controllers\ClientesController\Clientes.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEmpleados$OnCreate.class
 apiTrackline\proyectoPTC\Services\InfoEmbarqueService.class
@@ -97,6 +99,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOObservaciones$OnPatch.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTipoDatoContable$OnUpdate.class
 apiTrackline\proyectoPTC\Entities\RolesEntity.class
 apiTrackline\proyectoPTC\Services\OrdenEncabezadoService.class
+apiTrackline\proyectoPTC\Models\DTO\DTOOrdenServicio$OnPatch.class
 apiTrackline\proyectoPTC\Models\DTO\DTOSelectivo.class
 apiTrackline\proyectoPTC\Models\DTO\DTOCargos.class
 apiTrackline\proyectoPTC\Models\DTO\DTOOrdenEncabezado.class

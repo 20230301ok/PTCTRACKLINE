@@ -22,31 +22,54 @@ public class ViajeService {
     @Autowired
     private TransporteRepository transporteRepo;
 
+    // Obtener todos los viajes
     public List<DTOViaje> getData() {
-        List<ViajeEntity> lista = repo.findAll();
-        return lista.stream()
+        return repo.findAll().stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
     }
 
-    private DTOViaje convertirADTO(ViajeEntity v) {
+    // Conversión de Entity a DTO
+    private DTOViaje convertirADTO(ViajeEntity entity) {
         DTOViaje dto = new DTOViaje();
-        dto.setIdViaje(v.getIdViaje());
+        dto.setIdViaje(entity.getIdViaje());
 
-        if (v.getIdOrdenServicio() != null) {
-            dto.setIdOrdenServicio(v.getIdOrdenServicio().getIdOrdenServicio());
+        if (entity.getOrdenServicio() != null) {
+            dto.setIdOrdenServicio(entity.getOrdenServicio().getIdOrdenServicio());
         }
 
-        if (v.getIdTransporte() != null) {
-            dto.setIdTransporte(v.getIdTransporte().getIdTransporte());
+        if (entity.getIdTransporte() != null) {
+            dto.setIdTransporte(entity.getIdTransporte().getIdTransporte());
         }
 
         return dto;
     }
 
+    // Crear viaje
     public String post(DTOViaje dto) {
         try {
-            ViajeEntity v = new ViajeEntity();
+            Optional<OrdenServicioEntity> orden = ordenServicioRepo.findById(dto.getIdOrdenServicio());
+            Optional<TransporteEntity> transporte = transporteRepo.findById(dto.getIdTransporte());
+
+            if (orden.isEmpty()) return "Error: ID de orden de servicio no válido";
+            if (transporte.isEmpty()) return "Error: ID de transporte no válido";
+
+            ViajeEntity entity = new ViajeEntity();
+            entity.setOrdenServicio(orden.get());
+            entity.setIdTransporte(transporte.get());
+
+            repo.save(entity);
+            return "Viaje creado correctamente";
+        } catch (Exception e) {
+            return "Error al crear el viaje: " + e.getMessage();
+        }
+    }
+
+    // Actualizar completamente
+    public String update(Long id, DTOViaje dto) {
+        try {
+            Optional<ViajeEntity> optional = repo.findById(id);
+            if (optional.isEmpty()) return "Error: Viaje no encontrado";
 
             Optional<OrdenServicioEntity> orden = ordenServicioRepo.findById(dto.getIdOrdenServicio());
             Optional<TransporteEntity> transporte = transporteRepo.findById(dto.getIdTransporte());
@@ -54,59 +77,52 @@ public class ViajeService {
             if (orden.isEmpty()) return "Error: ID de orden de servicio no válido";
             if (transporte.isEmpty()) return "Error: ID de transporte no válido";
 
-            v.setIdOrdenServicio(orden.get());
-            v.setIdTransporte(transporte.get());
+            ViajeEntity entity = optional.get();
+            entity.setOrdenServicio(orden.get());
+            entity.setIdTransporte(transporte.get());
 
-            repo.save(v);
-            return "Viaje creado correctamente";
+            repo.save(entity);
+            return "Viaje actualizado correctamente";
         } catch (Exception e) {
-            return "Error al crear viaje: " + e.getMessage();
+            return "Error al actualizar el viaje: " + e.getMessage();
         }
     }
 
-    public String update(Long id, DTOViaje dto) {
-        Optional<ViajeEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            ViajeEntity v = optional.get();
-
-            Optional<OrdenServicioEntity> orden = ordenServicioRepo.findById(dto.getIdOrdenServicio());
-            Optional<TransporteEntity> transporte = transporteRepo.findById(dto.getIdTransporte());
-
-            orden.ifPresent(v::setIdOrdenServicio);
-            transporte.ifPresent(v::setIdTransporte);
-
-            repo.save(v);
-            return "Información del viaje actualizada correctamente";
-        } else {
-            return "Error: Viaje no encontrado";
-        }
-    }
-
+    // Actualización parcial
     public String patch(Long id, DTOViaje dto) {
-        Optional<ViajeEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            ViajeEntity v = optional.get();
+        try {
+            Optional<ViajeEntity> optional = repo.findById(id);
+            if (optional.isEmpty()) return "Error: Viaje no encontrado";
+
+            ViajeEntity entity = optional.get();
 
             if (dto.getIdOrdenServicio() != null) {
-                ordenServicioRepo.findById(dto.getIdOrdenServicio()).ifPresent(v::setIdOrdenServicio);
-            }
-            if (dto.getIdTransporte() != null) {
-                transporteRepo.findById(dto.getIdTransporte()).ifPresent(v::setIdTransporte);
+                ordenServicioRepo.findById(dto.getIdOrdenServicio())
+                        .ifPresent(entity::setOrdenServicio);
             }
 
-            repo.save(v);
+            if (dto.getIdTransporte() != null) {
+                transporteRepo.findById(dto.getIdTransporte())
+                        .ifPresent(entity::setIdTransporte);
+            }
+
+            repo.save(entity);
             return "Viaje actualizado parcialmente";
+        } catch (Exception e) {
+            return "Error al hacer patch del viaje: " + e.getMessage();
         }
-        return "Viaje no encontrado";
     }
 
+    // Eliminar viaje
     public String delete(Long id) {
-        Optional<ViajeEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
+        try {
+            if (!repo.existsById(id)) {
+                return "Error: Viaje no encontrado";
+            }
             repo.deleteById(id);
             return "Viaje eliminado correctamente";
-        } else {
-            return "Viaje no encontrado";
+        } catch (Exception e) {
+            return "Error al eliminar el viaje: " + e.getMessage();
         }
     }
 }

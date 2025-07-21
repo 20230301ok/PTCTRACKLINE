@@ -1,5 +1,7 @@
 package apiTrackline.proyectoPTC.Models.DTO;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.util.Date;
@@ -10,6 +12,7 @@ public class DTOOrdenServicio {
     private Long idOrdenServicio;
 
     // Cliente
+    @NotNull(message = "El 'clienteNIT' es obligatorio", groups = {OnCreate.class, OnUpdate.class})
     private String clienteNIT;
     private String nombreCliente;
     private String apellidoCliente;
@@ -21,6 +24,7 @@ public class DTOOrdenServicio {
     private String nombreUsuarioCliente;
 
     // Orden Encabezado
+    @Positive(message = "El id de orden encabezado no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idOrdenEncabezado;
     private Date fechaOrden;
     private String encargadoUno;
@@ -34,6 +38,7 @@ public class DTOOrdenServicio {
     private String registroIvaDos;
 
     // Info Embarque
+    @Positive(message = "El id de info embarque no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idInfoEmbarque;
     private String facturasEmbarque;
     private String proveedorRefEmbarque;
@@ -43,6 +48,7 @@ public class DTOOrdenServicio {
     private Long volumenEmbarque;
 
     // Aduana
+    @Positive(message = "El id de aduana no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idAduana;
     private String dm;
     private String primeraModalidad;
@@ -54,6 +60,7 @@ public class DTOOrdenServicio {
     private String nombreTipoServicio;
 
     // Transporte
+    @Positive(message = "El id de transporte no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idTransporte;
     //Transporte -----> Transportista
     private Long idTransportista;
@@ -72,6 +79,7 @@ public class DTOOrdenServicio {
     private String capacidadServicio;
 
     // Recolección
+    @Positive(message = "El id de recoleccion no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idRecoleccion;
     private Boolean transporteRecoleccion;
     private Boolean recoleccionEntregaRecoleccion;
@@ -89,6 +97,7 @@ public class DTOOrdenServicio {
     private String nombreTipoDatoContables;
 
     // Financiamientos
+    @Positive(message = "El id de financiamiento no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idFinanciamiento;
     private Long montoFinanciamiento;
     //Financiamientos -----> TipoFinanciamiento
@@ -96,9 +105,15 @@ public class DTOOrdenServicio {
     private String nombretipoFinanciamineto;
 
     // Observaciones
+    @Positive(message = "El id de observaciones no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idObservaciones;
     private String textoObservacion;
     //Observaciones -----> Selectivo
+    @Positive(message = "El id de selectivo no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idSelectivo;
     private String colorSelectivo;
+
+    public interface OnCreate {}
+    public interface OnUpdate {}
+    public interface OnPatch {}
 }

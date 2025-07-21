@@ -18,7 +18,7 @@ public class ViajeEntity {
 
     @ManyToOne
     @JoinColumn(name = "IDORDENSERVICIO", referencedColumnName = "IDORDENSERVICIO")
-    private OrdenServicioEntity idOrdenServicio;
+    private OrdenServicioEntity OrdenServicio;
 
     @ManyToOne
     @JoinColumn(name = "IDTRANSPORTE", referencedColumnName = "IDTRANSPORTE")

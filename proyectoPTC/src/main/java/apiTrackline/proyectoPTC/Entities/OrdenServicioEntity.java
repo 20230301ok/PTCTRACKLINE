@@ -3,6 +3,8 @@ package apiTrackline.proyectoPTC.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "TB_ORDENSERVICIOS")
 @Getter
@@ -56,4 +58,8 @@ public class OrdenServicioEntity {
     @ManyToOne
     @JoinColumn(name = "IDOBSERVACIONES", nullable = true)
     private ObservacionesEntity idObservaciones;
+
+    @OneToMany(mappedBy = "OrdenServicio", cascade = CascadeType.ALL)
+    private List<ViajeEntity> viajes;
+
 }
