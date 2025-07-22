@@ -16,55 +16,35 @@ public class Tracking {
     @Autowired
     private TrackingService service;
 
-    // RUTA GET localhost:8080/apiTracking/list
-    @GetMapping("/list")
-    public List<DTOTracking> list() {
+    // GET: Obtener todos los trackings
+    //ruta localhost:8080/apiTracking/listar
+    @GetMapping("/listar")
+    public List<DTOTracking> listar() {
         return service.getAll();
     }
 
-    // RUTA GET localhost:8080/apiTracking/getById/{id}
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
-        DTOTracking result = service.getById(id);
-        if (result != null) {
-            return ResponseEntity.ok(result);
-        }
-        return ResponseEntity.status(404).body("Error: No se encontró el tracking con ID " + id);
+    // POST: Crear tracking con parámetros en JSON
+    //ruta localhost:8080/apiTracking/crear
+    @PostMapping("/crear")
+    public String crearTracking(@Validated(DTOTracking.OnCreate.class) @RequestBody DTOTracking dto) {
+        return service.create(dto);
     }
 
-    // RUTA POST localhost:8080/apiTracking/agregarTracking
-    @PostMapping("/agregarTracking")
-    public ResponseEntity<DTOTracking> post(@Validated(DTOTracking.OnCreate.class) @RequestBody DTOTracking dto) {
-        return ResponseEntity.ok(service.post(dto));
+    //ruta localhost:8080/apiTracking/eliminar/id
+    @DeleteMapping("/eliminar/{id}")
+    public String eliminarTracking(@PathVariable Long id) {
+        return service.delete(id);
     }
 
-    // RUTA PUT localhost:8080/apiTracking/actualizarTracking/{id}
-    @PutMapping("/actualizarTracking/{id}")
-    public ResponseEntity<?> update(@Validated(DTOTracking.OnUpdate.class) @RequestBody DTOTracking dto, @PathVariable Long id) {
-        Object result = service.update(dto, id);
-        if (result instanceof DTOTracking) {
-            return ResponseEntity.ok(result);
-        }
-        return ResponseEntity.status(404).body(result);
+    //ruta localhost:8080/apiTracking/actualizarparcial/id
+    @PatchMapping("/actualizarparcial/{id}")
+    public String patchTracking(@PathVariable Long id,@Validated(DTOTracking.OnPatch.class) @RequestBody DTOTracking dto) {
+        return service.patch(id, dto);
     }
 
-    // RUTA PATCH localhost:8080/apiTracking/actualizarParcialmente/{id}
-    @PatchMapping("/actualizarParcialmente/{id}")
-    public ResponseEntity<?> patch(@PathVariable Long id, @Validated(DTOTracking.OnPatch.class) @RequestBody DTOTracking dto) {
-        Object result = service.patch(dto, id);
-        if (result instanceof DTOTracking) {
-            return ResponseEntity.ok(result);
-        }
-        return ResponseEntity.status(404).body(result);
-    }
-
-    // RUTA DELETE localhost:8080/apiTracking/eliminarTracking/{id}
-    @DeleteMapping("/eliminarTracking/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        String result = service.delete(id);
-        if (result.startsWith("Error")) {
-            return ResponseEntity.status(404).body(result);
-        }
-        return ResponseEntity.ok(result);
+    //ruta localhost:8080/apiTracking/actualizar/id
+    @PutMapping("/actualizar/{id}")
+    public String putUpdateTracking(@PathVariable Long id,@Validated(DTOTracking.OnUpdate.class) @RequestBody DTOTracking dto) {
+        return service.putUpdate(id, dto);
     }
 }

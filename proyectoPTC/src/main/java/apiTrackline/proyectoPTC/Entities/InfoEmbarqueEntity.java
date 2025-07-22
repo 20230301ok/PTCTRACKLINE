@@ -29,8 +29,8 @@ public class InfoEmbarqueEntity {
     private String tipo;
 
     @Column(name = "KILOS")
-    private Long kilos;
+    private Double kilos;
 
     @Column(name = "VOLUMEN")
-    private Long volumen;
+    private Double volumen;
 }

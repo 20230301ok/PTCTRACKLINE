@@ -9,6 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class DTOTipoFinanciamientos {
+
     private Long idTipoFinanciamiento;
 
     private String nombre;

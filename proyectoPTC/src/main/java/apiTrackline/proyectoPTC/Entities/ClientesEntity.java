@@ -27,7 +27,7 @@ public class ClientesEntity {
     @Column(name = "TELEFONO")
     private String telefono;
 
-    @Column(name = "CORREO")
+    @Column(name = "CORREO", unique = true)
     private String correo;
 
     @Column(name = "CODEMPRESA")

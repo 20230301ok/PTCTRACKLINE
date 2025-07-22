@@ -44,8 +44,8 @@ public class DTOOrdenServicio {
     private String proveedorRefEmbarque;
     private Long bultosEmbarque;
     private String tipoEmbarque;
-    private Long kilosEmbarque;
-    private Long volumenEmbarque;
+    private Double kilosEmbarque;
+    private Double volumenEmbarque;
 
     // Aduana
     @Positive(message = "El id de aduana no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})

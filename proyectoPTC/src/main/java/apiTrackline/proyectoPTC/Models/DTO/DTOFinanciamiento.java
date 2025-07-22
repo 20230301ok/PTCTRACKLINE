@@ -12,6 +12,7 @@ public class DTOFinanciamiento {
     private Long idFinanciamiento;
 
     @NotNull(message = "El ID del tipo de financiamiento es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
+    @Positive(message = "El id tipo financiamiento no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnUpdate.class})
     private Long idTipoFinanciamiento;
     private String nombreTipoFinanciamiento;
 

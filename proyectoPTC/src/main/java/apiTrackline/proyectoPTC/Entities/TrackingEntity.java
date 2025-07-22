@@ -2,39 +2,49 @@ package apiTrackline.proyectoPTC.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "TB_TRACKING")
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
+@ToString
+@Entity
+@Table(name = "TB_TRACKING")
 public class TrackingEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_tracking")
+    @SequenceGenerator(name = "seq_tracking", sequenceName = "SEQ_ID_TRACK", allocationSize = 1)
     @Column(name = "IDTRACKING")
     private Long idTracking;
 
-    @ManyToOne
-    @JoinColumn(name = "IDVIAJE")
-    private ViajeEntity idViaje;
+    @Column(name = "IDVIAJE", nullable = false)
+    private Long idViaje;
 
-    @ManyToOne
-    @JoinColumn(name = "IDESTADO")
-    private EstadosEntity idEstado;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IDVIAJE", referencedColumnName = "IDVIAJE", insertable = false, updatable = false)
+    private ViajeEntity viaje;
+
+    @Column(name = "IDESTADO", nullable = false)
+    private Long idEstado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IDESTADO", referencedColumnName = "IDESTADO", insertable = false, updatable = false)
+    private EstadosEntity estado;
 
     @Column(name = "HORAESTIMADAPARTIDA")
-    private LocalDateTime horaEstimadaPartida;
+    private Timestamp horaEstimadaPartida;
 
     @Column(name = "HORAESTIMADALLEGADA")
-    private LocalDateTime horaEstimadaLlegada;
-
-    @Column(name = "HORALLEGADA")
-    private LocalDateTime horaLlegada;
+    private Timestamp horaEstimadaLlegada;
 
     @Column(name = "HORASALIDA")
-    private LocalDateTime horaSalida;
+    private Timestamp horaSalida;
+
+    @Column(name = "HORALLEGADA")
+    private Timestamp horaLlegada;
 
     @Column(name = "LUGARPARTIDA")
     private String lugarPartida;

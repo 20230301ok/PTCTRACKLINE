@@ -28,10 +28,10 @@ public class EmpleadosEntity {
     @Column(name = "TELEFONO")
     private  String telefono;
 
-    @Column(name = "CORREO")
+    @Column(name = "CORREO", unique = true)
     private String correo;
 
-    @Column(name = "NIT")
+    @Column(name = "NIT", unique = true)
     private String nit;
 
     @ManyToOne

@@ -20,7 +20,7 @@ public class DTOOrdenEncabezado {
 
     @NotNull(message = "La fecha no puede estar en blanco.", groups = {OnCreate.class, OnUpdate.class})
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @PastOrPresent(message = "La fecha debe de ser igual o previa a la fecha actual")
+    @PastOrPresent(message = "La fecha debe de ser igual o previa a la fecha actual",groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Date fecha;
 
     @NotBlank(message = "El encargado no puede estar en blanco.", groups = {OnCreate.class, OnUpdate.class})

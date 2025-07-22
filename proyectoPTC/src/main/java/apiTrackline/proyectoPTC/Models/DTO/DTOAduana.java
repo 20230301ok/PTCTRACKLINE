@@ -2,10 +2,7 @@ package apiTrackline.proyectoPTC.Models.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +14,7 @@ public class DTOAduana {
 
     //Tipo de servicio (Llave foranea)
     @NotNull(message = "El id del tipo de servicio es obligatorio", groups = {OnCreate.class, OnUpdate.class})
+    @Positive(message = "El id del tipo de servicio no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idTipoServicio;
     private String nombreTipoServicio;
 

@@ -32,8 +32,8 @@ public class DTOInfoEmbarque {
 
 
     @Positive(message = "El número de kilos no puede ser negativos")
-    private Long kilos;
+    private Double kilos;
 
     @Positive(message = "El volumen no puede ser negativo")
-    private Long volumen;
+    private Double volumen;
 }
