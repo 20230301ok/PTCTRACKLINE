@@ -160,13 +160,13 @@ public class OrdenServicioService {
         }
 
         // Financiamiento
-        if (entity.getIdFinanciamiento() != null) {
-            dto.setIdFinanciamiento(entity.getIdFinanciamiento().getIdFinanciamiento());
-            dto.setMontoFinanciamiento(entity.getIdFinanciamiento().getMonto());
+        if (entity.getFinanciamiento() != null) {
+            dto.setIdFinanciamiento(entity.getFinanciamiento().getIdFinanciamiento());
+            dto.setMontoFinanciamiento(entity.getFinanciamiento().getMonto());
 
-            if (entity.getIdFinanciamiento().getTipoFinanciamiento() != null) {
-                dto.setIdTipoFinanciamiento(entity.getIdFinanciamiento().getTipoFinanciamiento().getIdTipoFinanciamiento());
-                dto.setNombretipoFinanciamineto(entity.getIdFinanciamiento().getTipoFinanciamiento().getNombre());
+            if (entity.getFinanciamiento().getTipoFinanciamiento() != null) {
+                dto.setIdTipoFinanciamiento(entity.getFinanciamiento().getTipoFinanciamiento().getIdTipoFinanciamiento());
+                dto.setNombretipoFinanciamineto(entity.getFinanciamiento().getTipoFinanciamiento().getNombre());
             }
         }
 
@@ -264,7 +264,7 @@ public class OrdenServicioService {
             if (dto.getIdFinanciamiento() != null) {
                 Optional<FinanciamientoEntity> financiamiento = financiamientoRepo.findById(dto.getIdFinanciamiento());
                 if (financiamiento.isPresent()) {
-                    entity.setIdFinanciamiento(financiamiento.get());
+                    entity.setFinanciamiento(financiamiento.get());
                 } else {
                     return "Error: Financiamiento no encontrado";
                 }
@@ -283,7 +283,6 @@ public class OrdenServicioService {
             // Guardar entidad
             repo.save(entity);
             return "Orden de servicio creada correctamente";
-
         } catch (Exception e) {
             return "Error al crear orden de servicio: " + e.getMessage();
         }
@@ -383,12 +382,12 @@ public class OrdenServicioService {
             if (dto.getIdFinanciamiento() != null) {
                 Optional<FinanciamientoEntity> financiamiento = financiamientoRepo.findById(dto.getIdFinanciamiento());
                 if (financiamiento.isPresent()) {
-                    entity.setIdFinanciamiento(financiamiento.get());
+                    entity.setFinanciamiento(financiamiento.get());
                 } else {
                     return "Error: Financiamiento no encontrado";
                 }
             } else {
-                entity.setIdFinanciamiento(null);
+                entity.setFinanciamiento(null);
             }
 
             // Observaciones
@@ -495,7 +494,7 @@ public class OrdenServicioService {
             if (dto.getIdFinanciamiento() != null) {
                 Optional<FinanciamientoEntity> financiamiento = financiamientoRepo.findById(dto.getIdFinanciamiento());
                 if (financiamiento.isPresent()) {
-                    entity.setIdFinanciamiento(financiamiento.get());
+                    entity.setFinanciamiento(financiamiento.get());
                 } else {
                     return "Error: Financiamiento no encontrado";
                 }

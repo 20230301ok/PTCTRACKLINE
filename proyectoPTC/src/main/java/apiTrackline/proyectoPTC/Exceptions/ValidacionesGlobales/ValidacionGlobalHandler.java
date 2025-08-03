@@ -1,4 +1,4 @@
-package apiTrackline.proyectoPTC.Exceptions;
+package apiTrackline.proyectoPTC.Exceptions.ValidacionesGlobales;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;

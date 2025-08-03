@@ -53,7 +53,7 @@ public class OrdenServicioEntity {
 
     @ManyToOne
     @JoinColumn(name = "IDFINANCIAMIENTO", nullable = true)
-    private FinanciamientoEntity idFinanciamiento;
+    private FinanciamientoEntity financiamiento;
 
     @ManyToOne
     @JoinColumn(name = "IDOBSERVACIONES", nullable = true)

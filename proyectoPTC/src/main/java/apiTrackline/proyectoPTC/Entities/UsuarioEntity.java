@@ -17,13 +17,13 @@ public class UsuarioEntity {
     @Column(name = "IDUSUARIO")
     private Long idUsuario;
 
-    @Column(name = "USUARIO")
+    @Column(name = "USUARIO", unique = true)
     private String usuario;
 
     @Column(name = "CONTRASENIA")
     private String contrasenia;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "IDROL", referencedColumnName = "IDROL")
     private RolesEntity Rol;
 

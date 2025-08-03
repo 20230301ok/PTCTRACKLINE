@@ -2,20 +2,25 @@ package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.AduanaEntity;
 import apiTrackline.proyectoPTC.Entities.TipoServicioEntity;
-import apiTrackline.proyectoPTC.Entities.TransportistaEntity;
-import apiTrackline.proyectoPTC.Entities.UsuarioEntity;
+import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaNoEncontrada;
+import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaNoRegistrada;
+import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaRelacionada;
+import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionTipoServicioNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
-import apiTrackline.proyectoPTC.Models.DTO.DTOTransportista;
 import apiTrackline.proyectoPTC.Repositories.AduanaRepository;
 import apiTrackline.proyectoPTC.Repositories.TipoServicioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
+@Slf4j
 @Service
 public class AduanaService {
     @Autowired
@@ -25,15 +30,10 @@ public class AduanaService {
     private TipoServicioRepository tipoServiciorepo;
 
     //El metodo pide una lista porque en el front end solo se puede mostrar un DTO
-    public List<DTOAduana> obtenerAduana(){
-        List<AduanaEntity> aduana = repo.findAll();
-        //Se guarda en una lista de tipoEntity todos las aduanas encontrados en la base
-        //Es una lista de tipo Entity porque en la base de datos solo puede tener ENTITY
-        //Así que se obtiene de una lista de entity
-        List<DTOAduana> collect = aduana.stream()
-                .map(this::convertirAAduanaDTO)
-                .collect(Collectors.toList());
-        return collect;
+    public Page<DTOAduana> obtenerAduanas(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AduanaEntity> pageEntity = repo.findAll(pageable);
+        return pageEntity.map(this::convertirAAduanaDTO);
         //TODO LO QUE SALE DE LA BASE SALE COMO ENTIDAD
         //TODO LO QUE ENTRA A LA BASE DEBE ENTRAR COMO ENTIDAD
     }
@@ -67,95 +67,96 @@ public class AduanaService {
         return dto;
     }
 
-    public String agregarAduana(DTOAduana dtoAduana){
-        try
-        {
-            //Se guardan en un entity los datos de tipo dto
+    public DTOAduana agregarAduana(DTOAduana json) {
+        if (json == null) {
+            throw new IllegalArgumentException("No puedes agregar un registro sin datos");
+        }
+
+        // Buscar el tipo de servicio por el ID que viene en el DTO
+        TipoServicioEntity tipoServicio = tipoServiciorepo.findById(json.getIdTipoServicio())
+                .orElseThrow(() -> new ExceptionTipoServicioNoEncontrado("Tipo servicio no encontrado con id " + json.getIdTipoServicio()));
+
+        try {
             AduanaEntity entity = new AduanaEntity();
-            entity.setDM(dtoAduana.getDM());
-            entity.setPrimeraModalidad(dtoAduana.getPrimeraModalidad());
-            entity.setSegundaModalidad(dtoAduana.getSegundaModalidad());
-            entity.setDigitador(dtoAduana.getDigitador());
-            entity.setTramitador(dtoAduana.getTramitador());
+            entity.setDM(json.getDM());
+            entity.setPrimeraModalidad(json.getPrimeraModalidad());
+            entity.setSegundaModalidad(json.getSegundaModalidad());
+            entity.setDigitador(json.getDigitador());
+            entity.setTramitador(json.getTramitador());
+            entity.setTipoServicio(tipoServicio);
 
-            // Buscar el tipo de servicio por el ID que viene en el DTO
-            Optional<TipoServicioEntity> aduana = tipoServiciorepo.findById(dtoAduana.getIdTipoServicio());
+            AduanaEntity aduanaCreada = repo.save(entity);
+            return convertirAAduanaDTO(aduanaCreada);
 
-            if (aduana.isPresent()) {
-                entity.setTipoServicio(aduana.get()); // Asignar el tipo servicio si existe
-                repo.save(entity); // Guardar aduana
-                return "Transportista creado correctamente";
-            } else {
-                return "Error: ID de tipo servicio no encontrado";
-            }
-        }
-        catch (Exception e)
-        {
-            return "ERROR: no se pudo agregar aduana " + e.getMessage();
+        } catch (Exception e) {
+            log.error("Error al registrar la aduana: " + e.getMessage());
+            throw new ExceptionAduanaNoRegistrada("Error: aduana no registrada");
         }
     }
 
-    public String actualizarAduana(Long id, DTOAduana dto) {
-        Optional<AduanaEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            AduanaEntity entity = optional.get();
-            entity.setDM(dto.getDM());
-            entity.setPrimeraModalidad(dto.getPrimeraModalidad());
-            entity.setSegundaModalidad(dto.getSegundaModalidad());
-            entity.setDigitador(dto.getDigitador());
-            entity.setTramitador(dto.getTramitador());
 
-            // Validar si el nuevo idTipoServicio existe
-            if (dto.getIdTipoServicio() != null) {
-                Optional<TipoServicioEntity> tipoServicio = tipoServiciorepo.findById(dto.getIdTipoServicio());
-                if (tipoServicio.isPresent()) {
-                    entity.setTipoServicio(tipoServicio.get());
-                } else {
-                    return "Error: El ID de tipo de servicio ingresado no existe";
-                }
-            }
+    public DTOAduana actualizarAduana(Long id, DTOAduana dto) {
+        AduanaEntity aduana = repo.findById(id)
+                .orElseThrow(() -> new ExceptionAduanaNoEncontrada("Aduana no encontrada con id " + id));
 
-            repo.save(entity);
-            return "Información de la aduana actualizada correctamente";
-        } else {
-            return "Error: Aduana no encontrada";
+        aduana.setDM(dto.getDM());
+        aduana.setPrimeraModalidad(dto.getPrimeraModalidad());
+        aduana.setSegundaModalidad(dto.getSegundaModalidad());
+        aduana.setDigitador(dto.getDigitador());
+        aduana.setTramitador(dto.getTramitador());
+
+        if (dto.getIdTipoServicio() != null) {
+            TipoServicioEntity tipoServicio = tipoServiciorepo.findById(dto.getIdTipoServicio())
+                    .orElseThrow(() -> new ExceptionTipoServicioNoEncontrado("Tipo servicio no encontrado con id " + dto.getIdTipoServicio()));
+            aduana.setTipoServicio(tipoServicio);
         }
+        return convertirAAduanaDTO(repo.save(aduana));
     }
 
-    public String patchAduana(Long id, DTOAduana dto) {
-        Optional<AduanaEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            AduanaEntity entity = optional.get();
 
-            if (dto.getDM() != null) entity.setDM(dto.getDM());
-            if (dto.getPrimeraModalidad() != null) entity.setPrimeraModalidad(dto.getPrimeraModalidad());
-            if (dto.getSegundaModalidad() != null) entity.setSegundaModalidad(dto.getSegundaModalidad());
-            if (dto.getDigitador() != null) entity.setDigitador(dto.getDigitador());
-            if (dto.getTramitador() != null) entity.setTramitador(dto.getTramitador());
+    public DTOAduana patchAduana(Long id, DTOAduana json) {
+        AduanaEntity aduana = repo.findById(id)
+                .orElseThrow(() -> new ExceptionAduanaNoEncontrada("Aduana no encontrada con id " + id));
 
-            if (dto.getIdTipoServicio() != null) {
-                Optional<TipoServicioEntity> tipoServicio = tipoServiciorepo.findById(dto.getIdTipoServicio());
-                if(tipoServicio.isPresent()){
-                    entity.setTipoServicio(tipoServicio.get());
-                }
-                else {
-                    return "Error: El ID de tipo de servicio ingresado no existe";
-                }
+        //Este campo tiene Not null en la BD, por ende, tiene anotación @Not Blank en el DTO
+        //Si el usuario quiere editar el DM con "" o con null
+        //ESTO SOLO SE HACE SI EL CAMPO TIENE @NOT BLANK EN EL DTO
+        if (json.getDM() != null) { //Si no es nulo, es decir, si se está actualizando ese campo en el body del Patch
+            if (json.getDM().isBlank()) { //Si al momento de actualizarlo el usuario envia un "", null, o " "
+                throw new IllegalArgumentException("El DM no puede estar en blanco, debe contener datos"); //Se activa la excepción
             }
-            repo.save(entity);
-            return "Aduana actualizada parcialmente.";
+            //Si el usuario envia una cadena correcta, se actualiza correctamente
+            aduana.setDM(json.getDM());
         }
-        return "Aduana no encontrada.";
+        if (json.getPrimeraModalidad() != null) aduana.setPrimeraModalidad(json.getPrimeraModalidad());
+        if (json.getSegundaModalidad() != null) aduana.setSegundaModalidad(json.getSegundaModalidad());
+        if (json.getDigitador() != null) {
+            if(json.getDigitador().isBlank()){
+                throw new IllegalArgumentException("El digitador no puede estar en blanco, debe contener datos");
+            }
+            aduana.setDigitador(json.getDigitador());
+        }
+        if (json.getTramitador() != null) aduana.setTramitador(json.getTramitador());
+
+        if (json.getIdTipoServicio() != null) {
+            TipoServicioEntity tipoServicio = tipoServiciorepo.findById(json.getIdTipoServicio())
+                    .orElseThrow(() -> new ExceptionTipoServicioNoEncontrado(
+                            "Tipo servicio no encontrado con id " + json.getIdTipoServicio()));
+            aduana.setTipoServicio(tipoServicio);
+        }
+        return convertirAAduanaDTO(repo.save(aduana));
     }
+
 
     //ELiminar
     public String eliminarAduana(Long id) {
-        Optional<AduanaEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            repo.deleteById(id);
+        AduanaEntity aduana = repo.findById(id)
+                .orElseThrow(() -> new ExceptionAduanaNoEncontrada("Aduana no encontrada con id " + id));
+        try {
+            repo.delete(aduana);
             return "Aduana eliminada correctamente";
-        } else {
-            return "Aduana no encontrada";
+        } catch (DataIntegrityViolationException e) {
+            throw new ExceptionAduanaRelacionada("No se pudo eliminar la aduana porque tiene registros relacionados");
         }
     }
 }

@@ -46,7 +46,11 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\TransportistaEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\UsuarioEntity.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Entities\ViajeEntity.java
-C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ValidacionGlobalHandler.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionAduanaNoEncontrada.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionAduanaNoRegistrada.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionAduanaRelacionada.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionTipoServicioNoEncontrado.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ValidacionesGlobales\ValidacionGlobalHandler.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOAduana.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOCargos.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOClientes.java

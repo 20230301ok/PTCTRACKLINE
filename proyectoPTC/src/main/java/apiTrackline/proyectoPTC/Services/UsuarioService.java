@@ -52,7 +52,7 @@ public class UsuarioService {
     }
 
     //Método HTTP PUT(actualizar) por id
-    public String update(long id, DTOUsuario dtoUsuario){
+    public String update(Long id, DTOUsuario dtoUsuario){
         Optional<UsuarioEntity> optionalUser = repo.findById(id);
         if (optionalUser.isPresent()) {
             if (repo.existsByUsuarioAndIdUsuarioNot(dtoUsuario.getUsuario(), id)) {

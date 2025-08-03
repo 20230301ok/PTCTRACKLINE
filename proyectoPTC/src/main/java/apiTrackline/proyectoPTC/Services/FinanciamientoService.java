@@ -85,11 +85,16 @@ public class FinanciamientoService {
     }
 
     public String delete(Long id) {
-        if (repo.existsById(id)) {
-            repo.deleteById(id);
-            return "Financiamiento eliminado correctamente.";
-        } else {
-            return "Financiamiento no encontrado.";
+        try{
+            if (repo.existsById(id)) {
+                repo.deleteById(id);
+                return "Financiamiento eliminado correctamente.";
+            } else {
+                return "Financiamiento no encontrado.";
+            }
+        }catch (Exception e){
+            return "Error al eliminar el financiamiento: " + e.getMessage();
         }
+
     }
 }
