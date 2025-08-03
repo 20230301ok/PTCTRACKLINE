@@ -159,4 +159,10 @@ public class AduanaService {
             throw new ExceptionAduanaRelacionada("No se pudo eliminar la aduana porque tiene registros relacionados");
         }
     }
+
+    public DTOAduana buscarAduanaPorId(Long id) {
+        AduanaEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionAduanaNoEncontrada("No se encontró la aduana con ID: " + id));
+        return convertirAAduanaDTO(entity);
+    }
 }

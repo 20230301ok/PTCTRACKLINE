@@ -1,10 +1,15 @@
 package apiTrackline.proyectoPTC.Services;
 
+import apiTrackline.proyectoPTC.Entities.AduanaEntity;
 import apiTrackline.proyectoPTC.Entities.OrdenEncabezadoEntity;
 import apiTrackline.proyectoPTC.Models.DTO.DTOOrdenEncabezado;
 import apiTrackline.proyectoPTC.Repositories.OrdenEncabezadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import apiTrackline.proyectoPTC.Exceptions.OrdenEncabezadoExceptions.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,13 +21,12 @@ public class OrdenEncabezadoService {
     private OrdenEncabezadoRepository repo;
 
     // Obtiene todos los registros de la tabla y convertirlos en una lista de DTO
-    public List<DTOOrdenEncabezado> getData() {
-        List<OrdenEncabezadoEntity> ordenes = repo.findAll();
-        return ordenes.stream()
-                // Convierte cada entidad a DTO
-                .map(this::convertirADTO)
-                //Y lo devuelve
-                .collect(Collectors.toList());
+    public Page<DTOOrdenEncabezado> getData(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OrdenEncabezadoEntity> pageEntity = repo.findAll(pageable);
+        return pageEntity.map(this::convertirADTO);
+        //TODO LO QUE SALE DE LA BASE SALE COMO ENTIDAD
+        //TODO LO QUE ENTRA A LA BASE DEBE ENTRAR COMO ENTIDAD
     }
     //Convierte las entidades a dto
     private DTOOrdenEncabezado convertirADTO(OrdenEncabezadoEntity orden) {
@@ -121,5 +125,11 @@ public class OrdenEncabezadoService {
         } else {
             return "Orden no encontrada";
         }
+    }
+
+    public DTOOrdenEncabezado buscarPorId(Long id) {
+        OrdenEncabezadoEntity ordenEncabezado = repo.findById(id).
+                orElseThrow(() -> new ExceptionOrdenEncabezadoNoEncontrado("Orden encabezado no encontrado con id: " + id));
+        return convertirADTO(ordenEncabezado);
     }
 }

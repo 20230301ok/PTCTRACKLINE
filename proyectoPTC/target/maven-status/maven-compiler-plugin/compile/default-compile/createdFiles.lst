@@ -159,6 +159,7 @@ apiTrackline\proyectoPTC\Services\EstadosService.class
 apiTrackline\proyectoPTC\Models\DTO\DTOViaje$OnCreate.class
 apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionTipoServicioNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEstados$OnPatch.class
+apiTrackline\proyectoPTC\Exceptions\OrdenEncabezadoExceptions\ExceptionOrdenEncabezadoNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEstados$OnUpdate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTipoFinanciamientos.class
 apiTrackline\proyectoPTC\Controllers\RecoleccionController\Recoleccion.class

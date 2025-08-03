@@ -4,6 +4,7 @@ import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaNoEnc
 import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaRelacionada;
 import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionTipoServicioNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
+import apiTrackline.proyectoPTC.Models.DTO.DTOOrdenEncabezado;
 import apiTrackline.proyectoPTC.Services.AduanaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,25 +22,56 @@ public class Aduana {
     @Autowired
     private AduanaService service;
 
+    // MÉTODO GET POR ID
+    // RUTA: localhost:8080/apiAduana/buscarAduanaPorId/{id}
+    @GetMapping("/obtenerAduanaPorId/{id}")
+    public ResponseEntity<?> obtenerAduanaPorId(@PathVariable Long id) {
+        try {
+            DTOAduana aduana = service.buscarAduanaPorId(id);
+            return ResponseEntity.ok(Map.of(
+                    "status", "Éxito",
+                    "data", aduana
+            ));
+        } catch (ExceptionAduanaNoEncontrada e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error no controlado",
+                    "message", "Error inesperado al buscar aduana por ID"
+            ));
+        }
+    }
+
     //MÉTODO GET
     //Consultar todos los datos e implementación de Pageable
     //RUTA: localhost:8080/apiAduana/datosAduana
     @GetMapping("/datosAduana")
-    //El metodo pide una lista de tipo dto porque en el front end solo se puede mostrar un DTO
-    private ResponseEntity<Page<DTOAduana>> getAduana(
-            @RequestParam(defaultValue = "0") int page, //Es como un arreglo, empieza desde el 0, es decir la página 1 se mostrará
-            @RequestParam(defaultValue = "5") int size //La página 1 mostrará 5 registros
-    ){
-        if (size <= 0 || size > 50){
-            ResponseEntity.badRequest().body(Map.of(
-               "status", "El tamaño de la página debe estar entre 1 y 50"
+    public ResponseEntity<?> getAduanas(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        if (page < 0) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error de validación",
+                    "message", "El número de página no puede ser negativo"
             ));
-            return ResponseEntity.ok(null);
         }
+
+        if (size <= 0 || size > 50) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error de validación",
+                    "message", "El tamaño de la página debe estar entre 1 y 50"
+            ));
+        }
+
         Page<DTOAduana> aduanas = service.obtenerAduanas(page, size);
-        if (aduanas == null){
-            ResponseEntity.badRequest().body(Map.of(
-                    "status", "No hay aduanas registradas"
+        if (aduanas == null || aduanas.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", "No hay aduanas registradas"
             ));
         }
         return ResponseEntity.ok(aduanas);
