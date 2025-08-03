@@ -1,6 +1,7 @@
 package apiTrackline.proyectoPTC.Controllers.OrdenEncabezadoController;
 
 import apiTrackline.proyectoPTC.Exceptions.OrdenEncabezadoExceptions.ExceptionOrdenEncabezadoNoEncontrado;
+import apiTrackline.proyectoPTC.Exceptions.OrdenEncabezadoExceptions.ExceptionOrdenEncabezadoRelacionado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
 import apiTrackline.proyectoPTC.Models.DTO.DTOOrdenEncabezado;
 import apiTrackline.proyectoPTC.Services.OrdenEncabezadoService;
@@ -80,28 +81,109 @@ public class OrdenEncabezado {
     // Crear una nueva orden
     // Ruta: POST localhost:8080/apiOrden/postOrden
     @PostMapping("/postOrden")
-    public String postOrden(@Validated(DTOOrdenEncabezado.OnCreate.class) @RequestBody DTOOrdenEncabezado dto) {
-        return service.post(dto);
+    public ResponseEntity<?> postOrden(@Validated(DTOOrdenEncabezado.OnCreate.class) @RequestBody DTOOrdenEncabezado dto) {
+        try{
+            DTOOrdenEncabezado respuesta = service.post(dto);
+            if (respuesta == null){
+                return ResponseEntity.badRequest().body(Map.of(
+                        "status", "Error al insertar datos",
+                        "errorType", "VALIDATION_ERROR",
+                        "message", "Verfique los valores de los campos"
+                ));
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                    "status", "Éxito",
+                    "data", respuesta,
+                    "message", "Orden encabezado creado correctamente"
+            ));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error no controlado",
+                    "message", "Ocurrió un error no controlado"
+            ));
+        }
     }
 
     // Actualizar completamente una orden existente
     // Ruta: PUT localhost:8080/apiOrden/updateOrden/id
     @PutMapping("/updateOrden/{id}")
-    public String updateOrden(@PathVariable Long id, @Validated(DTOOrdenEncabezado.OnUpdate.class) @RequestBody DTOOrdenEncabezado dto) {
-        return service.update(id, dto);
+    public ResponseEntity<?> updateOrden(@PathVariable Long id, @Validated(DTOOrdenEncabezado.OnUpdate.class) @RequestBody DTOOrdenEncabezado dto) {
+        try{
+            DTOOrdenEncabezado ordenEncabezado = service.update(id, dto);
+            return ResponseEntity.ok().body(Map.of(
+                    "status", "Éxito",
+                    "data", ordenEncabezado,
+                    "message", "Orden Encabezado actualizado correctamente"
+            ));
+        } catch (ExceptionOrdenEncabezadoNoEncontrado e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error",
+                    "message", "Error no controlado al actualizar el orden encabezado"
+                    "description", e.getMessage()
+            ));
+        }
     }
 
     // Actualizar parcialmente una orden existente
     // Ruta: PATCH localhost:8080/apiOrden/updateOrdenPartial/id
     @PatchMapping("/updateOrdenPartial/{id}")
-    public String patchOrden(@PathVariable Long id, @Validated(DTOOrdenEncabezado.OnPatch.class) @RequestBody DTOOrdenEncabezado dto) {
-        return service.patchOrden(id, dto);
+    public ResponseEntity<?> patchOrden(@PathVariable Long id, @Validated(DTOOrdenEncabezado.OnPatch.class) @RequestBody DTOOrdenEncabezado dto) {
+        try{
+            DTOOrdenEncabezado ordenEncabezado = service.patchOrden(id, dto);
+            return ResponseEntity.ok().body(Map.of(
+                    "status", "Éxito",
+                    "data", ordenEncabezado,
+                    "message", "El orden encabezado ha sido actualizado parcialmente correctamente"
+            ));
+        } catch (ExceptionOrdenEncabezadoNoEncontrado noEncontrado){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", noEncontrado.getMessage()
+            ));
+        } catch (IllegalArgumentException illegal){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                    "status", "Error de validación",
+                    "message", illegal.getMessage()
+            ));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error no controlado",
+                    "message", "Error no controlado",
+                    "description", e.getMessage()
+            ));
+        }
     }
 
     // Eliminar una orden
     // Ruta: DELETE localhost:8080/apiOrden/deleteOrden/id
     @DeleteMapping("/deleteOrden/{id}")
-    public String deleteOrden(@PathVariable Long id) {
-        return service.delete(id);
+    public ResponseEntity<?> deleteOrden(@PathVariable Long id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.ok().body(Map.of(
+                    "status", "Éxito",
+                    "message", "Orden encabezado eliminado correctamente"
+            ));
+        } catch (ExceptionOrdenEncabezadoNoEncontrado e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
+        } catch (ExceptionOrdenEncabezadoRelacionado e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                    "status", "Error",
+                    "message", "No se pudo eliminar el orden encabezado porque tiene registros relacionados"
+            ));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error no controlado",
+                    "message", "Error no controlado al eliminar el orden encabezado"
+            ));
+        }
     }
 }
