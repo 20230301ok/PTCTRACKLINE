@@ -17,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/apiAduana")
+@CrossOrigin
 public class Aduana {
 
     @Autowired
@@ -40,7 +41,8 @@ public class Aduana {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error inesperado al buscar aduana por ID"
+                    "message", "Error inesperado al buscar aduana por ID",
+                    "description", e.getMessage()
             ));
         }
     }
@@ -104,7 +106,8 @@ public class Aduana {
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
-                    "message", "Error no controlado al registrar aduana"
+                    "message", "Error no controlado al registrar aduana",
+                    "description", e.getMessage()
             ));
         }
     }
@@ -128,7 +131,8 @@ public class Aduana {
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al actualizar la aduana"
+                    "message", "Error no controlado al actualizar la aduana",
+                    "description", e.getMessage()
             ));
         }
     }
@@ -162,7 +166,8 @@ public class Aduana {
         catch (Exception exceptionCodigo){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al editar parcialmente"
+                    "message", "Error no controlado al editar parcialmente",
+                    "description", exceptionCodigo.getMessage()
             ));
         }
     }
@@ -188,7 +193,11 @@ public class Aduana {
                    "message", "La aduana no se pudo elimanr porque tiene registros relacionados"
            ));
        } catch (Exception e){
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado al eliminar aduana");
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                   "status", "Error no controlado",
+                   "message", "Error no controlado al eliminar",
+                   "description", e.getMessage()
+           ));
        }
     }
 }

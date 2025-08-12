@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/apiOrdenServicio")
+@CrossOrigin
 public class OrdenServicio {
 
     @Autowired

@@ -1,105 +1,103 @@
 package apiTrackline.proyectoPTC.Services;
 
-
 import apiTrackline.proyectoPTC.Entities.ServicioTransporteEntity;
+import apiTrackline.proyectoPTC.Exceptions.ServicioTransporteExceptions.ExceptionServicioTransporteNoEncontrado;
+import apiTrackline.proyectoPTC.Exceptions.ServicioTransporteExceptions.ExceptionServicioTransporteNoRegistrado;
+import apiTrackline.proyectoPTC.Exceptions.ServicioTransporteExceptions.ExceptionServicioTransporteRelacionado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOServicioTransporte;
 import apiTrackline.proyectoPTC.Repositories.ServicioTransporteRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 public class ServicioTransporteService {
+
     @Autowired
     private ServicioTransporteRepository repo;
 
-    //MEtodo público que usa el repositorio y convierte entidades a DTOs
-    //Metodo HTTP GET (obtener datos)
-    public List<DTOServicioTransporte> getServicioTrans() {
-        List<ServicioTransporteEntity> serviciotrans = repo.findAll();
-        return serviciotrans.stream()
-                .map(this::convertirAServicioTransDTO)
-                .collect(Collectors.toList());
+    public Page<DTOServicioTransporte> obtenerServiciosTransporte(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ServicioTransporteEntity> pageEntity = repo.findAll(pageable);
+        return pageEntity.map(this::convertirADTO);
     }
 
-    private DTOServicioTransporte convertirAServicioTransDTO(ServicioTransporteEntity serviciotrans){
+    /**
+     * Conversión de Entidad a DTO
+     */
+    private DTOServicioTransporte convertirADTO(ServicioTransporteEntity entity) {
         DTOServicioTransporte dto = new DTOServicioTransporte();
-        dto.setIdServicioTransporte(serviciotrans.getIdServicioTransporte());
-        dto.setPlaca(serviciotrans.getPlaca());
-        dto.setTarjetaCirculacion(serviciotrans.getTarjetaCirculacion());
-        dto.setCapacidad(serviciotrans.getCapacidad());
+        dto.setIdServicioTransporte(entity.getIdServicioTransporte());
+        dto.setPlaca(entity.getPlaca());
+        dto.setTarjetaCirculacion(entity.getTarjetaCirculacion());
+        dto.setCapacidad(entity.getCapacidad());
         return dto;
     }
 
-    //Metodo HTTP post (insertar información)
-    public String postServicioTrans(DTOServicioTransporte dtoServicioTransporte) {
+    public DTOServicioTransporte agregarServicioTransporte(DTOServicioTransporte json) {
+        if (json == null) {
+            throw new IllegalArgumentException("No puedes agregar un registro sin datos");
+        }
+
         try {
-            ServicioTransporteEntity serviciotrans = new ServicioTransporteEntity();
-            serviciotrans.setIdServicioTransporte(dtoServicioTransporte.getIdServicioTransporte());
-            serviciotrans.setTarjetaCirculacion(dtoServicioTransporte.getTarjetaCirculacion());
-            serviciotrans.setPlaca(dtoServicioTransporte.getPlaca());
-            serviciotrans.setCapacidad(dtoServicioTransporte.getCapacidad());
-            repo.save(serviciotrans);
-            return "Información de servicio de transporte agregada correctamente";
+            ServicioTransporteEntity entity = new ServicioTransporteEntity();
+            entity.setPlaca(json.getPlaca());
+            entity.setTarjetaCirculacion(json.getTarjetaCirculacion());
+            entity.setCapacidad(json.getCapacidad());
+
+            ServicioTransporteEntity creado = repo.save(entity);
+            return convertirADTO(creado);
+
         } catch (Exception e) {
-            return "Error al agregar la información de servicio de transporte: " + e.getMessage();
+            log.error("Error al registrar el servicio de transporte: {}", e.getMessage());
+            throw new ExceptionServicioTransporteNoRegistrado("Error: servicio de transporte no registrado");
         }
     }
 
+    public DTOServicioTransporte actualizarServicioTransporte(Long id, DTOServicioTransporte json) {
+        ServicioTransporteEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + id));
 
-    //Metodo HTTP DELETE(eliminar) por id
-    public String deleteServicioTrans(long id) {
-        Optional<ServicioTransporteEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            repo.deleteById(id);
-            return "Información eliminada correctamente";
-        } else {
-            return "Información de el servicio de transporte no encontrada";
+        entity.setPlaca(json.getPlaca());
+        entity.setTarjetaCirculacion(json.getTarjetaCirculacion());
+        entity.setCapacidad(json.getCapacidad());
+
+        return convertirADTO(repo.save(entity));
+    }
+
+    public DTOServicioTransporte patchServicioTransporte(Long id, DTOServicioTransporte json) {
+        ServicioTransporteEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + id));
+
+        if (json.getPlaca() != null) entity.setPlaca(json.getPlaca());
+        if (json.getTarjetaCirculacion() != null) entity.setTarjetaCirculacion(json.getTarjetaCirculacion());
+        if (json.getCapacidad() != null) entity.setCapacidad(json.getCapacidad());
+
+        return convertirADTO(repo.save(entity));
+    }
+
+    /**
+     * Eliminar registro por ID
+     */
+    public String eliminarServicioTransporte(Long id) {
+        ServicioTransporteEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + id));
+        try {
+            repo.delete(entity);
+            return "Servicio de transporte eliminado correctamente";
+        } catch (DataIntegrityViolationException e) {
+            throw new ExceptionServicioTransporteRelacionado("No se pudo eliminar el servicio de transporte porque tiene registros relacionados");
         }
     }
 
-    //Metodo HTTP PUT(actualizar) por id
-    public String updateServicioTrans(Long id, DTOServicioTransporte dtoServicioTransporte){
-        Optional<ServicioTransporteEntity> optServicioTrans = repo.findById(id);
-        if (optServicioTrans.isPresent()) {
-
-            ServicioTransporteEntity serviciotrans = optServicioTrans.get();
-            serviciotrans.setCapacidad(dtoServicioTransporte.getCapacidad());
-            serviciotrans.setPlaca(dtoServicioTransporte.getPlaca());
-            serviciotrans.setTarjetaCirculacion(dtoServicioTransporte.getTarjetaCirculacion());
-
-            repo.save(serviciotrans);
-            return "Servicio de transporte actualizado correctamente";
-        } else {
-            return "Servicio de transporte no encontrado con ID: " + (id);
-        }
-    }
-
-    //Metodo HTTP PATCH(actualizar un solo campo) por id
-    public String patchServicioTrans(Long id, DTOServicioTransporte dto) {
-        Optional<ServicioTransporteEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            ServicioTransporteEntity serviciotrans = optional.get();
-
-
-            if (dto.getCapacidad() != null) {
-                serviciotrans.setCapacidad(dto.getCapacidad());
-            }
-            if (dto.getPlaca() != null) {
-                serviciotrans.setPlaca(dto.getPlaca());
-            }
-            if (dto.getIdServicioTransporte() != null) {
-                serviciotrans.setIdServicioTransporte(dto.getIdServicioTransporte());
-            }
-            if (dto.getTarjetaCirculacion() != null) {
-                serviciotrans.setTarjetaCirculacion(dto.getTarjetaCirculacion());
-            }
-            repo.save(serviciotrans);
-            return "Servicio de transporte actualizado parcialmente";
-        }
-        return "Servicio de transporte no encontrado";
+    public DTOServicioTransporte buscarServicioTransportePorId(Long id) {
+        ServicioTransporteEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("No se encontró el servicio de transporte con ID: " + id));
+        return convertirADTO(entity);
     }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/apiOrden")  // Ruta base: localhost:8080/apiOrden
+@CrossOrigin
 public class OrdenEncabezado {
     @Autowired  // Inyecta el servicio que contiene la lógica de negocio
     private OrdenEncabezadoService service;

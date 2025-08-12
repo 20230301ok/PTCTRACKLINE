@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/apiTipoDatoContable")
+@CrossOrigin
 public class TipoDatoContable {
 
     @Autowired

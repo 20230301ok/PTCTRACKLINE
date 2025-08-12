@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/apiCargos")
+@CrossOrigin
 public class Cargos {
 
     @Autowired

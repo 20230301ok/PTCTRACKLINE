@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/apiRoles")
+@CrossOrigin
 public class Roles {
     @Autowired
     private RolesService service;

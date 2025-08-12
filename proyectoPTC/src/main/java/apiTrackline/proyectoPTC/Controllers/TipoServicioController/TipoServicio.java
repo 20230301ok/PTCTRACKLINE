@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/apiTipoServicio")
+@CrossOrigin
 public class TipoServicio {
     @Autowired //Inyecta la clase service que tiene la lógica de la empresa
     private TipoServicioService service;

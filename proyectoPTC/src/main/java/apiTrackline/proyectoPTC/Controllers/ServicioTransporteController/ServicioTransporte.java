@@ -2,82 +2,151 @@ package apiTrackline.proyectoPTC.Controllers.ServicioTransporteController;
 
 import apiTrackline.proyectoPTC.Models.DTO.DTOServicioTransporte;
 import apiTrackline.proyectoPTC.Services.ServicioTransporteService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/apiServicioTransporte")
+@CrossOrigin
 public class ServicioTransporte {
+
     @Autowired
     private ServicioTransporteService service;
 
-    // Obtener todos los servicios de transporte
-    // Ruta: GET localhost:8080/apiServicioTransporte/data
+    // MÉTODO GET TODOS
+    // RUTA: GET localhost:8080/apiServicioTransporte/data
     @GetMapping("/data")
-    public List<DTOServicioTransporte> getServicioTransporte() {
-        return service.getServicioTrans();
+    public ResponseEntity<?> obtenerServicios(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        if (page < 0) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error de validación",
+                    "message", "El número de página no puede ser negativo"
+            ));
+        }
+
+        if (size <= 0 || size > 50) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error de validación",
+                    "message", "El tamaño de la página debe estar entre 1 y 50"
+            ));
+        }
+
+        try {
+            Page<DTOServicioTransporte> servicios = service.obtenerServiciosTransporte(page, size);
+            if (servicios == null || servicios.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "status", "Error",
+                        "message", "No hay servicios de transporte registrados"
+                ));
+            }
+            return ResponseEntity.ok(servicios);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error interno",
+                    "message", "Error no controlado al obtener servicios de transporte",
+                    "description", e.getMessage()
+            ));
+        }
     }
 
-    // Agregar servicios de transporte
-    // Ruta: POST localhost:8080/apiServicioTransporte/postST
+    // MÉTODO POST
+    // RUTA: POST localhost:8080/apiServicioTransporte/postST
     @PostMapping("/postST")
-    public ResponseEntity<String> postServicioTransporte(@RequestBody @Valid DTOServicioTransporte dto, BindingResult result) {
-        if (result.hasErrors()) {
-            // Devuelve el primer mensaje de validación si hay errores
-            return ResponseEntity.badRequest().body(Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
+    public ResponseEntity<?> agregarServicio(@Validated(DTOServicioTransporte.OnCreate.class) @RequestBody DTOServicioTransporte dto) {
+        try {
+            DTOServicioTransporte nuevo = service.agregarServicioTransporte(dto);
+            if (nuevo == null) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "status", "Error al insertar datos",
+                        "errorType", "VALIDATION_ERROR",
+                        "message", "Verifique los valores de los campos"
+                ));
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                    "status", "Éxito",
+                    "data", nuevo,
+                    "message", "Servicio de transporte creado correctamente"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error interno",
+                    "message", "Error no controlado al registrar servicio de transporte",
+                    "description", e.getMessage()
+            ));
         }
-
-        // Llama al servicio para guardar los servicios de transporte
-        String mensaje = service.postServicioTrans(dto);
-        return ResponseEntity.ok(mensaje);
     }
 
-    // Actualizar parcialmente (un campo) los servicios de transporte
-    // Ruta: patch localhost:8080/apiServicioTransporte/patchST/id
-    @PatchMapping("/patchST/{id}")
-    public ResponseEntity<String> patchServicioTransporte(@PathVariable Long id, @RequestBody @Valid DTOServicioTransporte dto, BindingResult result) {
-        if (result.hasErrors()) {
-            // Devuelve el primer mensaje de validación si hay errores
-            return ResponseEntity.badRequest().body(result.getFieldError().getDefaultMessage());
-        }
-
-        // Llama al servicio para actualizar un campo del registro
-        String mensaje = service.patchServicioTrans(id, dto);
-        return ResponseEntity.ok(mensaje);
-    }
-
-    //Elimina un registro
-    //Ruta: DELETE localhost:8080/apiServicioTransporte/deleteST/id
-    @DeleteMapping("/deleteST/{id}")
-    public ResponseEntity<String> deleteServicioTransporte(@PathVariable Long id){
-        // Llama al servicio para eliminar un registro
-        String mensaje = service.deleteServicioTrans(id);
-        return ResponseEntity.ok(mensaje);
-    }
-
-    // Actualizar completamente un servicio de transporte
-    // Ruta: PUT localhost:8080/apiServicioTransporte/updateTS/{id}
+    // MÉTODO PUT
+    // RUTA: PUT localhost:8080/apiServicioTransporte/updateTS/{id}
     @PutMapping("/updateTS/{id}")
-    public ResponseEntity<String> updateServicioTransporte(@PathVariable Long id, @RequestBody @Valid DTOServicioTransporte dto, BindingResult result) {
-        if (result.hasErrors()) {
-            // Devuelve el primer mensaje de error de validación
-            return ResponseEntity.badRequest()
-                    .body(Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
+    public ResponseEntity<?> actualizarServicio(@PathVariable Long id, @Validated(DTOServicioTransporte.OnUpdate.class) @RequestBody DTOServicioTransporte dto) {
+        try {
+            DTOServicioTransporte actualizado = service.actualizarServicioTransporte(id, dto);
+            if (actualizado == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "status", "Error",
+                        "message", "No se encontró el servicio de transporte con el ID especificado"
+                ));
+            }
+            return ResponseEntity.ok(actualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error interno",
+                    "message", "Error no controlado al actualizar servicio de transporte",
+                    "description", e.getMessage()
+            ));
         }
-        // Llama al servicio para hacer la actualización
-        String mensaje = service.updateServicioTrans(id, dto);
-        if (mensaje.toLowerCase().contains("no se encontró")) {
-            return ResponseEntity.notFound().build();
-        }
-        // Éxito
-        return ResponseEntity.ok(mensaje);
     }
 
+    // MÉTODO PATCH
+    // RUTA: PATCH localhost:8080/apiServicioTransporte/patchST/{id}
+    @PatchMapping("/patchST/{id}")
+    public ResponseEntity<?> actualizarParcialmente(@PathVariable Long id, @Validated(DTOServicioTransporte.OnPatch.class) @RequestBody DTOServicioTransporte dto) {
+        try {
+            DTOServicioTransporte actualizado = service.patchServicioTransporte(id, dto);
+            return ResponseEntity.ok(Map.of(
+                    "status", "Éxito",
+                    "data", actualizado
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                    "status", "Error de validación",
+                    "message", e.getMessage()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error interno",
+                    "message", "Error no controlado al editar parcialmente servicio de transporte",
+                    "description", e.getMessage()
+            ));
+        }
+    }
 
+    // MÉTODO DELETE
+    // RUTA: DELETE localhost:8080/apiServicioTransporte/deleteST/{id}
+    @DeleteMapping("/deleteST/{id}")
+    public ResponseEntity<?> eliminarServicio(@PathVariable Long id) {
+        try {
+            service.eliminarServicioTransporte(id);
+            return ResponseEntity.ok(Map.of(
+                    "status", "Éxito",
+                    "message", "El servicio de transporte ha sido eliminado correctamente"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error interno",
+                    "message", "Error no controlado al eliminar servicio de transporte",
+                    "description", e.getMessage()
+            ));
+        }
+    }
 }
