@@ -12,7 +12,11 @@ import lombok.*;
 public class ObservacionesEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "observacionesSeq")
+    @SequenceGenerator(name = "observacionesSeq", sequenceName = "SEQ_ID_OBS", allocationSize = 1)
     @Column(name = "IDOBSERVACIONES")
     private Long idObservaciones;
 

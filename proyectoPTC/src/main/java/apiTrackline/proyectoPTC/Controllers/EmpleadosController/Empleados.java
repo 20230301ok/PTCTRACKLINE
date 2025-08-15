@@ -3,6 +3,7 @@ package apiTrackline.proyectoPTC.Controllers.EmpleadosController;
 import apiTrackline.proyectoPTC.Exceptions.EmpleadosExceptions.*;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEmpleados;
 import apiTrackline.proyectoPTC.Services.EmpleadosService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/apiEmpleados")
@@ -36,6 +38,7 @@ public class Empleados {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al buscar un empleado por id", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
                     "message", "Error inesperado al buscar empleado por ID"
@@ -82,15 +85,16 @@ public class Empleados {
                     "message", e.getMessage()
             ));
         } catch (ExceptionEmpleadoNoRegistrado e) {
+            log.error("Error inesperado al agregar el empleado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
-                    "message", e.getMessage()
+                    "message", "Error inesperado al registrar el empleado"
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al agregar el empleado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error inesperado al registrar empleado",
-                    "description", e.getMessage()
+                    "message", "Error inesperado al registrar empleado"
             ));
         }
     }
@@ -121,10 +125,10 @@ public class Empleados {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al actualizar el empleado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error inesperado al actualizar empleado",
-                    "description", e.getMessage()
+                    "message", "Error inesperado al actualizar empleado"
             ));
         }
     }
@@ -160,11 +164,10 @@ public class Empleados {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al actualizar parcialmente el empleado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error inesperado al editar parcialmente empleado",
-                    "description", e.getMessage()
-
+                    "message", "Error inesperado al editar parcialmente empleado"
             ));
         }
     }
@@ -190,10 +193,10 @@ public class Empleados {
                     "message", "El empleado no se pudo eliminar porque tiene registros relacionados"
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al elimnar el empleado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error inesperado al eliminar empleado",
-                    "description", e.getMessage()
+                    "message", "Error inesperado al eliminar empleado"
             ));
         }
     }

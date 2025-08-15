@@ -15,11 +15,14 @@ import lombok.ToString;
 public class TipoDatoContableEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_id_TDC")
-    @SequenceGenerator(name = "seq_id_TDC", sequenceName = "SEQ_ID_TDC", allocationSize = 1)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tipoDatoContableSeq")
+    @SequenceGenerator(name = "tipoDatoContableSeq", sequenceName = "SEQ_ID_TDC", allocationSize = 1)
     @Column(name = "IDTIPODATOCONTABLE")
     private Long idTipoDatoContable;
 
-    @Column(name = "NOMBRE", length = 30, nullable = false)
+    @Column(name = "NOMBRE")
     private String nombre;
 }

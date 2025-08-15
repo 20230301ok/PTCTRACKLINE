@@ -4,8 +4,8 @@ import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaNoEnc
 import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaRelacionada;
 import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionTipoServicioNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
-import apiTrackline.proyectoPTC.Models.DTO.DTOOrdenEncabezado;
 import apiTrackline.proyectoPTC.Services.AduanaService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/apiAduana")
 @CrossOrigin
@@ -39,10 +40,10 @@ public class Aduana {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al obtener aduana por id", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error inesperado al buscar aduana por ID",
-                    "description", e.getMessage()
+                    "message", "Error inesperado al buscar aduana por ID"
             ));
         }
     }
@@ -87,7 +88,7 @@ public class Aduana {
         try {
             DTOAduana respuesta = service.agregarAduana(json);
             if (respuesta == null){
-                return ResponseEntity.badRequest().body(Map.of(
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                         "status", "Error al insertar datos",
                         "errorType", "VALIDATION_ERROR",
                         "message", "Verfique los valores de los campos"
@@ -104,10 +105,10 @@ public class Aduana {
         }
         //"Red de seguridad" para que capture todos los errores no previstos ya sea lógicos o de BD
         catch (Exception e){
+            log.error("Error inesperado al agregar aduana", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
-                    "message", "Error no controlado al registrar aduana",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al registrar aduana"
             ));
         }
     }
@@ -129,10 +130,10 @@ public class Aduana {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noEncontrado.getMessage());
         }
         catch (Exception e){
+            log.error("Error inesperado al actualizar aduana", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al actualizar la aduana",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al actualizar la aduana"
             ));
         }
     }
@@ -164,10 +165,10 @@ public class Aduana {
             ));
         }
         catch (Exception exceptionCodigo){
+            log.error("Error inesperado al actualizar parcialmente la aduana", exceptionCodigo);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al editar parcialmente",
-                    "description", exceptionCodigo.getMessage()
+                    "message", "Error no controlado al editar parcialmente"
             ));
         }
     }
@@ -190,13 +191,13 @@ public class Aduana {
        } catch (ExceptionAduanaRelacionada e){
            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
                    "status", "Error",
-                   "message", "La aduana no se pudo elimanr porque tiene registros relacionados"
+                   "message", "La aduana no se pudo eliminar porque tiene registros relacionados"
            ));
        } catch (Exception e){
+           log.error("Error inesperado al eliminar la aduana", e);
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                    "status", "Error no controlado",
-                   "message", "Error no controlado al eliminar",
-                   "description", e.getMessage()
+                   "message", "Error no controlado al eliminar"
            ));
        }
     }

@@ -2,12 +2,11 @@ package apiTrackline.proyectoPTC.Controllers.OrdenEncabezadoController;
 
 import apiTrackline.proyectoPTC.Exceptions.OrdenEncabezadoExceptions.ExceptionOrdenEncabezadoNoEncontrado;
 import apiTrackline.proyectoPTC.Exceptions.OrdenEncabezadoExceptions.ExceptionOrdenEncabezadoRelacionado;
-import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
 import apiTrackline.proyectoPTC.Models.DTO.DTOOrdenEncabezado;
 import apiTrackline.proyectoPTC.Services.OrdenEncabezadoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/apiOrden")  // Ruta base: localhost:8080/apiOrden
 @CrossOrigin
@@ -98,6 +98,7 @@ public class OrdenEncabezado {
                     "message", "Orden encabezado creado correctamente"
             ));
         } catch (Exception e){
+            log.error("Error inesperado al agregar la orden encabezado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
                     "message", "Ocurrió un error no controlado"
@@ -122,10 +123,10 @@ public class OrdenEncabezado {
                     "message", e.getMessage()
             ));
         } catch (Exception e){
+            log.error("Error inesperado al actualizar el orden encabezado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error",
                     "message", "Error no controlado al actualizar el orden encabezado"
-                    "description", e.getMessage()
             ));
         }
     }
@@ -152,10 +153,10 @@ public class OrdenEncabezado {
                     "message", illegal.getMessage()
             ));
         } catch (Exception e){
+            log.error("Error inesperado al actualizar parcialmente la orden encabezado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado",
-                    "description", e.getMessage()
+                    "message", "Error no controlado"
             ));
         }
     }
@@ -181,6 +182,7 @@ public class OrdenEncabezado {
                     "message", "No se pudo eliminar el orden encabezado porque tiene registros relacionados"
             ));
         } catch (Exception e){
+            log.error("Error inesperado al eliminar la orden encabezado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
                     "message", "Error no controlado al eliminar el orden encabezado"

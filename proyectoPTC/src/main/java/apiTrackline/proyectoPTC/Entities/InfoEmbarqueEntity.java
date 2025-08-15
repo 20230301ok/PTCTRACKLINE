@@ -12,7 +12,11 @@ import lombok.ToString;
 public class InfoEmbarqueEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "infoEmbarqueSeq")
+    @SequenceGenerator(name = "infoEmbarqueSeq", sequenceName = "SEQ_ID_IE", allocationSize = 1)
     @Column(name = "IDINFOEMBARQUE")
     private Long idInfoEmbarque;
 

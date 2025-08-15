@@ -13,7 +13,11 @@ import java.util.List;
 @Getter @Setter @ToString @EqualsAndHashCode
 public class UsuarioEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarioSeq")
+    @SequenceGenerator(name = "usuarioSeq", sequenceName = "SEQ_ID_US", allocationSize = 1)
     @Column(name = "IDUSUARIO")
     private Long idUsuario;
 

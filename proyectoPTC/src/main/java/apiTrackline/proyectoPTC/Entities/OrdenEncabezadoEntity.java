@@ -11,8 +11,13 @@ import java.util.Date;
 @Table(name = "TB_ORDENENCABEZADO")
 @Getter @Setter @ToString @EqualsAndHashCode
 public class    OrdenEncabezadoEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ordenEncabezadoSeq")
+    @SequenceGenerator(name = "ordenEncabezadoSeq", sequenceName = "SEQ_ID_OE", allocationSize = 1)
     @Column(name = "IDORDENENCABEZADO")
     private long idOrdenEncabezado;
 
@@ -28,7 +33,7 @@ public class    OrdenEncabezadoEntity {
     @Column(name = "IMPORTADOR")
     private String Importador;
 
-    @Column(name = "NIT")
+    @Column(name = "NIT",  unique = true)
     private String Nit;
 
     @Column(name = "REGISTROIVA")

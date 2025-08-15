@@ -2,21 +2,28 @@ package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.ServicioTransporteEntity;
 import apiTrackline.proyectoPTC.Entities.TransporteEntity;
+import apiTrackline.proyectoPTC.Exceptions.ServicioTransporteExceptions.ExceptionServicioTransporteNoEncontrado;
+import apiTrackline.proyectoPTC.Exceptions.TransporteExceptions.ExceptionTransporteNoEncontrado;
+import apiTrackline.proyectoPTC.Exceptions.TransporteExceptions.ExceptionTransporteNoRegistrado;
+import apiTrackline.proyectoPTC.Exceptions.TransporteExceptions.ExceptionTransporteRelacionado;
+import apiTrackline.proyectoPTC.Exceptions.TransporteExceptions.ExceptionTransportistaNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTransporte;
 import apiTrackline.proyectoPTC.Repositories.ServicioTransporteRepository;
 import apiTrackline.proyectoPTC.Repositories.TransporteRepository;
 import apiTrackline.proyectoPTC.Repositories.TransportistaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import apiTrackline.proyectoPTC.Entities.TransportistaEntity;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TransporteService {
-
 
     @Autowired
     private TransporteRepository transporteRepo;
@@ -27,17 +34,16 @@ public class TransporteService {
     @Autowired
     private ServicioTransporteRepository servicioTransporteRepo;
 
-    public List<DTOTransporte> obtenerTransportes() {
-        return transporteRepo.findAll().stream()
-                .map(this::convertirADTO)
-                .collect(Collectors.toList());
+    public Page<DTOTransporte> obtenerTransportes(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TransporteEntity> pageEntity = transporteRepo.findAll(pageable);
+        return pageEntity.map(this::convertirADTO);
     }
 
     public DTOTransporte convertirADTO(TransporteEntity entity) {
         DTOTransporte dto = new DTOTransporte();
         dto.setIdTransporte(entity.getIdTransporte());
 
-        // Datos del transportista
         if (entity.getTransportista() != null) {
             TransportistaEntity t = entity.getTransportista();
             dto.setIdTransportista(t.getIdTransportista());
@@ -51,7 +57,6 @@ public class TransporteService {
             dto.setContrasenia(t.getUsuarioT().getContrasenia());
         }
 
-        // Datos del servicio transporte
         if (entity.getServicioTransporte() != null) {
             ServicioTransporteEntity s = entity.getServicioTransporte();
             dto.setIdServicioTransporte(s.getIdServicioTransporte());
@@ -63,99 +68,82 @@ public class TransporteService {
         return dto;
     }
 
+    public DTOTransporte agregarTransporte(DTOTransporte dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("No puedes agregar un transporte sin datos");
+        }
 
-    public String agregarTransporte(DTOTransporte dto) {
+        TransportistaEntity transportista = transportistaRepo.findById(dto.getIdTransportista())
+                .orElseThrow(() -> new ExceptionTransportistaNoEncontrado("Transportista no encontrado con id " + dto.getIdTransportista()));
+
+        ServicioTransporteEntity servicio = servicioTransporteRepo.findById(dto.getIdServicioTransporte())
+                .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + dto.getIdServicioTransporte()));
+
         try {
             TransporteEntity entity = new TransporteEntity();
+            entity.setTransportista(transportista);
+            entity.setServicioTransporte(servicio);
 
-            Optional<TransportistaEntity> transportista = transportistaRepo.findById(dto.getIdTransportista());
-            Optional<ServicioTransporteEntity> servicio = servicioTransporteRepo.findById(dto.getIdServicioTransporte());
-
-            if (transportista.isPresent() && servicio.isPresent()) {
-                entity.setTransportista(transportista.get());
-                entity.setServicioTransporte(servicio.get());
-
-                transporteRepo.save(entity);
-                return "Transporte agregado correctamente";
-            } else {
-                return "Error: Transportista o servicio no encontrado";
-            }
+            TransporteEntity transporteCreado = transporteRepo.save(entity);
+            return convertirADTO(transporteCreado);
         } catch (Exception e) {
-            return "ERROR al agregar transporte: " + e.getMessage();
-        }
-    }
-    public String actualizarTransporte(Long id, DTOTransporte dto) {
-        Optional<TransporteEntity> optional = transporteRepo.findById(id);
-        if (optional.isPresent()) {
-            TransporteEntity entity = optional.get();
-
-            // Validar si el nuevo idTransportista existe
-            if (dto.getIdTransportista() != null) {
-                Optional<TransportistaEntity> transportista = transportistaRepo.findById(dto.getIdTransportista());
-                if (transportista.isPresent()) {
-                    entity.setTransportista(transportista.get());
-                } else {
-                    return "Error: El ID del transportista ingresado no existe";
-                }
-            }
-
-            // Validar si el nuevo idServicioTransporte existe
-            if (dto.getIdServicioTransporte() != null) {
-                Optional<ServicioTransporteEntity> servicio = servicioTransporteRepo.findById(dto.getIdServicioTransporte());
-                if (servicio.isPresent()) {
-                    entity.setServicioTransporte(servicio.get());
-                } else {
-                    return "Error: El ID del servicio de transporte ingresado no existe";
-                }
-            }
-
-            transporteRepo.save(entity);
-            return "Información del transporte actualizada correctamente";
-        } else {
-            return "Error: Transporte no encontrado";
+            log.error("Error al registrar el transporte: " + e.getMessage());
+            throw new ExceptionTransporteNoRegistrado("Error interno: transporte no registrado, intente de nuevo");
         }
     }
 
-    public String patchTransporte(Long id, DTOTransporte dto) {
-        Optional<TransporteEntity> optional = transporteRepo.findById(id);
-        if (optional.isPresent()) {
-            TransporteEntity entity = optional.get();
+    public DTOTransporte actualizarTransporte(Long id, DTOTransporte dto) {
+        TransporteEntity transporte = transporteRepo.findById(id)
+                .orElseThrow(() -> new ExceptionTransporteNoEncontrado("Transporte no encontrado con id " + id));
 
-            // Validar y actualizar transportista
-            if (dto.getIdTransportista() != null) {
-                Optional<TransportistaEntity> transportista = transportistaRepo.findById(dto.getIdTransportista());
-                if (transportista.isPresent()) {
-                    entity.setTransportista(transportista.get());
-                } else {
-                    return "Error: El ID de transportista ingresado no existe";
-                }
-            }
-
-            // Validar y actualizar servicio transporte
-            if (dto.getIdServicioTransporte() != null) {
-                Optional<ServicioTransporteEntity> servicio = servicioTransporteRepo.findById(dto.getIdServicioTransporte());
-                if (servicio.isPresent()) {
-                    entity.setServicioTransporte(servicio.get());
-                } else {
-                    return "Error: El ID de servicio de transporte ingresado no existe";
-                }
-            }
-
-            transporteRepo.save(entity);
-            return "Transporte actualizado parcialmente.";
+        if (dto.getIdTransportista() != null) {
+            TransportistaEntity transportista = transportistaRepo.findById(dto.getIdTransportista())
+                    .orElseThrow(() -> new ExceptionTransportistaNoEncontrado("Transportista no encontrado con id " + dto.getIdTransportista()));
+            transporte.setTransportista(transportista);
         }
 
-        return "Transporte no encontrado.";
+        if (dto.getIdServicioTransporte() != null) {
+            ServicioTransporteEntity servicio = servicioTransporteRepo.findById(dto.getIdServicioTransporte())
+                    .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + dto.getIdServicioTransporte()));
+            transporte.setServicioTransporte(servicio);
+        }
+
+        return convertirADTO(transporteRepo.save(transporte));
     }
 
-    public String eliminarTransporte(Long id){
-        Optional<TransporteEntity> optional = transporteRepo.findById(id);
-        if (optional.isPresent()){
-            transporteRepo.deleteById(id);
+    public DTOTransporte patchTransporte(Long id, DTOTransporte dto) {
+        TransporteEntity transporte = transporteRepo.findById(id)
+                .orElseThrow(() -> new ExceptionTransporteNoEncontrado("Transporte no encontrado con id " + id));
+
+        if (dto.getIdTransportista() != null) {
+            TransportistaEntity transportista = transportistaRepo.findById(dto.getIdTransportista())
+                    .orElseThrow(() -> new ExceptionTransportistaNoEncontrado("Transportista no encontrado con id " + dto.getIdTransportista()));
+            transporte.setTransportista(transportista);
+        }
+
+        if (dto.getIdServicioTransporte() != null) {
+            ServicioTransporteEntity servicio = servicioTransporteRepo.findById(dto.getIdServicioTransporte())
+                    .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + dto.getIdServicioTransporte()));
+            transporte.setServicioTransporte(servicio);
+        }
+
+        return convertirADTO(transporteRepo.save(transporte));
+    }
+
+    public String eliminarTransporte(Long id) {
+        TransporteEntity transporte = transporteRepo.findById(id)
+                .orElseThrow(() -> new ExceptionTransporteNoEncontrado("Transporte no encontrado con id " + id));
+        try {
+            transporteRepo.delete(transporte);
             return "Transporte eliminado correctamente";
+        } catch (DataIntegrityViolationException e) {
+            throw new ExceptionTransporteRelacionado("No se pudo eliminar el transporte porque tiene registros relacionados");
         }
-        else {
-            return "No se encontró un transporte con id: " + id;
-        }
+    }
+
+    public DTOTransporte buscarTransportePorId(Long id) {
+        TransporteEntity entity = transporteRepo.findById(id)
+                .orElseThrow(() -> new ExceptionTransporteNoEncontrado("No se encontró el transporte con ID: " + id));
+        return convertirADTO(entity);
     }
 }

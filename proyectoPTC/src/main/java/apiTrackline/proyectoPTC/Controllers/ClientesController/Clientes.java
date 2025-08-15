@@ -16,7 +16,6 @@ public class Clientes {
     @Autowired
     private ClientesService service;
 
-
     //Metodo GET
     //Ruta: localhost:8080/apiClientes/obtenerClientes
     @GetMapping("/obtenerClientes")

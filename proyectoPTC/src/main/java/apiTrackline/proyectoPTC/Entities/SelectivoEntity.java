@@ -13,7 +13,11 @@ import java.util.List;
 @Setter
 public class SelectivoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "selectivoSeq")
+    @SequenceGenerator(name = "selectivoSeq", sequenceName = "SEQ_ID_SELE", allocationSize = 1)
     @Column(name = "IDSELECTIVO")
     private Long idSelectivo;
 

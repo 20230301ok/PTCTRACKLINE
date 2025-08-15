@@ -16,8 +16,11 @@ import org.springframework.stereotype.Service;
 @Table(name = "TB_ADUANA")
 public class AduanaEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Si se autogenera en la BD
-    @Column(name = "IDADUANA")
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "aduanaSeq")
+    @SequenceGenerator(name = "aduanaSeq", sequenceName = "SEQ_ID_ADU", allocationSize = 1)
     private Long idAduana;
 
     //LLave foránea hacia la tabla tb_tipoServicio

@@ -15,7 +15,11 @@ import lombok.ToString;
 public class FinanciamientoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financiamientoSeq")
+    @SequenceGenerator(name = "financiamientoSeq", sequenceName = "SEQ_ID_FIN", allocationSize = 1)
     @Column(name = "IDFINANCIAMIENTO")
     private Long idFinanciamiento;
 

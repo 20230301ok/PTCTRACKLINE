@@ -89,7 +89,7 @@ public class AduanaService {
             return convertirAAduanaDTO(aduanaCreada);
 
         } catch (Exception e) {
-            log.error("Error al registrar la aduana: " + e.getMessage());
+            log.error("Error al registrar la aduana: " + e);
             throw new ExceptionAduanaNoRegistrada("Error: aduana no registrada");
         }
     }

@@ -17,7 +17,11 @@ import java.util.List;
 @Table(name = "TB_ROLES")
 public class RolesEntity {
     @Id
-    @Column(name = "IDROL")
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolesSeq")
+    @SequenceGenerator(name = "rolesSeq", sequenceName = "SEQ_ID_ROL", allocationSize = 1)
     private Long idRol;
 
     @Column(name = "ROL")

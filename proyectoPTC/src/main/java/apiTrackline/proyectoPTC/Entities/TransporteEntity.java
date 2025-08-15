@@ -11,7 +11,11 @@ import lombok.ToString;
 @Table(name = "TB_TRANSPORTE")
 public class TransporteEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transporteSeq")
+    @SequenceGenerator(name = "transporteSeq", sequenceName = "SEQ_ID_TRANS", allocationSize = 1)
     @Column(name = "IDTRANSPORTE")
     private Long idTransporte;
 

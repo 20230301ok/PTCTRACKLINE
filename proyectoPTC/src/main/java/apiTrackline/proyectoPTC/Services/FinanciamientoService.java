@@ -69,7 +69,7 @@ public class FinanciamientoService {
 
     public DTOFinanciamiento actualizarFinanciamiento(Long id, DTOFinanciamiento dto) {
         FinanciamientoEntity financiamiento = repo.findById(id)
-                .orElseThrow(() -> new ExceptionFinanciamientoNoEncontrado("Financiamineto no encontrado con id " + id));
+                .orElseThrow(() -> new ExceptionFinanciamientoNoEncontrado("Financiamiento no encontrado con id " + id));
 
         financiamiento.setMonto(dto.getMonto());
 

@@ -11,7 +11,11 @@ import lombok.*;
 @EqualsAndHashCode
 public class OrdenPermisosEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ordenPermisosSeq")
+    @SequenceGenerator(name = "ordenPermisosSeq", sequenceName = "SEQ_ID_OP", allocationSize = 1)
     @Column(name = "IDORDENPERMISOS")
     private Long idOrdenPermisos;
 

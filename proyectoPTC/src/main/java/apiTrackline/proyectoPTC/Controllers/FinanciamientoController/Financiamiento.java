@@ -5,6 +5,7 @@ import apiTrackline.proyectoPTC.Exceptions.FinanciamientoExceptions.ExceptionFin
 import apiTrackline.proyectoPTC.Exceptions.FinanciamientoExceptions.ExceptionTipoFinanciamientoNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOFinanciamiento;
 import apiTrackline.proyectoPTC.Services.FinanciamientoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/apiFinanciamiento")
@@ -80,10 +82,10 @@ public class Financiamiento {
         }
         //"Red de seguridad" para que capture todos los errores no previstos ya sea lógicos o de BD
         catch (Exception e){
+            log.error("Error inesperado al agregar el financiamiento", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al agregar",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al agregar"
             ));
         }
     }
@@ -108,10 +110,10 @@ public class Financiamiento {
             ));
         }
         catch (Exception e){
+            log.error("Error inesperado al actualizar el financiamiento", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al actualizar el financiamiento",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al actualizar el financiamiento"
             ));
         }
     }
@@ -144,10 +146,10 @@ public class Financiamiento {
             ));
         }
         catch (Exception exceptionCodigo){
+            log.error("Error inesperado al actualizar parcialmente el financiamiento", exceptionCodigo);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al editar parcialmente",
-                    "description", exceptionCodigo.getMessage()
+                    "message", "Error no controlado al editar parcialmente"
             ));
         }
     }
@@ -173,10 +175,10 @@ public class Financiamiento {
                     "message", "El financiamiento no se pudo eliminar porque tiene registros relacionados"
             ));
         } catch (Exception e){
+            log.error("Error inesperado al eliminar el financiamiento", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al eliminar",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al eliminar"
             ));
         }
     }

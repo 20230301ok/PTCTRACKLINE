@@ -10,7 +10,11 @@ import lombok.Setter;
 @Table(name = "TB_RECOLECCION")
 public class RecoleccionEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recoleccionSeq")
+    @SequenceGenerator(name = "recoleccionSeq", sequenceName = "SEQ_ID_RECO", allocationSize = 1)
     @Column(name = "IDRECOLECCION")
     private Long idRecoleccion;
 

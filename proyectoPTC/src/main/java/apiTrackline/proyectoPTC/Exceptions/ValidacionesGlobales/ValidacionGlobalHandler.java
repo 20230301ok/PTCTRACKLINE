@@ -1,6 +1,7 @@
 package apiTrackline.proyectoPTC.Exceptions.ValidacionesGlobales;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -59,4 +60,27 @@ public class ValidacionGlobalHandler {
         // Devuelve los errores con código 400 Bad Request
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
+
+    // Este método captura violaciones de integridad de datos en Oracle (UNIQUE, FOREIGN KEY, NOT NULL, etc.)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> manejarErroresIntegridad(DataIntegrityViolationException ex) {
+        Map<String, String> errores = new HashMap<>();
+        String mensaje = ex.getMostSpecificCause().getMessage();
+
+        if (mensaje != null && (mensaje.toUpperCase().contains("ORA-00001") || mensaje.toUpperCase().contains("UNIQUE"))) {
+            errores.put("error", "Ya existe un registro con estos datos. Verifique que no haya valores repetidos en campos únicos.");
+        }
+        else if (mensaje != null && mensaje.toUpperCase().contains("ORA-02291")) {
+            errores.put("error", "Violación de clave foránea: El registro relacionado no existe.");
+        }
+        else if (mensaje != null && mensaje.toUpperCase().contains("ORA-01400")) {
+            errores.put("error", "No puede insertar un valor nulo en un campo obligatorio.");
+        }
+        else {
+            errores.put("error", "Violación de integridad de datos. Verifique la información ingresada.");
+        }
+
+        return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
+    }
+
 }

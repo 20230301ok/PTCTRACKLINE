@@ -10,7 +10,11 @@ import lombok.Setter;
 @Table(name = "TB_ESTADOS")
 public class EstadosEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "estadosSeq")
+    @SequenceGenerator(name = "estadosSeq", sequenceName = "SEQ_ID_EST", allocationSize = 1)
     @Column(name = "IDESTADO")
     private Long idEstado;
 

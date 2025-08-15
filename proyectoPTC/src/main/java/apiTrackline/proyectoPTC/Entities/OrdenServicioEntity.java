@@ -14,7 +14,11 @@ import java.util.List;
 public class OrdenServicioEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ordenServiciosSeq")
+    @SequenceGenerator(name = "ordenServiciosSeq", sequenceName = "SEQ_ID_OS", allocationSize = 1)
     @Column(name = "IDORDENSERVICIO")
     private Long idOrdenServicio;
 
