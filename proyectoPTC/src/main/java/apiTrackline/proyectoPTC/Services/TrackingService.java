@@ -1,14 +1,20 @@
 package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.*;
+import apiTrackline.proyectoPTC.Exceptions.TrackingExceptions.*;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTracking;
-import apiTrackline.proyectoPTC.Repositories.*;
+import apiTrackline.proyectoPTC.Repositories.EstadosRepository;
+import apiTrackline.proyectoPTC.Repositories.TrackingRepository;
+import apiTrackline.proyectoPTC.Repositories.ViajeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+@Slf4j
 @Service
 public class TrackingService {
 
@@ -21,59 +27,30 @@ public class TrackingService {
     @Autowired
     private EstadosRepository estadosRepo;
 
-    public List<DTOTracking> getAll() {
-        List<TrackingEntity> lista = repo.findAll();
-        return lista.stream()
-                .map(this::convertirADTO)
-                .collect(Collectors.toList());
+    // MÉTODOS PRINCIPALES
+
+    // Obtener lista paginada de tracking (DTO)
+    public Page<DTOTracking> obtenerTrackings(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TrackingEntity> pageEntity = repo.findAll(pageable);
+        return pageEntity.map(this::convertirATrackingDTO);
     }
 
-    private DTOTracking convertirADTO(TrackingEntity entity) {
+    // Convertir de Entity → DTO
+    private DTOTracking convertirATrackingDTO(TrackingEntity entity) {
         DTOTracking dto = new DTOTracking();
-
         dto.setIdTracking(entity.getIdTracking());
-        dto.setIdViaje(entity.getIdViaje());
-        dto.setIdEstado(entity.getIdEstado());
 
-        // Campos Tracking
-        dto.setHoraEstimadaPartida(entity.getHoraEstimadaPartida());
-        dto.setHoraEstimadaLlegada(entity.getHoraEstimadaLlegada());
-        dto.setHoraSalida(entity.getHoraSalida());
-        dto.setHoraLlegada(entity.getHoraLlegada());
-        dto.setLugarPartida(entity.getLugarPartida());
-        dto.setLugarLlegada(entity.getLugarLlegada());
-        dto.setIdEstado(entity.getIdEstado());
-
-        // Relación Viaje y desde ahí OrdenServicio y Transporte
+        // --- Viaje
         if (entity.getViaje() != null) {
-            ViajeEntity viaje = entity.getViaje();
-            dto.setIdOrdenServicio(viaje.getOrdenServicio() != null ? viaje.getOrdenServicio().getIdOrdenServicio() : null);
+            dto.setIdViaje(entity.getViaje().getIdViaje());
 
-            if (viaje.getOrdenServicio() != null) {
-                var orden = viaje.getOrdenServicio();
+            if (entity.getViaje().getTransporte() != null) {
+                dto.setIdTransporte(entity.getViaje().getTransporte().getIdTransporte());
 
-                dto.setClienteNIT(orden.getClienteNIT());
-
-                if (orden.getCliente() != null) {
-                    dto.setNombreCliente(orden.getCliente().getNombre());
-                    dto.setApellidoCliente(orden.getCliente().getApellido());
-                    dto.setTelefonoCliente(orden.getCliente().getTelefono());
-                    dto.setCorreoCliente(orden.getCliente().getCorreo());
-                    dto.setCodEmpresaCliente(orden.getCliente().getCodEmpresa());
-
-                    if (orden.getCliente().getUsuario() != null) {
-                        dto.setIdUsuarioCliente(orden.getCliente().getUsuario().getIdUsuario());
-                        dto.setNombreUsuarioCliente(orden.getCliente().getUsuario().getUsuario());
-                    }
-                }
-            }
-
-            // Transporte desde viaje
-            if (viaje.getTransporte() != null) {
-                dto.setIdTransporte(viaje.getTransporte().getIdTransporte());
-
-                if (viaje.getTransporte().getServicioTransporte() != null) {
-                    var servicio = viaje.getTransporte().getServicioTransporte();
+                if (entity.getViaje().getTransporte().getServicioTransporte() != null) {
+                    var servicio = entity.getViaje().getTransporte().getServicioTransporte();
+                    dto.setIdServicioTransporte(servicio.getIdServicioTransporte());
                     dto.setPlacaServicio(servicio.getPlaca());
                     dto.setTarjetaCirculacionServicio(servicio.getTarjetaCirculacion());
                     dto.setCapacidadServicio(servicio.getCapacidad());
@@ -81,27 +58,51 @@ public class TrackingService {
             }
         }
 
+        // --- Estado
+        if (entity.getEstado() != null) {
+            dto.setIdEstado(entity.getEstado().getIdEstado());
+            dto.setDocumentos(entity.getEstado().getDocumentos());
+            dto.setClasificacion(entity.getEstado().getClasificacion());
+            dto.setDigitacion(entity.getEstado().getDigitacion());
+            dto.setRegistro(entity.getEstado().getRegistro());
+            dto.setPago(entity.getEstado().getPago());
+            if (entity.getEstado().getSelectivo() != null) {
+                dto.setIdSelectivo(entity.getEstado().getSelectivo().getIdSelectivo());
+                dto.setColorSelectivo(entity.getEstado().getSelectivo().getColorSelectivo());
+            }
+            dto.setLevantePago(entity.getEstado().getLevantePago());
+            dto.setEquipoTransporte(entity.getEstado().getEquipoTransporte());
+            dto.setCarga(entity.getEstado().getCarga());
+            dto.setEnCamino(entity.getEstado().getEnCamino());
+            dto.setEntregada(entity.getEstado().getEntregada());
+            dto.setFacturacion(entity.getEstado().getFacturacion());
+        }
+
+        // --- Tracking propio
+        dto.setHoraEstimadaPartida(entity.getHoraEstimadaPartida());
+        dto.setHoraEstimadaLlegada(entity.getHoraEstimadaLlegada());
+        dto.setHoraSalida(entity.getHoraSalida());
+        dto.setHoraLlegada(entity.getHoraLlegada());
+        dto.setLugarPartida(entity.getLugarPartida());
+        dto.setLugarLlegada(entity.getLugarLlegada());
+
         return dto;
     }
 
+    // CREATE
+    public DTOTracking agregarTracking(DTOTracking dto) {
+        if (dto == null) throw new IllegalArgumentException("No puedes agregar un tracking vacío");
 
-    public String create(DTOTracking dto) {
+        ViajeEntity viaje = viajeRepo.findById(dto.getIdViaje())
+                .orElseThrow(() -> new ExceptionViajeNoEncontrado("Viaje no encontrado con id " + dto.getIdViaje()));
+
+        EstadosEntity estado = estadosRepo.findById(dto.getIdEstado())
+                .orElseThrow(() -> new ExceptionEstadoNoEncontrado("Estado no encontrado con id " + dto.getIdEstado()));
+
         try {
-            Optional<ViajeEntity> viajeOpt = viajeRepo.findById(dto.getIdViaje());
-            if (viajeOpt.isEmpty()) return "Error: Viaje no encontrado";
-
-            ViajeEntity viaje = viajeOpt.get();
-            if (viaje.getOrdenServicio() == null)
-                return "Error: El viaje no tiene una orden de servicio asociada";
-
-            Optional<EstadosEntity> estadoOpt = estadosRepo.findById(dto.getIdEstado());
-            if (estadoOpt.isEmpty()) return "Error: Estado no encontrado";
-
             TrackingEntity entity = new TrackingEntity();
             entity.setViaje(viaje);
-            entity.setIdViaje(dto.getIdViaje());
-            entity.setEstado(estadoOpt.get());
-            entity.setIdEstado(dto.getIdEstado());
+            entity.setEstado(estado);
 
             entity.setHoraEstimadaPartida(dto.getHoraEstimadaPartida());
             entity.setHoraEstimadaLlegada(dto.getHoraEstimadaLlegada());
@@ -110,100 +111,82 @@ public class TrackingService {
             entity.setLugarPartida(dto.getLugarPartida());
             entity.setLugarLlegada(dto.getLugarLlegada());
 
-            repo.save(entity);
-            return "Tracking creado correctamente";
+            TrackingEntity creado = repo.save(entity);
+            return convertirATrackingDTO(creado);
+
         } catch (Exception e) {
-            return "Error al crear Tracking: " + e.getMessage();
+            log.error("Error al registrar el tracking: " + e);
+            throw new ExceptionTrackingNoRegistrado("Error: tracking no registrado");
         }
     }
 
+    // UPDATE (PUT)
+    public DTOTracking actualizarTracking(Long id, DTOTracking dto) {
+        TrackingEntity tracking = repo.findById(id)
+                .orElseThrow(() -> new ExceptionTrackingNoEncontrado("Tracking no encontrado con id " + id));
 
-    public String putUpdate(Long id, DTOTracking dto) {
-        try {
-            Optional<TrackingEntity> optional = repo.findById(id);
-            if (optional.isEmpty()) return "Error: Tracking no encontrado";
+        ViajeEntity viaje = viajeRepo.findById(dto.getIdViaje())
+                .orElseThrow(() -> new ExceptionViajeNoEncontrado("Viaje no encontrado con id " + dto.getIdViaje()));
 
-            if (dto.getIdViaje() == null || dto.getIdEstado() == null)
-                return "Error: PUT requiere idViaje y idEstado";
+        EstadosEntity estado = estadosRepo.findById(dto.getIdEstado())
+                .orElseThrow(() -> new ExceptionEstadoNoEncontrado("Estado no encontrado con id " + dto.getIdEstado()));
 
-            Optional<ViajeEntity> viajeOpt = viajeRepo.findById(dto.getIdViaje());
-            if (viajeOpt.isEmpty()) return "Error: Viaje no encontrado";
+        tracking.setViaje(viaje);
+        tracking.setEstado(estado);
 
-            if (viajeOpt.get().getOrdenServicio() == null)
-                return "Error: El viaje no tiene una orden de servicio asociada";
+        tracking.setHoraEstimadaPartida(dto.getHoraEstimadaPartida());
+        tracking.setHoraEstimadaLlegada(dto.getHoraEstimadaLlegada());
+        tracking.setHoraSalida(dto.getHoraSalida());
+        tracking.setHoraLlegada(dto.getHoraLlegada());
+        tracking.setLugarPartida(dto.getLugarPartida());
+        tracking.setLugarLlegada(dto.getLugarLlegada());
 
-            Optional<EstadosEntity> estadoOpt = estadosRepo.findById(dto.getIdEstado());
-            if (estadoOpt.isEmpty()) return "Error: Estado no encontrado";
-
-            TrackingEntity entity = optional.get();
-            entity.setViaje(viajeOpt.get());
-            entity.setIdViaje(dto.getIdViaje());
-            entity.setEstado(estadoOpt.get());
-            entity.setIdEstado(dto.getIdEstado());
-
-            entity.setHoraEstimadaPartida(dto.getHoraEstimadaPartida());
-            entity.setHoraEstimadaLlegada(dto.getHoraEstimadaLlegada());
-            entity.setHoraSalida(dto.getHoraSalida());
-            entity.setHoraLlegada(dto.getHoraLlegada());
-            entity.setLugarPartida(dto.getLugarPartida());
-            entity.setLugarLlegada(dto.getLugarLlegada());
-
-            repo.save(entity);
-            return "Tracking actualizado correctamente";
-        } catch (Exception e) {
-            return "Error al actualizar Tracking: " + e.getMessage();
-        }
+        return convertirATrackingDTO(repo.save(tracking));
     }
 
+    // ================== PATCH ==================
+    public DTOTracking patchTracking(Long id, DTOTracking dto) {
+        TrackingEntity tracking = repo.findById(id)
+                .orElseThrow(() -> new ExceptionTrackingNoEncontrado("Tracking no encontrado con id " + id));
 
-    public String delete(Long id) {
+        if (dto.getIdViaje() != null) {
+            ViajeEntity viaje = viajeRepo.findById(dto.getIdViaje())
+                    .orElseThrow(() -> new ExceptionViajeNoEncontrado("Viaje no encontrado con id " + dto.getIdViaje()));
+            tracking.setViaje(viaje);
+        }
+
+        if (dto.getIdEstado() != null) {
+            EstadosEntity estado = estadosRepo.findById(dto.getIdEstado())
+                    .orElseThrow(() -> new ExceptionEstadoNoEncontrado("Estado no encontrado con id " + dto.getIdEstado()));
+            tracking.setEstado(estado);
+        }
+
+        if (dto.getHoraEstimadaPartida() != null) tracking.setHoraEstimadaPartida(dto.getHoraEstimadaPartida());
+        if (dto.getHoraEstimadaLlegada() != null) tracking.setHoraEstimadaLlegada(dto.getHoraEstimadaLlegada());
+        if (dto.getHoraSalida() != null) tracking.setHoraSalida(dto.getHoraSalida());
+        if (dto.getHoraLlegada() != null) tracking.setHoraLlegada(dto.getHoraLlegada());
+        if (dto.getLugarPartida() != null) tracking.setLugarPartida(dto.getLugarPartida());
+        if (dto.getLugarLlegada() != null) tracking.setLugarLlegada(dto.getLugarLlegada());
+
+        return convertirATrackingDTO(repo.save(tracking));
+    }
+
+    // DELETE
+    public String eliminarTracking(Long id) {
+        TrackingEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionTrackingNoEncontrado("Tracking no encontrado con id " + id));
         try {
-            if (!repo.existsById(id)) return "Error: Tracking no encontrado";
-            repo.deleteById(id);
+            repo.delete(entity);
             return "Tracking eliminado correctamente";
-        } catch (Exception e) {
-            return "Error al eliminar Tracking: " + e.getMessage();
+        } catch (DataIntegrityViolationException e) {
+            throw new ExceptionTrackingRelacionado("No se pudo eliminar el tracking porque tiene registros relacionados");
         }
     }
 
-    public String patch(Long id, DTOTracking dto) {
-        try {
-            Optional<TrackingEntity> optional = repo.findById(id);
-            if (optional.isEmpty()) return "Error: Tracking no encontrado";
-
-            TrackingEntity entity = optional.get();
-
-            if (dto.getIdViaje() != null) {
-                Optional<ViajeEntity> viajeOpt = viajeRepo.findById(dto.getIdViaje());
-                if (viajeOpt.isEmpty()) return "Error: Viaje no encontrado";
-
-                if (viajeOpt.get().getOrdenServicio() == null)
-                    return "Error: El viaje no tiene una orden de servicio asociada";
-
-                entity.setViaje(viajeOpt.get());
-                entity.setIdViaje(dto.getIdViaje());
-            }
-
-            if (dto.getIdEstado() != null) {
-                Optional<EstadosEntity> estadoOpt = estadosRepo.findById(dto.getIdEstado());
-                if (estadoOpt.isEmpty()) return "Error: Estado no encontrado";
-
-                entity.setEstado(estadoOpt.get());
-                entity.setIdEstado(dto.getIdEstado());
-            }
-
-            if (dto.getHoraEstimadaPartida() != null) entity.setHoraEstimadaPartida(dto.getHoraEstimadaPartida());
-            if (dto.getHoraEstimadaLlegada() != null) entity.setHoraEstimadaLlegada(dto.getHoraEstimadaLlegada());
-            if (dto.getHoraSalida() != null) entity.setHoraSalida(dto.getHoraSalida());
-            if (dto.getHoraLlegada() != null) entity.setHoraLlegada(dto.getHoraLlegada());
-            if (dto.getLugarPartida() != null) entity.setLugarPartida(dto.getLugarPartida());
-            if (dto.getLugarLlegada() != null) entity.setLugarLlegada(dto.getLugarLlegada());
-
-            repo.save(entity);
-            return "Tracking actualizado parcialmente";
-        } catch (Exception e) {
-            return "Error al actualizar Tracking: " + e.getMessage();
-        }
+    // GET BY ID
+    public DTOTracking buscarTrackingPorId(Long id) {
+        TrackingEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionTrackingNoEncontrado("No se encontró tracking con ID: " + id));
+        return convertirATrackingDTO(entity);
     }
-
 }

@@ -101,7 +101,10 @@ public class Aduana {
             ));
         } //Cuando se ingresen los datos, no se encuentra el id del tipo de servicio (llave foránea) se captura la exception
         catch (ExceptionTipoServicioNoEncontrado noEncontrado){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noEncontrado.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", noEncontrado.getMessage()
+            ));
         }
         //"Red de seguridad" para que capture todos los errores no previstos ya sea lógicos o de BD
         catch (Exception e){
@@ -123,11 +126,17 @@ public class Aduana {
             return ResponseEntity.ok(aduana);
         }
         catch (ExceptionAduanaNoEncontrada e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
         }
         //Cuando se ingresen los datos, no se encuentra el id del tipo de servicio (llave foránea) se captura la exception
         catch (ExceptionTipoServicioNoEncontrado noEncontrado){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noEncontrado.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", noEncontrado.getMessage()
+            ));
         }
         catch (Exception e){
             log.error("Error inesperado al actualizar aduana", e);
@@ -189,6 +198,7 @@ public class Aduana {
                    "message", e.getMessage()
            ));
        } catch (ExceptionAduanaRelacionada e){
+           log.error("Error al eliminar", e);
            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
                    "status", "Error",
                    "message", "La aduana no se pudo eliminar porque tiene registros relacionados"

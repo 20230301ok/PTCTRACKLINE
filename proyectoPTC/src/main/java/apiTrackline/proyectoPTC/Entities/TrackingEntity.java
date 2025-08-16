@@ -20,16 +20,12 @@ public class TrackingEntity {
     @Column(name = "IDTRACKING")
     private Long idTracking;
 
-    @Column(name = "IDVIAJE", nullable = false)
-    private Long idViaje;
-
+    //Referencia a tabla foránea "Tb_Viajes"
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "IDVIAJE", referencedColumnName = "IDVIAJE", insertable = false, updatable = false)
     private ViajeEntity viaje;
 
-    @Column(name = "IDESTADO", nullable = false)
-    private Long idEstado;
-
+    //Referencia a tabla foránea "Tb_Estado"
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "IDESTADO", referencedColumnName = "IDESTADO", insertable = false, updatable = false)
     private EstadosEntity estado;
