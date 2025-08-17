@@ -1,6 +1,7 @@
 package apiTrackline.proyectoPTC.Controllers.EstadosController;
 
 import apiTrackline.proyectoPTC.Exceptions.EstadosExceptions.*;
+import apiTrackline.proyectoPTC.Exceptions.ObservacionesExceptions.ExceptionSelectivoNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEstados;
 import apiTrackline.proyectoPTC.Services.EstadosService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class Estados {
         try {
             DTOEstados estado = service.buscarEstadoPorId(id);
             return ResponseEntity.ok(Map.of("status", "Éxito", "data", estado));
-        } catch (ExceptionEstadoNoEncontrado e) {
+        } catch (ExceptionEstadoNoEncontrado | ExceptionOrdenServicioNoEncontrado | ExceptionSelectivoNoEncontrado e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "Error", "message", e.getMessage()));
         } catch (Exception e) {
             log.error("Error inesperado al obtener estado por id", e);
@@ -58,6 +59,8 @@ public class Estados {
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "Éxito", "data", respuesta, "message", "Estado creado correctamente"));
         } catch (ExceptionEstadoNoRegistrado e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "Error", "message", e.getMessage()));
+        } catch (ExceptionOrdenServicioNoEncontrado | ExceptionSelectivoNoEncontrado e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "Error", "message", e.getMessage()));
         } catch (Exception e) {
             log.error("Error inesperado al agregar estado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("status", "Error", "message", "Error no controlado"));
@@ -72,6 +75,8 @@ public class Estados {
             return ResponseEntity.ok(estado);
         } catch (ExceptionEstadoNoEncontrado e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "Error", "message", e.getMessage()));
+        } catch (ExceptionOrdenServicioNoEncontrado | ExceptionSelectivoNoEncontrado e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "Error", "message", e.getMessage()));
         } catch (Exception e) {
             log.error("Error inesperado al actualizar estado", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("status", "Error", "message", "Error no controlado"));
@@ -85,6 +90,8 @@ public class Estados {
             DTOEstados actualizado = service.patchEstado(id, json);
             return ResponseEntity.ok(Map.of("status", "Éxito", "data", actualizado));
         } catch (ExceptionEstadoNoEncontrado e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "Error", "message", e.getMessage()));
+        } catch (ExceptionOrdenServicioNoEncontrado | ExceptionSelectivoNoEncontrado e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "Error", "message", e.getMessage()));
         } catch (Exception e) {
             log.error("Error inesperado al actualizar parcialmente estado", e);

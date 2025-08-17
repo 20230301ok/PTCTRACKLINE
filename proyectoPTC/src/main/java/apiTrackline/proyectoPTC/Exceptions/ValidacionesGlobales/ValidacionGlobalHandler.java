@@ -41,13 +41,20 @@ public class ValidacionGlobalHandler {
             // Recorremos los paths del error para identificar el campo que causó el error
             ife.getPath().forEach(ref -> {
                 String campo = ref.getFieldName();
+                Class<?> tipoEsperado = ife.getTargetType(); // Obtenemos el tipo de dato esperado
                 String mensaje;
 
                 // Si el tipo esperado era Date, damos un mensaje personalizado
-                if (ref.getFrom() instanceof java.util.Date || ref.getFrom().toString().contains("Date")) {
+                if (tipoEsperado == java.util.Date.class) {
                     mensaje = "El formato de fecha es inválido. Use 'dd-MM-yyyy'.";
-                } else {
-                    mensaje = "El valor enviado no es válido para el campo: " + campo + ". Verifique los datos";
+                }
+                // Si el tipo esperado era Boolean, damos un mensaje claro
+                else if (tipoEsperado == Boolean.class || tipoEsperado == boolean.class) {
+                    mensaje = "El campo '" + campo + "' solo acepta valores booleanos: true, false, 1 o 0.";
+                }
+                // Si no es Date ni Boolean, damos un mensaje genérico
+                else {
+                    mensaje = "El valor enviado no es válido para el campo: " + campo + ". Verifique los datos.";
                 }
 
                 errores.put(campo, mensaje);
@@ -60,6 +67,7 @@ public class ValidacionGlobalHandler {
         // Devuelve los errores con código 400 Bad Request
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
+
 
     // Este método captura violaciones de integridad de datos en Oracle (UNIQUE, FOREIGN KEY, NOT NULL, etc.)
     @ExceptionHandler(DataIntegrityViolationException.class)

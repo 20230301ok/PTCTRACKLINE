@@ -21,6 +21,7 @@ public class AduanaEntity {
     //sequenceName: Nombre de la secuencia en oracle
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "aduanaSeq")
     @SequenceGenerator(name = "aduanaSeq", sequenceName = "SEQ_ID_ADU", allocationSize = 1)
+    @Column(name = "IDADUANA")
     private Long idAduana;
 
     //LLave foránea hacia la tabla tb_tipoServicio

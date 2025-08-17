@@ -18,7 +18,7 @@ public class DTOTracking {
 
     // Campos relacionados con Viaje
     @Positive(message = "El id de viaje no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
-    @NotBlank(message = "El id de transporte no puede estar vacío", groups = {OnCreate.class, OnUpdate.class})
+    @NotNull(message = "El id de transporte no puede estar vacío", groups = {OnCreate.class, OnUpdate.class})
     private Long idViaje;
     // Desde Viaje -> Transporte (solo campos necesarios)
     private Long idTransporte;

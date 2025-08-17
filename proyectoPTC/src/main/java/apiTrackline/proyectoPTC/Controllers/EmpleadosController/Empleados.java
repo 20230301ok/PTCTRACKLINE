@@ -5,12 +5,12 @@ import apiTrackline.proyectoPTC.Models.DTO.DTOEmpleados;
 import apiTrackline.proyectoPTC.Services.EmpleadosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -46,21 +46,22 @@ public class Empleados {
         }
     }
 
-    // MÉTODO GET - Obtener todos los empleados
-    // RUTA: localhost:8080/apiEmpleados/datosEmpleados
+    // GET con paginación
     @GetMapping("/datosEmpleados")
-    public ResponseEntity<?> obtenerTodosEmpleados() {
-        List<DTOEmpleados> empleados = service.obtenerEmpleados();
-        if (empleados.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+    public ResponseEntity<?> obtenerEmpleados(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        try {
+            Page<DTOEmpleados> empleados = service.obtenerEmpleados(page, size);
+            return ResponseEntity.ok(empleados);
+        } catch (Exception e) {
+            log.error("Error al obtener empleados", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error",
-                    "message", "No hay empleados registrados"
+                    "message", "Error no controlado al obtener empleados"
             ));
         }
-        return ResponseEntity.ok(Map.of(
-                "status", "Éxito",
-                "data", empleados
-        ));
     }
 
     // MÉTODO POST

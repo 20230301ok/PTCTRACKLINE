@@ -1,12 +1,10 @@
 package apiTrackline.proyectoPTC.Services;
 
-import apiTrackline.proyectoPTC.Entities.AduanaEntity;
+import apiTrackline.proyectoPTC.Entities.ClientesEntity;
 import apiTrackline.proyectoPTC.Entities.EmpleadosEntity;
 import apiTrackline.proyectoPTC.Entities.UsuarioEntity;
-import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaNoEncontrada;
-import apiTrackline.proyectoPTC.Exceptions.AduanaExceptions.ExceptionAduanaRelacionada;
 import apiTrackline.proyectoPTC.Exceptions.EmpleadosExceptions.*;
-import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
+import apiTrackline.proyectoPTC.Models.DTO.DTOClientes;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEmpleados;
 import apiTrackline.proyectoPTC.Repositories.ClientesRepository;
 import apiTrackline.proyectoPTC.Repositories.EmpleadosRepository;
@@ -15,10 +13,12 @@ import apiTrackline.proyectoPTC.Repositories.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,11 +37,12 @@ public class EmpleadosService {
     private TransportistaRepository transportistasRepo;
 
 
-    public List<DTOEmpleados> obtenerEmpleados(){
-        List<EmpleadosEntity> entity = repo.findAll();
-        return entity.stream()
-                .map(this::convertirAEmpleadosDTO)
-                .collect(Collectors.toList());
+    public Page<DTOEmpleados> obtenerEmpleados(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EmpleadosEntity> pageEntity = repo.findAll(pageable);
+        return pageEntity.map(this::convertirAEmpleadosDTO);
+        //TODO LO QUE SALE DE LA BASE SALE COMO ENTIDAD
+        //TODO LO QUE ENTRA A LA BASE DEBE ENTRAR COMO ENTIDAD
     }
 
     private DTOEmpleados convertirAEmpleadosDTO(EmpleadosEntity entity){

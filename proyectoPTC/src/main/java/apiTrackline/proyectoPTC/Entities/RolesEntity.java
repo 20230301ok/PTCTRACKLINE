@@ -22,6 +22,7 @@ public class RolesEntity {
     //sequenceName: Nombre de la secuencia en oracle
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolesSeq")
     @SequenceGenerator(name = "rolesSeq", sequenceName = "SEQ_ID_ROL", allocationSize = 1)
+    @Column(name = "IDROL")
     private Long idRol;
 
     @Column(name = "ROL")

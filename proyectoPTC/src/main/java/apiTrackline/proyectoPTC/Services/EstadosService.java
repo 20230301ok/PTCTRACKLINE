@@ -1,9 +1,14 @@
 package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.EstadosEntity;
+import apiTrackline.proyectoPTC.Entities.OrdenServicioEntity;
+import apiTrackline.proyectoPTC.Entities.SelectivoEntity;
 import apiTrackline.proyectoPTC.Exceptions.EstadosExceptions.*;
+import apiTrackline.proyectoPTC.Exceptions.ObservacionesExceptions.ExceptionSelectivoNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEstados;
 import apiTrackline.proyectoPTC.Repositories.EstadosRepository;
+import apiTrackline.proyectoPTC.Repositories.OrdenServicioRepository;
+import apiTrackline.proyectoPTC.Repositories.SelectivoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +23,12 @@ public class EstadosService {
 
     @Autowired
     private EstadosRepository repo;
+
+    @Autowired
+    private OrdenServicioRepository ordenRepo;
+
+    @Autowired
+    private SelectivoRepository selectivoRepo;
 
     // ================== MÉTODOS ==================
 
@@ -38,9 +49,15 @@ public class EstadosService {
         dto.setRegistro(entity.getRegistro());
         dto.setPago(entity.getPago());
 
+        // Selectivo
         if (entity.getSelectivo() != null) {
             dto.setIdSelectivo(entity.getSelectivo().getIdSelectivo());
             dto.setColorSelectivo(entity.getSelectivo().getColorSelectivo());
+        }
+
+        // Orden de Servicio
+        if (entity.getOrdenServicioEstados() != null) {
+            dto.setIdOrdenServicio(entity.getOrdenServicioEstados().getIdOrdenServicio());
         }
 
         dto.setLevantePago(entity.getLevantePago());
@@ -56,6 +73,17 @@ public class EstadosService {
     // CREATE
     public DTOEstados agregarEstado(DTOEstados dto) {
         if (dto == null) throw new IllegalArgumentException("No puedes agregar un estado vacío");
+
+        // Validamos que el idOrdenServicio exista
+        OrdenServicioEntity orden = ordenRepo.findById(dto.getIdOrdenServicio())
+                .orElseThrow(() -> new ExceptionOrdenServicioNoEncontrado(
+                        "Orden de servicio no encontrada con id " + dto.getIdOrdenServicio()));
+
+        // Validamos que el idSelectivo exista
+        SelectivoEntity selectivo = selectivoRepo.findById(dto.getIdSelectivo())
+                .orElseThrow(() -> new ExceptionSelectivoNoEncontrado(
+                        "Selectivo no encontrado con id " + dto.getIdSelectivo()));
+
         try {
             EstadosEntity entity = new EstadosEntity();
             entity.setDocumentos(dto.getDocumentos());
@@ -70,8 +98,14 @@ public class EstadosService {
             entity.setEntregada(dto.getEntregada());
             entity.setFacturacion(dto.getFacturacion());
 
+            // Relacionar con entidades
+            entity.setOrdenServicioEstados(orden);
+            entity.setSelectivo(selectivo);
+
             EstadosEntity creado = repo.save(entity);
+            log.info("ID creado: " + creado.getIdEstado()); // muestra el ID real insertado
             return convertirADTO(creado);
+
 
         } catch (Exception e) {
             log.error("Error al registrar el estado: " + e);
@@ -96,6 +130,22 @@ public class EstadosService {
         estado.setEntregada(dto.getEntregada());
         estado.setFacturacion(dto.getFacturacion());
 
+        // Validamos si quiere actualizar la orden de servicio
+        if (dto.getIdOrdenServicio() != null) {
+            OrdenServicioEntity orden = ordenRepo.findById(dto.getIdOrdenServicio())
+                    .orElseThrow(() -> new ExceptionOrdenServicioNoEncontrado(
+                            "Orden de servicio no encontrada con id " + dto.getIdOrdenServicio()));
+            estado.setOrdenServicioEstados(orden);
+        }
+
+        // Validamos si quiere actualizar el selectivo
+        if (dto.getIdSelectivo() != null) {
+            SelectivoEntity selectivo = selectivoRepo.findById(dto.getIdSelectivo())
+                    .orElseThrow(() -> new ExceptionSelectivoNoEncontrado(
+                            "Selectivo no encontrado con id " + dto.getIdSelectivo()));
+            estado.setSelectivo(selectivo);
+        }
+
         return convertirADTO(repo.save(estado));
     }
 
@@ -115,6 +165,22 @@ public class EstadosService {
         if (dto.getEnCamino() != null) estado.setEnCamino(dto.getEnCamino());
         if (dto.getEntregada() != null) estado.setEntregada(dto.getEntregada());
         if (dto.getFacturacion() != null) estado.setFacturacion(dto.getFacturacion());
+
+        // Validamos si quiere actualizar la orden de servicio
+        if (dto.getIdOrdenServicio() != null) {
+            OrdenServicioEntity orden = ordenRepo.findById(dto.getIdOrdenServicio())
+                    .orElseThrow(() -> new ExceptionOrdenServicioNoEncontrado(
+                            "Orden de servicio no encontrada con id " + dto.getIdOrdenServicio()));
+            estado.setOrdenServicioEstados(orden);
+        }
+
+        // Validamos si quiere actualizar el selectivo
+        if (dto.getIdSelectivo() != null) {
+            SelectivoEntity selectivo = selectivoRepo.findById(dto.getIdSelectivo())
+                    .orElseThrow(() -> new ExceptionSelectivoNoEncontrado(
+                            "Selectivo no encontrado con id " + dto.getIdSelectivo()));
+            estado.setSelectivo(selectivo);
+        }
 
         return convertirADTO(repo.save(estado));
     }
