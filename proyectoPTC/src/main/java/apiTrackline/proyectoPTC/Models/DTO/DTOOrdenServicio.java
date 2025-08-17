@@ -12,7 +12,7 @@ public class DTOOrdenServicio {
     private Long idOrdenServicio;
 
     // Cliente
-    @NotNull(message = "El 'clienteNIT' es obligatorio", groups = {OnCreate.class, OnUpdate.class})
+    @NotNull(message = "El 'clienteNIT' es obligatorio", groups = {OnCreate.class})
     private String clienteNIT;
     private String nombreCliente;
     private String apellidoCliente;
@@ -90,6 +90,7 @@ public class DTOOrdenServicio {
     private String paisDestino;
 
     // Cargos
+    @Positive(message = "El id de cargos no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idCargos;
     private Long montoCargos;
     //Cargos -----> TipoDatoContable

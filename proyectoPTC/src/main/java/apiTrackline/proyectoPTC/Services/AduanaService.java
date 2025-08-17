@@ -26,7 +26,6 @@ public class AduanaService {
     @Autowired
     private TipoServicioRepository tipoServiciorepo;
 
-    //El metodo pide una lista porque en el front end solo se puede mostrar un DTO
     public Page<DTOAduana> obtenerAduanas(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<AduanaEntity> pageEntity = repo.findAll(pageable);
