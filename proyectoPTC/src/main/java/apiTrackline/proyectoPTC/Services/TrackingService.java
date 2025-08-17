@@ -2,6 +2,7 @@ package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.*;
 import apiTrackline.proyectoPTC.Exceptions.TrackingExceptions.*;
+import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTipoServicio;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTracking;
 import apiTrackline.proyectoPTC.Repositories.EstadosRepository;
@@ -33,11 +34,13 @@ public class TrackingService {
 
     // MÉTODOS PRINCIPALES
 
-    public List<DTOTracking> obtenerTrackings() {
-        List<TrackingEntity> trackingEntities = repo.findAll();
-        return trackingEntities.stream()
-                .map(this::convertirATrackingDTO)
-                .collect(Collectors.toList());
+    //El metodo pide una lista porque en el front end solo se puede mostrar un DTO
+    public Page<DTOTracking> obtenerTrackings(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TrackingEntity> pageEntity = repo.findAll(pageable);
+        return pageEntity.map(this::convertirATrackingDTO);
+        //TODO LO QUE SALE DE LA BASE SALE COMO ENTIDAD
+        //TODO LO QUE ENTRA A LA BASE DEBE ENTRAR COMO ENTIDAD
     }
 
     // Convertir de Entity → DTO

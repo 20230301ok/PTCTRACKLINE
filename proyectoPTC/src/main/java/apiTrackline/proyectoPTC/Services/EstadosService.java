@@ -181,7 +181,6 @@ public class EstadosService {
                             "Selectivo no encontrado con id " + dto.getIdSelectivo()));
             estado.setSelectivo(selectivo);
         }
-
         return convertirADTO(repo.save(estado));
     }
 

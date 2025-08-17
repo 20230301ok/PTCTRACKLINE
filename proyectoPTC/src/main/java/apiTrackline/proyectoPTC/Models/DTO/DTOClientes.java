@@ -12,7 +12,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class DTOClientes {
 
-    @NotBlank(message = "El campo 'clienteNit' no puede estar vacío", groups = {OnCreate.class, OnUpdate.class})
+    @NotBlank(message = "El campo 'clienteNit' no puede estar vacío", groups = {OnCreate.class})
     @Size(max = 20, message = "El campo 'clienteNit' debe tener como máximo 20 caracteres", groups = {OnCreate.class, OnPatch.class, OnUpdate.class})
     private String clienteNit;
 

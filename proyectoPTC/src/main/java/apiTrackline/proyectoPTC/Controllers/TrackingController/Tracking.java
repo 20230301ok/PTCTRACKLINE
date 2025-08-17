@@ -1,6 +1,7 @@
 package apiTrackline.proyectoPTC.Controllers.TrackingController;
 
 import apiTrackline.proyectoPTC.Exceptions.TrackingExceptions.*;
+import apiTrackline.proyectoPTC.Models.DTO.DTOAduana;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTracking;
 import apiTrackline.proyectoPTC.Services.TrackingService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,20 +52,32 @@ public class Tracking {
     // MÉTODO GET
     // RUTA: localhost:8080/apiTracking/obtenerTrackings
     @GetMapping("/obtenerTrackings")
-    public ResponseEntity<?> obtenerTrackings() {
-        try {
-            List<DTOTracking> trackings = service.obtenerTrackings();
-            return ResponseEntity.ok(Map.of(
-                    "status", "Éxito",
-                    "data", trackings
-            ));
-        } catch (Exception e) {
-            log.error("Error inesperado al obtener trackings", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error no controlado",
-                    "message", "Error inesperado al buscar trackings"
+    public ResponseEntity<?> obtenerTrackings(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        if (page < 0) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error de validación",
+                    "message", "El número de página no puede ser negativo"
             ));
         }
+
+        if (size <= 0 || size > 50) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error de validación",
+                    "message", "El tamaño de la página debe estar entre 1 y 50"
+            ));
+        }
+
+        Page<DTOTracking> trackings = service.obtenerTrackings(page, size);
+        if (trackings == null || trackings.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", "No hay trackings registradas"
+            ));
+        }
+        return ResponseEntity.ok(trackings);
     }
 
 

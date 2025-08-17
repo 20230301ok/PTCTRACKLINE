@@ -89,17 +89,24 @@ public class ClientesService {
                     throw new ExceptionClienteUsuarioYaAsignado("Usuario ya está asignado a otro registro");
                 }
                 UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
-                        .orElseThrow(() -> new ExceptionClienteUsuarioNoEncontrado("Usuario no encontrado con id: " + dto.getIdUsuario()));
+                        .orElseThrow(() -> new ExceptionClienteUsuarioNoEncontrado(
+                                "Usuario no encontrado con id: " + dto.getIdUsuario()));
                 entity.setUsuario(usuario);
             }
 
             ClientesEntity guardado = repo.save(entity);
             return convertirDTO(guardado);
+
+        } catch (ExceptionClienteUsuarioYaAsignado |
+                 ExceptionClienteUsuarioNoEncontrado e) {
+            throw e;
+
         } catch (Exception e) {
-            log.error("Error al agregar cliente: {}", e.getMessage());
+            log.error("Error inesperado al agregar cliente", e);
             throw new ExceptionClienteNoRegistrado("Error al registrar cliente");
         }
     }
+
 
     public DTOClientes actualizarCliente(String nit, DTOClientes dto) {
         ClientesEntity entity = repo.findById(nit)
@@ -164,17 +171,19 @@ public class ClientesService {
         List<ClientesEntity> clientes;
 
         if (nit != null && !nit.isBlank()) {
-            // Buscar por NIT exacto
-            ClientesEntity entity = repo.findById(nit)
-                    .orElseThrow(() -> new ExceptionClienteNoEncontrado("No se encontró cliente con NIT: " + nit));
+            String nitLimpio = nit.trim(); // nueva variable
+            ClientesEntity entity = repo.findById(nitLimpio)
+                    .orElseThrow(() -> new ExceptionClienteNoEncontrado("No se encontró cliente con NIT: " + nitLimpio));
             clientes = List.of(entity);
-        } else if (nombre != null && !nombre.isBlank()) {
-            // Buscar por nombre (case insensitive, parcial)
+        }
+        else if (nombre != null && !nombre.isBlank()) {
+            nombre = nombre.trim();
             clientes = repo.findByNombreIgnoreCaseContaining(nombre);
             if (clientes.isEmpty()) {
                 throw new ExceptionClienteNoEncontrado("No se encontró cliente con nombre: " + nombre);
             }
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("Debe proporcionar NIT o nombre para buscar");
         }
 
