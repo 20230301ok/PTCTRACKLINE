@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -26,7 +27,7 @@ public class DTOOrdenServicio {
     // Orden Encabezado
     @Positive(message = "El id de orden encabezado no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idOrdenEncabezado;
-    private Date fechaOrden;
+    private LocalDate fechaOrden;
     private String encargadoUno;
     private String referencia;
     private String importador;
@@ -58,7 +59,7 @@ public class DTOOrdenServicio {
     //Aduana ----->tipoServicio
     private Long idTipoServicio;
     private String nombreTipoServicio;
-
+    
     // Transporte
     @Positive(message = "El id de transporte no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private Long idTransporte;

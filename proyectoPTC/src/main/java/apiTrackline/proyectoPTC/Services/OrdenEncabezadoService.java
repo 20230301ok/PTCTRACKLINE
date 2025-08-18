@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @Slf4j
@@ -42,6 +44,9 @@ public class OrdenEncabezadoService {
             throw new IllegalArgumentException("No puedes agregar un registro sin datos");
         }
         try {
+            // Forzar la fecha a hoy, ignorando lo que venga en el JSON
+            dto.setFecha(LocalDate.now(ZoneId.of("America/El_Salvador")));
+
             OrdenEncabezadoEntity orden = convertirAEntidad(dto);
             OrdenEncabezadoEntity creada = repo.save(orden);
             return convertirADTO(creada);
@@ -64,7 +69,9 @@ public class OrdenEncabezadoService {
                         "Orden encabezado no encontrado con id: " + id
                 ));
         try {
-            orden.setFecha(dto.getFecha());
+            //Forzamos que la fecha actualizada sea la misma (Fecha actual)
+            orden.setFecha(LocalDate.now(ZoneId.of("America/El_Salvador")));
+
             orden.setEncargado(dto.getEncargado());
             orden.setReferencia(dto.getReferencia());
             orden.setImportador(dto.getImportador());

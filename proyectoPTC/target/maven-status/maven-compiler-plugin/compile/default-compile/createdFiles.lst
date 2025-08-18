@@ -1,5 +1,6 @@
 apiTrackline\proyectoPTC\Exceptions\ObservacionesExceptions\ExceptionSelectivoNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTracking.class
+apiTrackline\proyectoPTC\Exceptions\OrdenServicioExceptions\ExceptionOrdenServicioRelacionada.class
 apiTrackline\proyectoPTC\Exceptions\EstadosExceptions\ExceptionOrdenServicioNoEncontrado.class
 apiTrackline\proyectoPTC\Controllers\InfoEmbarqueController\InfoEmbarque.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEmpleados$OnUpdate.class
@@ -121,6 +122,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOPermisos.class
 apiTrackline\proyectoPTC\Entities\CargosEntity.class
 apiTrackline\proyectoPTC\Controllers\UsuarioController\Usuario.class
 apiTrackline\proyectoPTC\Repositories\ClientesRepository.class
+apiTrackline\proyectoPTC\Exceptions\OrdenServicioExceptions\ExceptionOrdenServicioNoRegistrado.class
 apiTrackline\proyectoPTC\Services\ViajeService.class
 apiTrackline\proyectoPTC\Entities\AduanaEntity.class
 apiTrackline\proyectoPTC\Controllers\TransporteController\Transporte.class
@@ -131,6 +133,7 @@ apiTrackline\proyectoPTC\Repositories\EmpleadosRepository.class
 apiTrackline\proyectoPTC\Exceptions\EstadosExceptions\ExceptionEstadoNoEncontrado.class
 apiTrackline\proyectoPTC\Exceptions\ServicioTransporteExceptions\ExceptionServicioTransporteNoRegistrado.class
 apiTrackline\proyectoPTC\Repositories\OrdenPermisosRepository.class
+apiTrackline\proyectoPTC\Exceptions\CargosExceptions\ExceptionCargosNoEncontrado.class
 apiTrackline\proyectoPTC\Repositories\ServicioTransporteRepository.class
 apiTrackline\proyectoPTC\Controllers\OrdenPermisosController\OrdenPermisos.class
 apiTrackline\proyectoPTC\Models\DTO\DTOAduana$OnUpdate.class
@@ -149,6 +152,7 @@ apiTrackline\proyectoPTC\Exceptions\TrackingExceptions\ExceptionTrackingRelacion
 apiTrackline\proyectoPTC\Entities\SelectivoEntity.class
 apiTrackline\proyectoPTC\Services\RecoleccionService.class
 apiTrackline\proyectoPTC\Models\DTO\DTOServicioTransporte.class
+apiTrackline\proyectoPTC\Exceptions\RecoleccionExceptions\ExceptionRecoleccionNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEmpleados$OnPatch.class
 apiTrackline\proyectoPTC\Exceptions\FinanciamientoExceptions\ExceptionFinanciamientoNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOServicioTransporte$OnCreate.class

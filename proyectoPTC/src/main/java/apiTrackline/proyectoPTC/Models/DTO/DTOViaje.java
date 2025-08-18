@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -25,7 +28,7 @@ public class DTOViaje {
     private String nombreUsuarioCliente;
 
     private Long idOrdenEncabezado;
-    private java.util.Date fechaOrden;
+    private LocalDate fechaOrden;
     private String encargadoUno;
     private String referencia;
     private String importador;

@@ -2,13 +2,16 @@ package apiTrackline.proyectoPTC.Models.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import jakarta.validation.constraints.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.lang.annotation.*;
+import java.time.LocalDate;
 
 @ToString
 @EqualsAndHashCode
@@ -18,10 +21,12 @@ public class DTOOrdenEncabezado {
 
     private Long IdOrdenEncabezado;
 
+    //@PastOrPresent(message = "La fecha solo puede ")
+
     @NotNull(message = "La fecha no puede estar en blanco.", groups = {OnCreate.class, OnUpdate.class})
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @PastOrPresent(message = "La fecha debe de ser igual o previa a la fecha actual",groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
-    private Date fecha;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate fecha;
+
 
     @NotBlank(message = "El encargado no puede estar en blanco.", groups = {OnCreate.class, OnUpdate.class})
     @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$", message = "El campo de encargado solo debe contener letras y espacios", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})

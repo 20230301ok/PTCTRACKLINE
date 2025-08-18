@@ -81,14 +81,14 @@ public class OrdenServicio {
             ));
         }
 
-        Page<DTOAduana> aduanas = service.obtenerAduanas(page, size);
-        if (aduanas == null || aduanas.isEmpty()) {
+        Page<DTOOrdenServicio> ordenServicios = service.obtenerOrdenServicios(page, size);
+        if (ordenServicios == null || ordenServicios.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                     "status", "Error",
                     "message", "No hay aduanas registradas"
             ));
         }
-        return ResponseEntity.ok(aduanas);
+        return ResponseEntity.ok(ordenServicios);
     }
 
     // MÉTODO POST

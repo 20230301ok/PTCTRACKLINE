@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Entity
 @Table(name = "TB_ORDENENCABEZADO")
@@ -22,7 +23,7 @@ public class    OrdenEncabezadoEntity {
     private long idOrdenEncabezado;
 
     @Column(name = "FECHA")
-    private Date Fecha;
+    private LocalDate Fecha;
 
     @Column(name = "ENCARGADO")
     private String Encargado;
@@ -33,7 +34,7 @@ public class    OrdenEncabezadoEntity {
     @Column(name = "IMPORTADOR")
     private String Importador;
 
-    @Column(name = "NIT",  unique = true)
+    @Column(name = "NIT")
     private String Nit;
 
     @Column(name = "REGISTROIVA")

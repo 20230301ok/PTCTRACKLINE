@@ -67,11 +67,6 @@ public class InfoEmbarque {
                     "data", respuesta,
                     "message", "Información de embarque creada correctamente"
             ));
-        } catch (ExceptionInfoEmbarqueNoEncontrado e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
-                    "status", "Error",
-                    "message", e.getMessage()
-            ));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",

@@ -50,6 +50,7 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionAduanaNoRegistrada.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionAduanaRelacionada.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionTipoServicioNoEncontrado.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\CargosExceptions\ExceptionCargosNoEncontrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ClientesExceptions\ExceptionClienteNoEncontrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ClientesExceptions\ExceptionClienteNoRegistrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ClientesExceptions\ExceptionClienteUsuarioNoEncontrado.java
@@ -76,6 +77,9 @@ C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrac
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\OrdenEncabezadoExceptions\ExceptionOrdenEncabezadoNoEncontrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\OrdenEncabezadoExceptions\ExceptionOrdenEncabezadoNoRegistrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\OrdenEncabezadoExceptions\ExceptionOrdenEncabezadoRelacionado.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\OrdenServicioExceptions\ExceptionOrdenServicioNoRegistrado.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\OrdenServicioExceptions\ExceptionOrdenServicioRelacionada.java
+C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\RecoleccionExceptions\ExceptionRecoleccionNoEncontrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ServicioTransporteExceptions\ExceptionServicioTransporteNoEncontrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ServicioTransporteExceptions\ExceptionServicioTransporteNoRegistrado.java
 C:\Users\mario\OneDrive\Desktop\Expo_TrackLine\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ServicioTransporteExceptions\ExceptionServicioTransporteRelacionado.java
