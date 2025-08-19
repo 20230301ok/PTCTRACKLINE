@@ -25,7 +25,6 @@ import java.util.Map;
 @CrossOrigin
 public class TipoDatoContable {
 
-
     @Autowired
     private TipoDatoContableService service;
 
@@ -125,7 +124,7 @@ public class TipoDatoContable {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
-            log.error("Error inesperado al actualizar TipoDatoContable", e);
+            log.error("Error inesperado al actualizar el dato contable", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
                     "message", "Error no controlado al actualizar el registro"

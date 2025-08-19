@@ -117,7 +117,7 @@ public class TrackingService {
             entity.setHoraLlegada(dto.getHoraLlegada());
             entity.setLugarPartida(dto.getLugarPartida());
             entity.setLugarLlegada(dto.getLugarLlegada());
-
+            entity.setProgreso(null);
             TrackingEntity creado = repo.save(entity);
             return convertirATrackingDTO(creado);
 
@@ -147,7 +147,7 @@ public class TrackingService {
         tracking.setHoraLlegada(dto.getHoraLlegada());
         tracking.setLugarPartida(dto.getLugarPartida());
         tracking.setLugarLlegada(dto.getLugarLlegada());
-
+        tracking.setProgreso(dto.getProgreso());
         return convertirATrackingDTO(repo.save(tracking));
     }
 
@@ -174,6 +174,7 @@ public class TrackingService {
         if (dto.getHoraLlegada() != null) tracking.setHoraLlegada(dto.getHoraLlegada());
         if (dto.getLugarPartida() != null) tracking.setLugarPartida(dto.getLugarPartida());
         if (dto.getLugarLlegada() != null) tracking.setLugarLlegada(dto.getLugarLlegada());
+        if (dto.getProgreso() != null) tracking.setProgreso(dto.getProgreso());
 
         return convertirATrackingDTO(repo.save(tracking));
     }

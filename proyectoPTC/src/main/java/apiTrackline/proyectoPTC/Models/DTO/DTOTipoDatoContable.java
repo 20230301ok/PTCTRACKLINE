@@ -1,6 +1,7 @@
 package apiTrackline.proyectoPTC.Models.DTO;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class DTOTipoDatoContable {
 
     private Long idTipoDatoContable;
 
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$", message = "La primera modalidad solo debe contener letras y espacios", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     @NotBlank(message = "El nombre es obligatorio.", groups = {OnCreate.class, OnUpdate.class})
     @Size(max = 30, message = "El nombre no debe exceder los 30 caracteres.", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private String nombre;

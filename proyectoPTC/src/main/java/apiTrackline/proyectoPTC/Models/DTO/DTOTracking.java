@@ -61,6 +61,9 @@ public class DTOTracking {
     @Size(min = 5, max = 70, message = "El lugar de llegada debe tener entre 5 y 70 caracteres", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
     private String lugarLlegada;
 
+    @Positive(message = "El progreso no puede ser negativo", groups = {OnCreate.class, OnUpdate.class, OnPatch.class})
+    private Long progreso;
+
     public interface OnCreate{}
     public interface OnUpdate{}
     public interface OnPatch{}

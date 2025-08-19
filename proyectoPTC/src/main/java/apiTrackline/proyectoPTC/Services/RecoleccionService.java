@@ -1,32 +1,35 @@
 package apiTrackline.proyectoPTC.Services;
 
 import apiTrackline.proyectoPTC.Entities.RecoleccionEntity;
+import apiTrackline.proyectoPTC.Exceptions.RecoleccionExceptions.ExceptionRecoleccionNoEncontrado;
+import apiTrackline.proyectoPTC.Exceptions.RecoleccionExceptions.ExceptionRecoleccionNoRegistrada;
+import apiTrackline.proyectoPTC.Exceptions.RecoleccionExceptions.ExceptionRecoleccionRelacionada;
 import apiTrackline.proyectoPTC.Models.DTO.DTORecoleccion;
 import apiTrackline.proyectoPTC.Repositories.RecoleccionRepository;
-import jakarta.persistence.Entity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 public class RecoleccionService {
 
     @Autowired
     private RecoleccionRepository repo;
 
-    //Método GET
-    public List<DTORecoleccion> obtenerRecoleccion(){
-        List<RecoleccionEntity> recoleccion = repo.findAll();
-        List<DTORecoleccion> collect = recoleccion.stream()
-                .map(this::convertirArecoleccionDTO)
-                .collect(Collectors.toList());
-        return collect;
+    // Obtener lista paginada de recolecciones
+    public Page<DTORecoleccion> obtenerRecolecciones(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RecoleccionEntity> pageEntity = repo.findAll(pageable);
+        return pageEntity.map(this::convertirARecoleccionDTO);
     }
 
-    private DTORecoleccion convertirArecoleccionDTO(RecoleccionEntity entity){
+    // Convertir entidad a DTO
+    private DTORecoleccion convertirARecoleccionDTO(RecoleccionEntity entity) {
         DTORecoleccion dto = new DTORecoleccion();
         dto.setIdRecoleccion(entity.getIdRecoleccion());
         dto.setTransporte(entity.getTransporte());
@@ -39,10 +42,13 @@ public class RecoleccionService {
         return dto;
     }
 
-    public String agregarRecoleccion(DTORecoleccion dto){
-        try{
+    // Agregar nueva recolección
+    public DTORecoleccion agregarRecoleccion(DTORecoleccion dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("No puedes agregar un registro sin datos");
+        }
+        try {
             RecoleccionEntity entity = new RecoleccionEntity();
-            entity.setIdRecoleccion(dto.getIdRecoleccion());
             entity.setTransporte(dto.getTransporte());
             entity.setRecoleccionEntrega(dto.getRecoleccionEntrega());
             entity.setNumeroDoc(dto.getNumeroDoc());
@@ -50,86 +56,65 @@ public class RecoleccionService {
             entity.setPaisOrigen(dto.getPaisOrigen());
             entity.setLugarDestino(dto.getLugarDestino());
             entity.setPaisDestino(dto.getPaisDestino());
-            repo.save(entity);
-            return "Información de recolección agregada correctamente";
-        }
-        catch (Exception e){
-            return "Error al ingresar recoleccion: " + e.getMessage();
-        }
-    }
 
-    public String actualizarRecoleccion(Long id, DTORecoleccion dto){
-        try {
-            Optional<RecoleccionEntity> optionalRecoleccion = repo.findById(id);
-            if (optionalRecoleccion.isPresent()){
-
-                RecoleccionEntity entity = optionalRecoleccion.get();
-
-                entity.setTransporte(dto.getTransporte());
-                entity.setRecoleccionEntrega(dto.getRecoleccionEntrega());
-                entity.setNumeroDoc(dto.getNumeroDoc());
-                entity.setLugarOrigen(dto.getLugarOrigen());
-                entity.setPaisOrigen(dto.getPaisOrigen());
-                entity.setLugarDestino(dto.getLugarDestino());
-                entity.setPaisDestino(dto.getPaisDestino());
-                repo.save(entity);
-                return "La información de recolección ha sido actualizada correctamente";
-            }
-            else {
-                return "El registro de recolección no se ha encontrado con id: " + id;
-            }
-        }
-        catch (Exception e){
-            return "Error al actualizar aduana: " + e.getMessage();
-        }
-    }
-
-    public String eliminarRecoleccion(Long id){
-        Optional<RecoleccionEntity> recoleccion = repo.findById(id);
-        if (recoleccion.isPresent()){
-            repo.deleteById(id);
-            return "La información de recolección ha sido eliminada correctamente";
-        }
-        else {
-            return "No se ha encontrado información de recolección con el id: " + id;
-        }
-    }
-
-    public String actualizarParcialmenteRecoleccion(Long id, DTORecoleccion dto){
-        try{
-            Optional<RecoleccionEntity> optRecoleccion = repo.findById(id);
-            if (optRecoleccion.isPresent()){
-                RecoleccionEntity entity = optRecoleccion.get();
-
-                if (dto.getTransporte() != null){
-                    entity.setTransporte(dto.getTransporte());
-                }
-                if (dto.getRecoleccionEntrega() != null){
-                    entity.setRecoleccionEntrega(dto.getRecoleccionEntrega());
-                }
-                if(dto.getNumeroDoc() != null){
-                    entity.setNumeroDoc(dto.getNumeroDoc());
-                }
-                if(dto.getLugarOrigen() != null){
-                    entity.setLugarOrigen(dto.getLugarOrigen());
-                }
-                if (dto.getPaisOrigen() != null){
-                    entity.setPaisOrigen(dto.getPaisOrigen());
-                }
-                if(dto.getLugarDestino() != null){
-                    entity.setLugarDestino(dto.getLugarDestino());
-                }
-                if (dto.getPaisDestino() != null){
-                    entity.setPaisDestino(dto.getPaisDestino());
-                }
-                repo.save(entity);
-                return "Se ha actualizado correctamente la información de recolección";
-            }
-            else {
-                return "No se ha encontrado información de recolección con id: " + id;
-            }
+            RecoleccionEntity guardada = repo.save(entity);
+            return convertirARecoleccionDTO(guardada);
         } catch (Exception e) {
-            return "Ha ocurrido un error al momento de actualizar parcialmente el registro: " + e.getMessage();
+            log.error("Error al registrar la recolección: " + e.getMessage());
+            throw new ExceptionRecoleccionNoRegistrada("Error: recolección no registrada");
         }
+    }
+
+    // Actualizar toda la recolección
+    public DTORecoleccion actualizarRecoleccion(Long id, DTORecoleccion dto) {
+        RecoleccionEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionRecoleccionNoEncontrado("Recolección no encontrada con id " + id));
+
+        entity.setTransporte(dto.getTransporte());
+        entity.setRecoleccionEntrega(dto.getRecoleccionEntrega());
+        entity.setNumeroDoc(dto.getNumeroDoc());
+        entity.setLugarOrigen(dto.getLugarOrigen());
+        entity.setPaisOrigen(dto.getPaisOrigen());
+        entity.setLugarDestino(dto.getLugarDestino());
+        entity.setPaisDestino(dto.getPaisDestino());
+
+        return convertirARecoleccionDTO(repo.save(entity));
+    }
+
+    // Actualización parcial (PATCH)
+    public DTORecoleccion patchRecoleccion(Long id, DTORecoleccion dto) {
+        RecoleccionEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionRecoleccionNoEncontrado("Recolección no encontrada con id " + id));
+
+        if (dto.getTransporte() != null) entity.setTransporte(dto.getTransporte());
+        if (dto.getRecoleccionEntrega() != null) entity.setRecoleccionEntrega(dto.getRecoleccionEntrega());
+        if (dto.getNumeroDoc() != null) entity.setNumeroDoc(dto.getNumeroDoc());
+        if (dto.getLugarOrigen() != null) entity.setLugarOrigen(dto.getLugarOrigen());
+        if (dto.getPaisOrigen() != null) entity.setPaisOrigen(dto.getPaisOrigen());
+        if (dto.getLugarDestino() != null) entity.setLugarDestino(dto.getLugarDestino());
+        if (dto.getPaisDestino() != null) entity.setPaisDestino(dto.getPaisDestino());
+
+        return convertirARecoleccionDTO(repo.save(entity));
+    }
+
+    // Eliminar recolección por id
+    public String eliminarRecoleccion(Long id) {
+        RecoleccionEntity entity = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encontró información de recolección con id: " + id));
+        try {
+            repo.delete(entity);
+            return "La información de recolección ha sido eliminada correctamente";
+        } catch (DataIntegrityViolationException e) {
+            log.error("Error al eliminar la recolección: " + e.getMessage());
+            throw new ExceptionRecoleccionRelacionada("No se pudo eliminar la recolección porque tiene registros relacionados");
+        }
+    }
+
+    // Buscar recolección por ID
+    public DTORecoleccion buscarRecoleccionPorId(Long id) {
+        RecoleccionEntity entity = repo.findById(id)
+                .orElseThrow(() -> new ExceptionRecoleccionNoEncontrado("No se encontró la recolección con ID: " + id));
+        return convertirARecoleccionDTO(entity);
     }
 }
+

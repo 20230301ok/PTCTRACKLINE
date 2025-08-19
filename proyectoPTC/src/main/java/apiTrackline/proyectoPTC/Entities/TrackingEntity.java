@@ -47,4 +47,7 @@ public class TrackingEntity {
 
     @Column(name = "LUGARLLEGADA")
     private String lugarLlegada;
+
+    @Column(name = "PROGRESO")
+    private Long progreso;
 }

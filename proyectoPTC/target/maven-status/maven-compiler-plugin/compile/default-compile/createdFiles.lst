@@ -35,6 +35,7 @@ apiTrackline\proyectoPTC\Entities\ObservacionesEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnUpdate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnPatch.class
 apiTrackline\proyectoPTC\Services\FinanciamientoService.class
+apiTrackline\proyectoPTC\Exceptions\TipoDatoContableExceptions\ExceptionTipoDatoContableNoEncontrado.class
 apiTrackline\proyectoPTC\Entities\EmpleadosEntity.class
 apiTrackline\proyectoPTC\Entities\OrdenEncabezadoEntity.class
 apiTrackline\proyectoPTC\Repositories\CargosRepository.class
@@ -55,6 +56,7 @@ apiTrackline\proyectoPTC\Exceptions\OrdenEncabezadoExceptions\ExceptionOrdenEnca
 apiTrackline\proyectoPTC\Models\DTO\DTOTransporte$OnPatch.class
 apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionAduanaNoEncontrada.class
 apiTrackline\proyectoPTC\Entities\PermisosEntity.class
+apiTrackline\proyectoPTC\Exceptions\TipoDatoContableExceptions\ExceptionTipoDatoContableNoRegistrado.class
 apiTrackline\proyectoPTC\Repositories\EstadosRepository.class
 apiTrackline\proyectoPTC\Services\OrdenPermisosService.class
 apiTrackline\proyectoPTC\Entities\ViajeEntity.class
@@ -206,6 +208,7 @@ apiTrackline\proyectoPTC\Entities\ClientesEntity.class
 apiTrackline\proyectoPTC\Controllers\TipoFinanciamientosController\TipoFinanciamiento.class
 apiTrackline\proyectoPTC\Services\EstadosService.class
 apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionTipoServicioNoEncontrado.class
+apiTrackline\proyectoPTC\Exceptions\TipoDatoContableExceptions\ExceptionTipoDatoContableRelacionado.class
 apiTrackline\proyectoPTC\Exceptions\ObservacionesExceptions\ExceptionObservacionNoRegistrada.class
 apiTrackline\proyectoPTC\Exceptions\OrdenEncabezadoExceptions\ExceptionOrdenEncabezadoNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEstados$OnUpdate.class
