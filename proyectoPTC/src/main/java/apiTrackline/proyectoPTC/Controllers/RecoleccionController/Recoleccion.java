@@ -98,6 +98,7 @@ public class Recoleccion {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al actualizar la recolección", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
                     "message", "Error no controlado al actualizar recolección"
@@ -117,6 +118,7 @@ public class Recoleccion {
                     "message", "Recolección actualizada parcialmente correctamente"
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al actualizar parcialmente la recolección", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
                     "message", "Error no controlado al actualizar parcialmente recolección"
@@ -140,6 +142,7 @@ public class Recoleccion {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al eliminar la recolección", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
                     "message", "Error no controlado al eliminar recolección"

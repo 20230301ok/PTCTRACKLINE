@@ -39,9 +39,22 @@ public class ServicioTransporteService {
         return dto;
     }
 
+    /**
+     * Registrar servicio transporte (validando duplicados en placa y tarjeta)
+     */
     public DTOServicioTransporte agregarServicioTransporte(DTOServicioTransporte json) {
         if (json == null) {
             throw new IllegalArgumentException("No puedes agregar un registro sin datos");
+        }
+
+        // Validar que no exista una Placa duplicada
+        if (repo.existsByPlaca(json.getPlaca())) {
+            throw new ExceptionServicioTransporteNoRegistrado("Ya existe un servicio con la placa: " + json.getPlaca());
+        }
+
+        // Validar que no exista una Tarjeta de Circulación duplicada
+        if (repo.existsByTarjetaCirculacion(json.getTarjetaCirculacion())) {
+            throw new ExceptionServicioTransporteNoRegistrado("Ya existe un servicio con la tarjeta de circulación: " + json.getTarjetaCirculacion());
         }
 
         try {
@@ -59,9 +72,22 @@ public class ServicioTransporteService {
         }
     }
 
+    /**
+     * Actualizar (validando duplicados si cambian placa o tarjeta)
+     */
     public DTOServicioTransporte actualizarServicioTransporte(Long id, DTOServicioTransporte json) {
         ServicioTransporteEntity entity = repo.findById(id)
                 .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + id));
+
+        // Validar duplicados SOLO si se cambia la placa
+        if (!entity.getPlaca().equals(json.getPlaca()) && repo.existsByPlaca(json.getPlaca())) {
+            throw new ExceptionServicioTransporteNoRegistrado("Ya existe un servicio con la placa: " + json.getPlaca());
+        }
+
+        // Validar duplicados SOLO si se cambia la tarjeta
+        if (!entity.getTarjetaCirculacion().equals(json.getTarjetaCirculacion()) && repo.existsByTarjetaCirculacion(json.getTarjetaCirculacion())) {
+            throw new ExceptionServicioTransporteNoRegistrado("Ya existe un servicio con la tarjeta de circulación: " + json.getTarjetaCirculacion());
+        }
 
         entity.setPlaca(json.getPlaca());
         entity.setTarjetaCirculacion(json.getTarjetaCirculacion());
@@ -70,9 +96,21 @@ public class ServicioTransporteService {
         return convertirADTO(repo.save(entity));
     }
 
+    /**
+     * Actualización parcial (PATCH) validando duplicados
+     */
     public DTOServicioTransporte patchServicioTransporte(Long id, DTOServicioTransporte json) {
         ServicioTransporteEntity entity = repo.findById(id)
                 .orElseThrow(() -> new ExceptionServicioTransporteNoEncontrado("Servicio de transporte no encontrado con id " + id));
+
+        if (json.getPlaca() != null && !entity.getPlaca().equals(json.getPlaca()) && repo.existsByPlaca(json.getPlaca())) {
+            throw new ExceptionServicioTransporteNoRegistrado("Ya existe un servicio con la placa: " + json.getPlaca());
+        }
+
+        if (json.getTarjetaCirculacion() != null && !entity.getTarjetaCirculacion().equals(json.getTarjetaCirculacion())
+                && repo.existsByTarjetaCirculacion(json.getTarjetaCirculacion())) {
+            throw new ExceptionServicioTransporteNoRegistrado("Ya existe un servicio con la tarjeta de circulación: " + json.getTarjetaCirculacion());
+        }
 
         if (json.getPlaca() != null) entity.setPlaca(json.getPlaca());
         if (json.getTarjetaCirculacion() != null) entity.setTarjetaCirculacion(json.getTarjetaCirculacion());

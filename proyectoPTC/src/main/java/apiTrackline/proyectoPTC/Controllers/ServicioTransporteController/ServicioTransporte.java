@@ -1,7 +1,10 @@
 package apiTrackline.proyectoPTC.Controllers.ServicioTransporteController;
 
+import apiTrackline.proyectoPTC.Exceptions.PermisosExceptions.ExceptionPermisoNoRegistrado;
+import apiTrackline.proyectoPTC.Exceptions.ServicioTransporteExceptions.ExceptionServicioTransporteNoRegistrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOServicioTransporte;
 import apiTrackline.proyectoPTC.Services.ServicioTransporteService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/apiServicioTransporte")
 @CrossOrigin
@@ -76,11 +80,18 @@ public class ServicioTransporte {
                     "data", nuevo,
                     "message", "Servicio de transporte creado correctamente"
             ));
-        } catch (Exception e) {
+        }catch (ExceptionServicioTransporteNoRegistrado e) {
+            log.error("Error inesperado al agregar servicio transporte", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
+        }
+        catch (Exception e) {
+            log.error("Error inesperado al agregar servicio transporte", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
-                    "message", "Error no controlado al registrar servicio de transporte",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al registrar servicio de transporte"
             ));
         }
     }
@@ -98,11 +109,17 @@ public class ServicioTransporte {
                 ));
             }
             return ResponseEntity.ok(actualizado);
+        } catch (ExceptionServicioTransporteNoRegistrado e) {
+            log.error("Error inesperado al actualizar servicio transporte", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
         } catch (Exception e) {
+            log.error("Error inesperado al actualizar servicio transporte", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
-                    "message", "Error no controlado al actualizar servicio de transporte",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al actualizar servicio de transporte"
             ));
         }
     }
@@ -117,16 +134,22 @@ public class ServicioTransporte {
                     "status", "Éxito",
                     "data", actualizado
             ));
+        }catch (ExceptionServicioTransporteNoRegistrado e) {
+            log.error("Error inesperado al agregar servicio transporte", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                     "status", "Error de validación",
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al actualizar servicio transporte", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
-                    "message", "Error no controlado al editar parcialmente servicio de transporte",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al editar parcialmente servicio de transporte"
             ));
         }
     }

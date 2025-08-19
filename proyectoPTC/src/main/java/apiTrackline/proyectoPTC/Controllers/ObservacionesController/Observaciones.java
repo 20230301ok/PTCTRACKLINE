@@ -4,6 +4,7 @@ import apiTrackline.proyectoPTC.Exceptions.ObservacionesExceptions.ExceptionObse
 import apiTrackline.proyectoPTC.Exceptions.ObservacionesExceptions.ExceptionSelectivoNoEncontrado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOObservaciones;
 import apiTrackline.proyectoPTC.Services.ObservacionesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/apiObservaciones")
 @CrossOrigin
+@Slf4j
 public class Observaciones {
     @Autowired
     private ObservacionesService service;
@@ -98,6 +100,7 @@ public class Observaciones {
                     "message", e.getMessage()
             ));
         } catch (Exception e) {
+            log.error("Error inesperado al agregar la observación", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error interno",
                     "message", "Error no controlado al registrar observación"
@@ -117,6 +120,7 @@ public class Observaciones {
         } catch (ExceptionSelectivoNoEncontrado e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            log.error("Error inesperado al actualizar la observación", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
                     "message", "Error inesperado al actualizar la observación"
@@ -150,10 +154,10 @@ public class Observaciones {
                     "message", e.getMessage()
             ));
         }catch (Exception e){
+            log.error("Error inesperado al actualizar parcialmente la observación", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al actualizar parcialmente la observación",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al actualizar parcialmente la observación"
             ));
         }
     }
@@ -179,10 +183,10 @@ public class Observaciones {
                     "message", "La observación no se pudo eliminar porque tiene registros relacionados"
             ));
         } catch (Exception e){
+            log.error("Error inesperado al agregar la observación", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "status", "Error no controlado",
-                    "message", "Error no controlado al eliminar",
-                    "description", e.getMessage()
+                    "message", "Error no controlado al eliminar"
             ));
         }
     }
