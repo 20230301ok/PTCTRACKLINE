@@ -15,6 +15,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOTipoDatoContable$OnCreate.class
 apiTrackline\proyectoPTC\Entities\TipoServicioEntity.class
 apiTrackline\proyectoPTC\Services\TransporteService.class
 apiTrackline\proyectoPTC\Repositories\InfoEmbarqueRepository.class
+apiTrackline\proyectoPTC\Exceptions\RecoleccionExceptions\ExceptionRecoleccionNoRegistrada.class
 apiTrackline\proyectoPTC\Controllers\PermisosController\Permisos.class
 apiTrackline\proyectoPTC\Services\TipoFinanciamientosService.class
 apiTrackline\proyectoPTC\Models\DTO\DTOFinanciamiento$OnCreate.class
@@ -30,11 +31,13 @@ apiTrackline\proyectoPTC\Models\DTO\DTOUsuario$OnUpdate.class
 apiTrackline\proyectoPTC\Repositories\TipoDatoContableRepository.class
 apiTrackline\proyectoPTC\Exceptions\TransporteExceptions\ExceptionTransporteNoEncontrado.class
 apiTrackline\proyectoPTC\Services\ClientesService.class
+apiTrackline\proyectoPTC\Exceptions\PermisosExceptions\ExceptionPermisoDuplicado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOViaje$OnPatch.class
 apiTrackline\proyectoPTC\Entities\ObservacionesEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnUpdate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnPatch.class
 apiTrackline\proyectoPTC\Services\FinanciamientoService.class
+apiTrackline\proyectoPTC\Exceptions\RecoleccionExceptions\ExceptionRecoleccionRelacionada.class
 apiTrackline\proyectoPTC\Exceptions\TipoDatoContableExceptions\ExceptionTipoDatoContableNoEncontrado.class
 apiTrackline\proyectoPTC\Entities\EmpleadosEntity.class
 apiTrackline\proyectoPTC\Entities\OrdenEncabezadoEntity.class
@@ -45,6 +48,7 @@ apiTrackline\proyectoPTC\Exceptions\InfoEmbarqueExceptions\ExceptionInfoEmbarque
 apiTrackline\proyectoPTC\Exceptions\ClientesExceptions\ExceptionClienteNoEncontrado.class
 apiTrackline\proyectoPTC\Controllers\ViajeController\Viaje.class
 apiTrackline\proyectoPTC\Exceptions\AduanaExceptions\ExceptionAduanaNoRegistrada.class
+apiTrackline\proyectoPTC\Exceptions\TipoFinanciamientoExceptions\ExceptionTipoFinanciamientoDuplicado.class
 apiTrackline\proyectoPTC\Services\ServicioTransporteService.class
 apiTrackline\proyectoPTC\Repositories\OrdenServicioRepository.class
 apiTrackline\proyectoPTC\Exceptions\ValidacionesGlobales\ValidacionGlobalHandler.class
@@ -82,6 +86,7 @@ apiTrackline\proyectoPTC\Repositories\SelectivoRepository.class
 apiTrackline\proyectoPTC\Exceptions\EstadosExceptions\ExceptionEstadoRelacionado.class
 apiTrackline\proyectoPTC\Entities\InfoEmbarqueEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTipoServicio.class
+apiTrackline\proyectoPTC\Models\DTO\DTOPermisos$OnUpdate.class
 apiTrackline\proyectoPTC\Services\EmpleadosService.class
 apiTrackline\proyectoPTC\Models\DTO\DTOFinanciamiento.class
 apiTrackline\proyectoPTC\Entities\ServicioTransporteEntity.class
@@ -111,8 +116,10 @@ apiTrackline\proyectoPTC\Exceptions\TrackingExceptions\ExceptionEstadoNoEncontra
 apiTrackline\proyectoPTC\Models\DTO\DTOObservaciones.class
 apiTrackline\proyectoPTC\Services\TrackingService.class
 apiTrackline\proyectoPTC\Services\OrdenServicioService.class
+apiTrackline\proyectoPTC\Exceptions\PermisosExceptions\ExceptionPermisoRelacionado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOObservaciones$OnCreate.class
 apiTrackline\proyectoPTC\Repositories\UsuarioRepository.class
+apiTrackline\proyectoPTC\Exceptions\TipoFinanciamientoExceptions\ExceptionTipoFinanciamientoNoRegistrado.class
 apiTrackline\proyectoPTC\Controllers\AduanaController\Aduana.class
 apiTrackline\proyectoPTC\Models\DTO\DTOCargos$OnCreate.class
 apiTrackline\proyectoPTC\Repositories\ViajeRepository.class
@@ -121,6 +128,7 @@ apiTrackline\proyectoPTC\Controllers\RolesController\Roles.class
 apiTrackline\proyectoPTC\Models\DTO\DTOFinanciamiento$OnPatch.class
 apiTrackline\proyectoPTC\Models\DTO\DTOOrdenEncabezado$OnCreate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOPermisos.class
+apiTrackline\proyectoPTC\Exceptions\TipoFinanciamientoExceptions\ExceptionTipoFinanciamientoRelacionado.class
 apiTrackline\proyectoPTC\Entities\CargosEntity.class
 apiTrackline\proyectoPTC\Controllers\UsuarioController\Usuario.class
 apiTrackline\proyectoPTC\Repositories\ClientesRepository.class
@@ -133,9 +141,11 @@ apiTrackline\proyectoPTC\Entities\TipoFinanciamientosEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTipoDatoContable$OnPatch.class
 apiTrackline\proyectoPTC\Repositories\EmpleadosRepository.class
 apiTrackline\proyectoPTC\Exceptions\EstadosExceptions\ExceptionEstadoNoEncontrado.class
+apiTrackline\proyectoPTC\Models\DTO\DTOPermisos$OnPatch.class
 apiTrackline\proyectoPTC\Exceptions\ServicioTransporteExceptions\ExceptionServicioTransporteNoRegistrado.class
 apiTrackline\proyectoPTC\Repositories\OrdenPermisosRepository.class
 apiTrackline\proyectoPTC\Exceptions\CargosExceptions\ExceptionCargosNoEncontrado.class
+apiTrackline\proyectoPTC\Exceptions\PermisosExceptions\ExceptionPermisoNoEncontrado.class
 apiTrackline\proyectoPTC\Repositories\ServicioTransporteRepository.class
 apiTrackline\proyectoPTC\Controllers\OrdenPermisosController\OrdenPermisos.class
 apiTrackline\proyectoPTC\Models\DTO\DTOAduana$OnUpdate.class
@@ -145,6 +155,7 @@ apiTrackline\proyectoPTC\Exceptions\EmpleadosExceptions\ExceptionEmpleadoUsuario
 apiTrackline\proyectoPTC\Models\DTO\DTOTransporte.class
 apiTrackline\proyectoPTC\Models\DTO\DTOUsuario.class
 apiTrackline\proyectoPTC\Repositories\ObservacionesRepository.class
+apiTrackline\proyectoPTC\Models\DTO\DTOPermisos$OnCreate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransporte$OnUpdate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOObservaciones$OnUpdate.class
 apiTrackline\proyectoPTC\Controllers\EmpleadosController\Empleados.class
@@ -158,6 +169,8 @@ apiTrackline\proyectoPTC\Exceptions\RecoleccionExceptions\ExceptionRecoleccionNo
 apiTrackline\proyectoPTC\Models\DTO\DTOEmpleados$OnPatch.class
 apiTrackline\proyectoPTC\Exceptions\FinanciamientoExceptions\ExceptionFinanciamientoNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOServicioTransporte$OnCreate.class
+apiTrackline\proyectoPTC\Exceptions\PermisosExceptions\ExceptionPermisoNoRegistrado.class
+apiTrackline\proyectoPTC\Exceptions\TipoFinanciamientoExceptions\ExceptionTipoFinanciamientoNoEncontrado.class
 apiTrackline\proyectoPTC\Controllers\FinanciamientoController\Financiamiento.class
 apiTrackline\proyectoPTC\Entities\TrackingEntity.class
 apiTrackline\proyectoPTC\Entities\TipoDatoContableEntity.class

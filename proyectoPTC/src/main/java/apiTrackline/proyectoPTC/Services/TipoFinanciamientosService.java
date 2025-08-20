@@ -55,7 +55,7 @@ public class TipoFinanciamientosService {
             throw new IllegalArgumentException("No puedes agregar un registro vacío");
         }
         // Validar duplicados por nombre
-        Optional<TipoFinanciamientosEntity> existente = repo.findByNombreTipoFinanciamiento(dto.getNombre());
+        Optional<TipoFinanciamientosEntity> existente = repo.findByNombre(dto.getNombre());
         if (existente.isPresent()) {
             throw new ExceptionTipoFinanciamientoDuplicado("Ya existe un financiamiento con el nombre: " + dto.getNombre());
         }
@@ -79,7 +79,7 @@ public class TipoFinanciamientosService {
 
         // Validar duplicado si cambia el nombre
         if (!entity.getNombre().equalsIgnoreCase(dto.getNombre()) &&
-                repo.findByNombreTipoFinanciamiento(dto.getNombre()).isPresent()) {
+                repo.findByNombre(dto.getNombre()).isPresent()) {
             throw new ExceptionTipoFinanciamientoDuplicado("Ya existe un tipo financiamiento con el nombre: " + dto.getNombre());
         }
         entity.setNombre(dto.getNombre());
@@ -102,7 +102,7 @@ public class TipoFinanciamientosService {
         if (dto.getNombre() != null && !dto.getNombre().isBlank()) {
             // Validar duplicado si cambia el nombre
             if (!entity.getNombre().equalsIgnoreCase(dto.getNombre()) &&
-                    repo.findByNombreTipoFinanciamiento(dto.getNombre()).isPresent()) {
+                    repo.findByNombre(dto.getNombre()).isPresent()) {
                 throw new ExceptionTipoFinanciamientoDuplicado("Ya existe un tipo de financiamiento con el nombre: " + dto.getNombre());
             }
             entity.setNombre(dto.getNombre());
