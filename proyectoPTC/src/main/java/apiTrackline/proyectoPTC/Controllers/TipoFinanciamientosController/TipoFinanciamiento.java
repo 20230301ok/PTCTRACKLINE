@@ -5,6 +5,7 @@ import apiTrackline.proyectoPTC.Exceptions.TipoFinanciamientoExceptions.Exceptio
 import apiTrackline.proyectoPTC.Exceptions.TipoFinanciamientoExceptions.ExceptionTipoFinanciamientoRelacionado;
 import apiTrackline.proyectoPTC.Models.DTO.DTOTipoFinanciamientos;
 import apiTrackline.proyectoPTC.Services.TipoFinanciamientosService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -72,7 +73,7 @@ public class TipoFinanciamiento {
 
     // POST - Crear nuevo
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody DTOTipoFinanciamientos dto) {
+    public ResponseEntity<?> crear(@Valid @RequestBody DTOTipoFinanciamientos dto) {
         try {
             DTOTipoFinanciamientos creado = service.agregarTipoFinanciamiento(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
@@ -95,7 +96,7 @@ public class TipoFinanciamiento {
 
     // PUT - Actualizar completo
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody DTOTipoFinanciamientos dto) {
+    public ResponseEntity<?> actualizar(@PathVariable Long id,@Valid @RequestBody DTOTipoFinanciamientos dto) {
         try {
             DTOTipoFinanciamientos actualizado = service.actualizarTipoFinanciamiento(id, dto);
             return ResponseEntity.ok(Map.of(
@@ -123,7 +124,7 @@ public class TipoFinanciamiento {
 
     // PATCH - Actualización parcial
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody DTOTipoFinanciamientos dto) {
+    public ResponseEntity<?> patch(@PathVariable Long id,@Valid @RequestBody DTOTipoFinanciamientos dto) {
         try {
             DTOTipoFinanciamientos actualizado = service.patchTipoFinanciamiento(id, dto);
             return ResponseEntity.ok(Map.of(
