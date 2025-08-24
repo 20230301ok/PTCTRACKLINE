@@ -91,6 +91,37 @@ public class OrdenServicio {
         return ResponseEntity.ok(ordenServicios);
     }
 
+    // MÉTODO GET - Validar que el NIT corresponda a la orden de servicio
+    // RUTA: localhost:8080/apiOrdenServicio/validarOrdenCliente/{id}/{nit}
+    @GetMapping("/validarOrdenCliente/{id}/{nit}")
+    public ResponseEntity<?> validarOrdenCliente(@PathVariable Long id,
+                                                 @PathVariable String nit) {
+        try {
+            DTOOrdenServicio dto = service.compararIdOrdenYClienteNIT(id, nit);
+            return ResponseEntity.ok(Map.of(
+                    "status", "Éxito",
+                    "data", dto,
+                    "message", "Orden de servicio y NIT coinciden correctamente"
+            ));
+        } catch (ExceptionOrdenServicioNoEncontrado e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                    "status", "Error de validación",
+                    "message", e.getMessage()
+            ));
+        } catch (Exception e) {
+            log.error("Error inesperado al validar orden de servicio con NIT", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error interno",
+                    "message", "Error inesperado al validar orden de servicio con cliente NIT"
+            ));
+        }
+    }
+
     // MÉTODO POST
     // RUTA: localhost:8080/apiOrdenServicio/crear
     @PostMapping("/crear")
@@ -120,6 +151,8 @@ public class OrdenServicio {
             ));
         }
     }
+
+
 
     // MÉTODO PUT
     // RUTA: localhost:8080/apiOrdenServicio/actualizar/{id}

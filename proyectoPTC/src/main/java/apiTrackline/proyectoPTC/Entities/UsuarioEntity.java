@@ -18,8 +18,6 @@ public class UsuarioEntity {
     //sequenceName: Nombre de la secuencia en oracle
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarioSeq")
     @SequenceGenerator(name = "usuarioSeq", sequenceName = "SEQ_ID_US", allocationSize = 1)
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDUSUARIO")
     private Long idUsuario;
 

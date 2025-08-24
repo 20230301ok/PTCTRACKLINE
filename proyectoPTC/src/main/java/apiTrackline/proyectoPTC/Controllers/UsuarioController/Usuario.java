@@ -210,4 +210,29 @@ public class Usuario {
             ));
         }
     }
+
+    // MÉTODO GET POR NOMBRE
+// RUTA: localhost:8080/apiUsuario/buscarUsuarioPorNombre/{usuario}
+    @GetMapping("/buscarUsuarioPorNombre/{usuario}")
+    public ResponseEntity<?> buscarUsuarioPorNombre(@PathVariable String usuario) {
+        try {
+            DTOUsuario dtoUsuario = service.buscarUsuarioPorNombre(usuario);
+            return ResponseEntity.ok(Map.of(
+                    "status", "Éxito",
+                    "data", dtoUsuario
+            ));
+        } catch (ExceptionUsuarioNoEncontrado e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
+            ));
+        } catch (Exception e) {
+            log.error("Error inesperado al buscar usuario por nombre", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error no controlado",
+                    "message", "Error inesperado al buscar usuario por nombre"
+            ));
+        }
+    }
+
 }

@@ -89,6 +89,7 @@ apiTrackline\proyectoPTC\Repositories\SelectivoRepository.class
 apiTrackline\proyectoPTC\Exceptions\EstadosExceptions\ExceptionEstadoRelacionado.class
 apiTrackline\proyectoPTC\Entities\InfoEmbarqueEntity.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTipoServicio.class
+apiTrackline\proyectoPTC\Exceptions\ViajeExceptions\ExceptionViajeRelacionada.class
 apiTrackline\proyectoPTC\Models\DTO\DTOPermisos$OnUpdate.class
 apiTrackline\proyectoPTC\Services\EmpleadosService.class
 apiTrackline\proyectoPTC\Models\DTO\DTOFinanciamiento.class
@@ -103,6 +104,7 @@ apiTrackline\proyectoPTC\Services\AduanaService.class
 apiTrackline\proyectoPTC\Repositories\FinanciamientoRepository.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEstados.class
 apiTrackline\proyectoPTC\Models\DTO\DTOCargos$OnPatch.class
+apiTrackline\proyectoPTC\Exceptions\ViajeExceptions\ExceptionViajeNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOViaje$OnCreate.class
 apiTrackline\proyectoPTC\Exceptions\InfoEmbarqueExceptions\ExceptionInfoEmbarqueRelacionado.class
 apiTrackline\proyectoPTC\Exceptions\TrackingExceptions\ExceptionTrackingNoEncontrado.class
@@ -211,6 +213,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnCreate.class
 apiTrackline\proyectoPTC\Exceptions\TransporteExceptions\ExceptionTransportistaNoEncontrado.class
 apiTrackline\proyectoPTC\Exceptions\TrackingExceptions\ExceptionViajeNoEncontrado.class
 apiTrackline\proyectoPTC\Repositories\TransporteRepository.class
+apiTrackline\proyectoPTC\Exceptions\ViajeExceptions\ExceptionViajeNoRegistrado.class
 apiTrackline\proyectoPTC\Services\TipoDatoContableService.class
 apiTrackline\proyectoPTC\Models\DTO\DTORoles.class
 apiTrackline\proyectoPTC\Models\DTO\DTOUsuario$OnCreate.class

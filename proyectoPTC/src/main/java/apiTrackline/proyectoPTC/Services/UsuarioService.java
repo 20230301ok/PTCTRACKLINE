@@ -143,4 +143,11 @@ public class UsuarioService {
             throw new RuntimeException("No se pudo eliminar el usuario porque tiene registros relacionados");
         }
     }
+
+    // Buscar usuario por nombre
+    public DTOUsuario buscarUsuarioPorNombre(String nombreUsuario) {
+        UsuarioEntity user = repo.findByUsuario(nombreUsuario)
+                .orElseThrow(() -> new ExceptionUsuarioNoEncontrado("Usuario no encontrado con nombre: " + nombreUsuario));
+        return convertirAUsuarioDTO(user);
+    }
 }

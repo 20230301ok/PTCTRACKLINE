@@ -202,8 +202,27 @@ public class OrdenServicioService {
 
         return dto;
     }
+    public DTOOrdenServicio compararIdOrdenYClienteNIT(Long idOrdenServicio, String clienteNIT) {
+        if (idOrdenServicio == null) {
+            throw new IllegalArgumentException("Debes ingresar el id de orden de servicio (no nulo)");
+        }
+        if (clienteNIT == null || clienteNIT.trim().isEmpty()) {
+            throw new IllegalArgumentException("Debes ingresar tu cliente NIT (no vacío)");
+        }
 
+        // Buscar orden de servicio
+        OrdenServicioEntity ordenServicio = repo.findById(idOrdenServicio)
+                .orElseThrow(() -> new ExceptionOrdenServicioNoEncontrado(
+                        "Orden servicio no encontrada con id " + idOrdenServicio));
 
+        // Comparar ClienteNIT
+        if (!clienteNIT.equals(ordenServicio.getClienteNIT())) {
+            throw new IllegalArgumentException("El NIT proporcionado no coincide con el NIT de la orden de servicio");
+        }
+
+        // Si todo está bien, devolver el DTO
+        return convertirADTO(ordenServicio);
+    }
     public DTOOrdenServicio post(DTOOrdenServicio dto) {
         if (dto == null) {
             throw new IllegalArgumentException("No puedes crear una orden vacía");

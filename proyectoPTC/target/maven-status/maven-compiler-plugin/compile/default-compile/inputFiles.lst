@@ -110,6 +110,9 @@ C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackl
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioNoEncontrado.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioNoRegistrado.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ValidacionesGlobales\ValidacionGlobalHandler.java
+C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ViajeExceptions\ExceptionViajeNoEncontrado.java
+C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ViajeExceptions\ExceptionViajeNoRegistrado.java
+C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ViajeExceptions\ExceptionViajeRelacionada.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOAduana.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOCargos.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOClientes.java

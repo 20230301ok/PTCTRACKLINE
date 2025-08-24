@@ -11,14 +11,13 @@ import lombok.*;
 @EqualsAndHashCode
 public class CargosEntity {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Id
-//    //generator: Generador en código Java
-//    //name: Nombre del generador en el código Java
-//    //sequenceName: Nombre de la secuencia en oracle
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cargosSeq")
-//    @SequenceGenerator(name = "cargosSeq", sequenceName = "SEQ_ID_CARG", allocationSize = 1)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cargosSeq")
+    @SequenceGenerator(name = "cargosSeq", sequenceName = "SEQ_ID_CARG", allocationSize = 1)
     @Column(name = "IDCARGOS")
     private Long idCargos;
 
