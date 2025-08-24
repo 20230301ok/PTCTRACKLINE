@@ -13,13 +13,13 @@ import java.util.List;
 @Getter @Setter @ToString @EqualsAndHashCode
 public class UsuarioEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Ids
-//    //generator: Generador en código Java
-//    //name: Nombre del generador en el código Java
-//    //sequenceName: Nombre de la secuencia en oracle
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarioSeq")
-//    @SequenceGenerator(name = "usuarioSeq", sequenceName = "SEQ_ID_US", allocationSize = 1)
+    //generator: Generador en código Java
+    //name: Nombre del generador en el código Java
+    //sequenceName: Nombre de la secuencia en oracle
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarioSeq")
+    @SequenceGenerator(name = "usuarioSeq", sequenceName = "SEQ_ID_US", allocationSize = 1)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDUSUARIO")
     private Long idUsuario;
 

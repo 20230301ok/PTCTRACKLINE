@@ -2,6 +2,7 @@ package apiTrackline.proyectoPTC.Controllers.EmpleadosController;
 
 import apiTrackline.proyectoPTC.Exceptions.EmpleadosExceptions.*;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEmpleados;
+import apiTrackline.proyectoPTC.Models.DTO.DTOViaje;
 import apiTrackline.proyectoPTC.Services.EmpleadosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -46,6 +48,7 @@ public class Empleados {
         }
     }
 
+
     // GET con paginación
     @GetMapping("/datosEmpleados")
     public ResponseEntity<?> obtenerEmpleados(
@@ -63,6 +66,22 @@ public class Empleados {
             ));
         }
     }
+
+    //GET SIN PAGINACION
+    @GetMapping("/obtenerEmpleados")
+    public ResponseEntity<?> empleados() {
+        try {
+            List<DTOEmpleados> empleados = service.getSinPaginacion();
+            return ResponseEntity.ok(empleados);
+        } catch (Exception e) {
+            log.error("Error al obtener empleados", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error",
+                    "message", "Error no controlado al obtener empleados"
+            ));
+        }
+    }
+
 
     // MÉTODO POST
     // RUTA: localhost:8080/apiEmpleados/agregarEmpleado

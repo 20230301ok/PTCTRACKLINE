@@ -74,6 +74,20 @@ public class Clientes {
         }
     }
 
+    @GetMapping("/clientes")
+    public ResponseEntity<?> obtenerClientes(){
+        try {
+            List<DTOClientes> clientes = service.obtenerSinPaginacion();
+            return ResponseEntity.ok(clientes);
+        }
+        catch (Exception e) {
+            log.error("Error al obtener clientes", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "Error",
+                    "message", "Error no controlado al obtener clientes"
+            ));
+        }
+    }
     // POST
     @PostMapping("/agregarCliente")
     public ResponseEntity<?> agregarCliente(@Validated(DTOClientes.OnCreate.class) @RequestBody DTOClientes dto) {

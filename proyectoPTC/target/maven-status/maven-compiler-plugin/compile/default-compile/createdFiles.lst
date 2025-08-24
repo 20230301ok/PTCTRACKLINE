@@ -23,6 +23,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOAduana$OnPatch.class
 apiTrackline\proyectoPTC\Services\TipoServicioService.class
 apiTrackline\proyectoPTC\Entities\FinanciamientoEntity.class
 apiTrackline\proyectoPTC\Controllers\OrdenServicioController\OrdenServicio.class
+apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioDuplicado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTipoDatoContable.class
 apiTrackline\proyectoPTC\Controllers\TransportistaController\Transportista.class
 apiTrackline\proyectoPTC\Entities\OrdenServicioEntity.class
@@ -38,6 +39,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnUpdate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransportista$OnPatch.class
 apiTrackline\proyectoPTC\Services\FinanciamientoService.class
 apiTrackline\proyectoPTC\Exceptions\RecoleccionExceptions\ExceptionRecoleccionRelacionada.class
+apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioNoEncontrado.class
 apiTrackline\proyectoPTC\Exceptions\TipoDatoContableExceptions\ExceptionTipoDatoContableNoEncontrado.class
 apiTrackline\proyectoPTC\Entities\EmpleadosEntity.class
 apiTrackline\proyectoPTC\Entities\OrdenEncabezadoEntity.class
@@ -65,6 +67,7 @@ apiTrackline\proyectoPTC\Repositories\EstadosRepository.class
 apiTrackline\proyectoPTC\Services\OrdenPermisosService.class
 apiTrackline\proyectoPTC\Entities\ViajeEntity.class
 apiTrackline\proyectoPTC\Exceptions\ObservacionesExceptions\ExceptionObservacionRelacionada.class
+apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioNoRegistrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOOrdenServicio$OnCreate.class
 apiTrackline\proyectoPTC\Models\DTO\DTOEmpleados$OnCreate.class
 apiTrackline\proyectoPTC\Controllers\CargosController\Cargos.class
@@ -153,6 +156,7 @@ apiTrackline\proyectoPTC\Models\DTO\DTOUsuario$OnPatch.class
 apiTrackline\proyectoPTC\Services\RolesService.class
 apiTrackline\proyectoPTC\Exceptions\EmpleadosExceptions\ExceptionEmpleadoUsuarioNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOTransporte.class
+apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionRolNoEncontrado.class
 apiTrackline\proyectoPTC\Models\DTO\DTOUsuario.class
 apiTrackline\proyectoPTC\Repositories\ObservacionesRepository.class
 apiTrackline\proyectoPTC\Models\DTO\DTOPermisos$OnCreate.class

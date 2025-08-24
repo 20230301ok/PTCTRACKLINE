@@ -3,9 +3,11 @@ package apiTrackline.proyectoPTC.Services;
 import apiTrackline.proyectoPTC.Entities.ClientesEntity;
 import apiTrackline.proyectoPTC.Entities.EmpleadosEntity;
 import apiTrackline.proyectoPTC.Entities.UsuarioEntity;
+import apiTrackline.proyectoPTC.Entities.ViajeEntity;
 import apiTrackline.proyectoPTC.Exceptions.EmpleadosExceptions.*;
 import apiTrackline.proyectoPTC.Models.DTO.DTOClientes;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEmpleados;
+import apiTrackline.proyectoPTC.Models.DTO.DTOViaje;
 import apiTrackline.proyectoPTC.Repositories.ClientesRepository;
 import apiTrackline.proyectoPTC.Repositories.EmpleadosRepository;
 import apiTrackline.proyectoPTC.Repositories.TransportistaRepository;
@@ -36,6 +38,12 @@ public class EmpleadosService {
     @Autowired
     private TransportistaRepository transportistasRepo;
 
+    public List<DTOEmpleados> getSinPaginacion(){
+        List<EmpleadosEntity> empleados = repo.findAll();
+        return empleados.stream()
+                .map(this::convertirAEmpleadosDTO)
+                .collect(Collectors.toList());
+    }
 
     public Page<DTOEmpleados> obtenerEmpleados(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

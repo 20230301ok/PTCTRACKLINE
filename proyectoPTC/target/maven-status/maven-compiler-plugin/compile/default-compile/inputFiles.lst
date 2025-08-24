@@ -105,6 +105,10 @@ C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackl
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\TransporteExceptions\ExceptionTransporteNoRegistrado.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\TransporteExceptions\ExceptionTransporteRelacionado.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\TransporteExceptions\ExceptionTransportistaNoEncontrado.java
+C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionRolNoEncontrado.java
+C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioDuplicado.java
+C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioNoEncontrado.java
+C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\UsuarioExceptions\ExceptionUsuarioNoRegistrado.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Exceptions\ValidacionesGlobales\ValidacionGlobalHandler.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOAduana.java
 C:\Users\mario\OneDrive\Desktop\PTCTRACKLINE\proyectoPTC\src\main\java\apiTrackline\proyectoPTC\Models\DTO\DTOCargos.java

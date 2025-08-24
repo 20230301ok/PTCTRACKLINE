@@ -32,6 +32,12 @@ public class ClientesService {
     @Autowired private EmpleadosRepository empleadosRepo;
     @Autowired private TransportistaRepository transportistasRepo;
 
+    public List<DTOClientes> obtenerSinPaginacion(){
+        List<ClientesEntity> clientes = repo.findAll();
+        return clientes.stream()
+                .map(this::convertirDTO)
+                .collect(Collectors.toList());
+    }
     public Page<DTOClientes> obtenerClientes(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ClientesEntity> pageEntity = repo.findAll(pageable);
