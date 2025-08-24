@@ -112,7 +112,7 @@ public class EmpleadosService {
 
         }
         catch (Exception e) {
-            log.error("Error al agregar el empleado: {}", e.getMessage());
+            log.error("Error al agregar el empleado: ", e);
             throw new ExceptionEmpleadoNoRegistrado("Error: empleado no registrado");
         }
     }
@@ -184,13 +184,13 @@ public class EmpleadosService {
             repo.delete(empleado);
             return "Empleado eliminado correctamente";
         } catch (DataIntegrityViolationException e) {
-            throw new ExceptionEmpleadoRelacionado("No se pudo eliminar la aduana porque tiene registros relacionados");
+            throw new ExceptionEmpleadoRelacionado("No se pudo eliminar el empleado porque tiene registros relacionados");
         }
     }
 
     public DTOEmpleados buscarEmpleadoPorId(Long id) {
         EmpleadosEntity entity = repo.findById(id)
-                .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("No se encontró la aduana con ID: " + id));
+                .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("No se encontró el empleado con ID: " + id));
         return convertirAEmpleadosDTO(entity);
     }
 }
