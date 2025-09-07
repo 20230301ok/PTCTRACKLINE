@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/apiClientes")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost")
 public class Clientes {
     @Autowired
     private ClientesService service;
@@ -104,12 +104,6 @@ public class Clientes {
                     "status", "Error",
                     "message", e.getMessage()
             ));
-        } catch (Exception e) {
-            log.error("Error inesperado al agregar cliente", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error interno",
-                    "message", "Error no controlado al agregar cliente"
-            ));
         }
     }
 
@@ -132,12 +126,6 @@ public class Clientes {
                     "status", "Error",
                     "message", e.getMessage()
             ));
-        } catch (Exception e) {
-            log.error("Error inesperado al actualizar cliente", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error interno",
-                    "message", "Error no controlado al actualizar cliente"
-            ));
         }
     }
 
@@ -159,12 +147,6 @@ public class Clientes {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                     "status", "Error",
                     "message", e.getMessage()
-            ));
-        } catch (Exception e) {
-            log.error("Error inesperado al actualizar parcialmente cliente", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error interno",
-                    "message", "Error no controlado al actualizar parcialmente cliente"
             ));
         }
     }

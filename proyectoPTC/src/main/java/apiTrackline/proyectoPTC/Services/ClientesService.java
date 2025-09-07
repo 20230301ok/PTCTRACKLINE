@@ -1,6 +1,5 @@
 package apiTrackline.proyectoPTC.Services;
 
-import apiTrackline.proyectoPTC.Entities.AduanaEntity;
 import apiTrackline.proyectoPTC.Entities.ClientesEntity;
 import apiTrackline.proyectoPTC.Entities.UsuarioEntity;
 import apiTrackline.proyectoPTC.Exceptions.ClientesExceptions.ExceptionClienteNoEncontrado;
@@ -103,11 +102,13 @@ public class ClientesService {
             ClientesEntity guardado = repo.save(entity);
             return convertirDTO(guardado);
 
-        } catch (ExceptionClienteUsuarioYaAsignado |
+        }  catch (DataIntegrityViolationException e) {
+            throw e; // lo manejará el ControllerAdvice
+        }  catch (ExceptionClienteUsuarioYaAsignado |
                  ExceptionClienteUsuarioNoEncontrado e) {
             throw e;
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.error("Error inesperado al agregar cliente", e);
             throw new ExceptionClienteNoRegistrado("Error al registrar cliente");
         }
@@ -115,51 +116,72 @@ public class ClientesService {
 
 
     public DTOClientes actualizarCliente(String nit, DTOClientes dto) {
-        ClientesEntity entity = repo.findById(nit)
-                .orElseThrow(() -> new ExceptionClienteNoEncontrado("Cliente no encontrado con NIT: " + nit));
+        try {
+            ClientesEntity entity = repo.findById(nit)
+                    .orElseThrow(() -> new ExceptionClienteNoEncontrado("Cliente no encontrado con NIT: " + nit));
 
-        entity.setNombre(dto.getNombre());
-        entity.setApellido(dto.getApellido());
-        entity.setCorreo(dto.getCorreo());
-        entity.setTelefono(dto.getTelefono());
-        entity.setCodEmpresa(dto.getCodEmpresa());
+            entity.setNombre(dto.getNombre());
+            entity.setApellido(dto.getApellido());
+            entity.setCorreo(dto.getCorreo());
+            entity.setTelefono(dto.getTelefono());
+            entity.setCodEmpresa(dto.getCodEmpresa());
 
-        if (dto.getIdUsuario() != null) {
-            Long idActualUsuario = entity.getUsuario() != null ? entity.getUsuario().getIdUsuario() : null;
-            if (!dto.getIdUsuario().equals(idActualUsuario) && usuarioYaAsignado(dto.getIdUsuario(), nit)) {
-                throw new ExceptionClienteUsuarioYaAsignado("Usuario ya está asignado a otro registro");
+            if (dto.getIdUsuario() != null) {
+                Long idActualUsuario = entity.getUsuario() != null ? entity.getUsuario().getIdUsuario() : null;
+                if (!dto.getIdUsuario().equals(idActualUsuario) && usuarioYaAsignado(dto.getIdUsuario(), nit)) {
+                    throw new ExceptionClienteUsuarioYaAsignado("Usuario ya está asignado a otro registro");
+                }
+
+                UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
+                        .orElseThrow(() -> new ExceptionClienteUsuarioNoEncontrado("Usuario no encontrado con id: " + dto.getIdUsuario()));
+                entity.setUsuario(usuario);
             }
 
-            UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
-                    .orElseThrow(() -> new ExceptionClienteUsuarioNoEncontrado("Usuario no encontrado con id: " + dto.getIdUsuario()));
-            entity.setUsuario(usuario);
-        }
+            return convertirDTO(repo.save(entity));
 
-        return convertirDTO(repo.save(entity));
+        } catch (DataIntegrityViolationException e) {
+            throw e; // ⚡ deja que lo maneje el ControllerAdvice
+        } catch (ExceptionClienteUsuarioYaAsignado | ExceptionClienteUsuarioNoEncontrado | ExceptionClienteNoEncontrado e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error inesperado al actualizar cliente", e);
+            throw new ExceptionClienteNoRegistrado("Error inesperado: cliente no actualizado");
+        }
     }
 
     public DTOClientes patchCliente(String nit, DTOClientes dto) {
-        ClientesEntity entity = repo.findById(nit)
-                .orElseThrow(() -> new ExceptionClienteNoEncontrado("Cliente no encontrado con NIT: " + nit));
+        try {
+            ClientesEntity entity = repo.findById(nit)
+                    .orElseThrow(() -> new ExceptionClienteNoEncontrado("Cliente no encontrado con NIT: " + nit));
 
-        if (dto.getNombre() != null) entity.setNombre(dto.getNombre());
-        if (dto.getApellido() != null) entity.setApellido(dto.getApellido());
-        if (dto.getCorreo() != null) entity.setCorreo(dto.getCorreo());
-        if (dto.getTelefono() != null) entity.setTelefono(dto.getTelefono());
-        if(dto.getCodEmpresa() != null) entity.setCodEmpresa(dto.getCodEmpresa());
+            if (dto.getNombre() != null) entity.setNombre(dto.getNombre());
+            if (dto.getApellido() != null) entity.setApellido(dto.getApellido());
+            if (dto.getCorreo() != null) entity.setCorreo(dto.getCorreo());
+            if (dto.getTelefono() != null) entity.setTelefono(dto.getTelefono());
+            if (dto.getCodEmpresa() != null) entity.setCodEmpresa(dto.getCodEmpresa());
 
-        if (dto.getIdUsuario() != null) {
-            Long idActualUsuario = entity.getUsuario() != null ? entity.getUsuario().getIdUsuario() : null;
-            if (!dto.getIdUsuario().equals(idActualUsuario) && usuarioYaAsignado(dto.getIdUsuario(), nit)) {
-                throw new ExceptionClienteUsuarioYaAsignado("Usuario ya está asignado a otro registro");
+            if (dto.getIdUsuario() != null) {
+                Long idActualUsuario = entity.getUsuario() != null ? entity.getUsuario().getIdUsuario() : null;
+                if (!dto.getIdUsuario().equals(idActualUsuario) && usuarioYaAsignado(dto.getIdUsuario(), nit)) {
+                    throw new ExceptionClienteUsuarioYaAsignado("Usuario ya está asignado a otro registro");
+                }
+                UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
+                        .orElseThrow(() -> new ExceptionClienteUsuarioNoEncontrado("Usuario no encontrado con id: " + dto.getIdUsuario()));
+                entity.setUsuario(usuario);
             }
-            UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
-                    .orElseThrow(() -> new ExceptionClienteUsuarioNoEncontrado("Usuario no encontrado con id: " + dto.getIdUsuario()));
-            entity.setUsuario(usuario);
-        }
 
-        return convertirDTO(repo.save(entity));
+            return convertirDTO(repo.save(entity));
+
+        } catch (DataIntegrityViolationException e) {
+            throw e; // deja que lo maneje el ControllerAdvice
+        } catch (ExceptionClienteUsuarioYaAsignado | ExceptionClienteUsuarioNoEncontrado | ExceptionClienteNoEncontrado e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error inesperado al actualizar parcialmente cliente", e);
+            throw new ExceptionClienteNoRegistrado("Error inesperado: cliente no actualizado");
+        }
     }
+
 
     public String eliminarCliente(String nit) {
         ClientesEntity entity = repo.findById(nit)

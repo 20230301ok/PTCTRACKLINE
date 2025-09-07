@@ -1,13 +1,9 @@
 package apiTrackline.proyectoPTC.Services;
 
-import apiTrackline.proyectoPTC.Entities.ClientesEntity;
 import apiTrackline.proyectoPTC.Entities.EmpleadosEntity;
 import apiTrackline.proyectoPTC.Entities.UsuarioEntity;
-import apiTrackline.proyectoPTC.Entities.ViajeEntity;
 import apiTrackline.proyectoPTC.Exceptions.EmpleadosExceptions.*;
-import apiTrackline.proyectoPTC.Models.DTO.DTOClientes;
 import apiTrackline.proyectoPTC.Models.DTO.DTOEmpleados;
-import apiTrackline.proyectoPTC.Models.DTO.DTOViaje;
 import apiTrackline.proyectoPTC.Repositories.ClientesRepository;
 import apiTrackline.proyectoPTC.Repositories.EmpleadosRepository;
 import apiTrackline.proyectoPTC.Repositories.TransportistaRepository;
@@ -26,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class EmpleadosService {
+
     @Autowired
     private EmpleadosRepository repo;
 
@@ -38,7 +35,7 @@ public class EmpleadosService {
     @Autowired
     private TransportistaRepository transportistasRepo;
 
-    public List<DTOEmpleados> getSinPaginacion(){
+    public List<DTOEmpleados> getSinPaginacion() {
         List<EmpleadosEntity> empleados = repo.findAll();
         return empleados.stream()
                 .map(this::convertirAEmpleadosDTO)
@@ -49,11 +46,9 @@ public class EmpleadosService {
         Pageable pageable = PageRequest.of(page, size);
         Page<EmpleadosEntity> pageEntity = repo.findAll(pageable);
         return pageEntity.map(this::convertirAEmpleadosDTO);
-        //TODO LO QUE SALE DE LA BASE SALE COMO ENTIDAD
-        //TODO LO QUE ENTRA A LA BASE DEBE ENTRAR COMO ENTIDAD
     }
 
-    private DTOEmpleados convertirAEmpleadosDTO(EmpleadosEntity entity){
+    private DTOEmpleados convertirAEmpleadosDTO(EmpleadosEntity entity) {
         DTOEmpleados dto = new DTOEmpleados();
         dto.setIdEmpleado(entity.getIdEmpleado());
         dto.setNombre(entity.getNombre());
@@ -61,15 +56,13 @@ public class EmpleadosService {
         dto.setTelefono(entity.getTelefono());
         dto.setCorreo(entity.getCorreo());
         dto.setNit(entity.getNit());
-        //Datos de la tabla usuario
-        if(entity.getUsuarioEmpleado() != null){
-            //Se crea un objeto de tipoUsuarioEntity y se le asigna el atributo que hace referencia a la llave foranea
+
+        if (entity.getUsuarioEmpleado() != null) {
             UsuarioEntity usuario = entity.getUsuarioEmpleado();
             dto.setIdUsuario(usuario.getIdUsuario());
             dto.setUsuario(usuario.getUsuario());
             dto.setContrasenia(usuario.getContrasenia());
-            if (usuario.getRol() != null)
-            {
+            if (usuario.getRol() != null) {
                 dto.setIdRol(usuario.getRol().getIdRol());
                 dto.setNombreRol(usuario.getRol().getRol());
             }
@@ -78,15 +71,12 @@ public class EmpleadosService {
     }
 
     private boolean usuarioYaAsignado(Long idUsuario, Long idEmpleadoActual) {
-        boolean usadoPorCliente = clientesRepo.existsByUsuario_IdUsuario(idUsuario); //Verifica que si está en uso el usuario que queremos ingresar en otra tabla (Clientes)
-        boolean usadoPorTransportista = transportistasRepo.existsByUsuarioT_IdUsuario(idUsuario); //Verifica que si está en uso el usuario que queremos ingresar en otra tabla (Transportista)
-
-        // Verificamos si está asignado a otro empleado diferente del actual
+        boolean usadoPorCliente = clientesRepo.existsByUsuario_IdUsuario(idUsuario);
+        boolean usadoPorTransportista = transportistasRepo.existsByUsuarioT_IdUsuario(idUsuario);
         boolean usadoPorOtroEmpleado = repo.existsByUsuarioEmpleado_IdUsuarioAndIdEmpleadoNot(idUsuario, idEmpleadoActual);
 
         return usadoPorCliente || usadoPorTransportista || usadoPorOtroEmpleado;
     }
-
 
     public DTOEmpleados agregarEmpleado(DTOEmpleados dto) {
         if (dto == null) {
@@ -101,16 +91,17 @@ public class EmpleadosService {
             entity.setCorreo(dto.getCorreo());
             entity.setNit(dto.getNit());
 
-            // Si el DTO trae usuario asignado, verificar si está libre
             if (dto.getIdUsuario() != null) {
-                // Se pasa -1L para indicar que es nuevo y evitar excluirlo
                 if (usuarioYaAsignado(dto.getIdUsuario(), -1L)) {
-                    throw new ExceptionEmpleadoUsuarioYaAsignado("El usuario con ID " + dto.getIdUsuario() + " ya está asignado a otro registro");
+                    throw new ExceptionEmpleadoUsuarioYaAsignado(
+                            "El usuario con ID " + dto.getIdUsuario() + " ya está asignado a otro registro"
+                    );
                 }
 
-                // Buscar usuario
                 UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
-                        .orElseThrow(() -> new ExceptionEmpleadoUsuarioNoEncontrado("Usuario no encontrado con ID " + dto.getIdUsuario()));
+                        .orElseThrow(() -> new ExceptionEmpleadoUsuarioNoEncontrado(
+                                "Usuario no encontrado con ID " + dto.getIdUsuario()
+                        ));
 
                 entity.setUsuarioEmpleado(usuario);
             }
@@ -118,81 +109,110 @@ public class EmpleadosService {
             EmpleadosEntity empleadoCreado = repo.save(entity);
             return convertirAEmpleadosDTO(empleadoCreado);
 
-        }
-        catch (Exception e) {
-            log.error("Error al agregar el empleado: ", e);
-            throw new ExceptionEmpleadoNoRegistrado("Error: empleado no registrado");
+        } catch (DataIntegrityViolationException e) {
+            throw e; // lo maneja ControllerAdvice
+        } catch (ExceptionEmpleadoUsuarioYaAsignado | ExceptionEmpleadoUsuarioNoEncontrado e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error inesperado al agregar el empleado: ", e);
+            throw new ExceptionEmpleadoNoRegistrado("Error inesperado: empleado no registrado");
         }
     }
-
-
 
     public DTOEmpleados actualizarEmpleado(Long id, DTOEmpleados dto) {
-        EmpleadosEntity empleado = repo.findById(id)
-                .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("Empleado no encontrado con id " + id));
+        try {
+            EmpleadosEntity empleado = repo.findById(id)
+                    .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("Empleado no encontrado con id " + id));
 
-        empleado.setNombre(dto.getNombre());
-        empleado.setApellido(dto.getApellido());
-        empleado.setTelefono(dto.getTelefono());
-        empleado.setCorreo(dto.getCorreo());
-        empleado.setNit(dto.getNit());
+            empleado.setNombre(dto.getNombre());
+            empleado.setApellido(dto.getApellido());
+            empleado.setTelefono(dto.getTelefono());
+            empleado.setCorreo(dto.getCorreo());
+            empleado.setNit(dto.getNit());
 
-        if (dto.getIdUsuario() != null) {
-            if (usuarioYaAsignado(dto.getIdUsuario(), id)) {
-                throw new ExceptionEmpleadoUsuarioYaAsignado("El usuario con ID " + dto.getIdUsuario() + " ya está asignado a otro registro");
+            if (dto.getIdUsuario() != null) {
+                if (usuarioYaAsignado(dto.getIdUsuario(), id)) {
+                    throw new ExceptionEmpleadoUsuarioYaAsignado(
+                            "El usuario con ID " + dto.getIdUsuario() + " ya está asignado a otro registro"
+                    );
+                }
+
+                UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
+                        .orElseThrow(() -> new ExceptionEmpleadoUsuarioNoEncontrado(
+                                "Usuario no encontrado con ID " + dto.getIdUsuario()
+                        ));
+
+                empleado.setUsuarioEmpleado(usuario);
             }
 
-            UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
-                    .orElseThrow(() -> new ExceptionEmpleadoUsuarioNoEncontrado("Usuario no encontrado con ID " + dto.getIdUsuario()));
+            return convertirAEmpleadosDTO(repo.save(empleado));
 
-            empleado.setUsuarioEmpleado(usuario);
+        } catch (DataIntegrityViolationException e) {
+            throw e;
+        } catch (ExceptionEmpleadoUsuarioYaAsignado | ExceptionEmpleadoUsuarioNoEncontrado | ExceptionEmpleadoNoEncontrado e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error inesperado al actualizar el empleado: ", e);
+            throw new ExceptionEmpleadoNoRegistrado("Error inesperado: empleado no actualizado");
         }
-
-        return convertirAEmpleadosDTO(repo.save(empleado));
     }
-
 
     public DTOEmpleados patchEmpleado(Long id, DTOEmpleados dto) {
-        EmpleadosEntity empleado = repo.findById(id)
-                .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("Empleado no encontrado con id " + id));
+        try {
+            EmpleadosEntity empleado = repo.findById(id)
+                    .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("Empleado no encontrado con id " + id));
 
-        if (dto.getNombre() != null) {
-            if (dto.getNombre().isBlank()) {
-                throw new IllegalArgumentException("El nombre no puede estar en blanco");
+            if (dto.getNombre() != null) {
+                if (dto.getNombre().isBlank()) {
+                    throw new IllegalArgumentException("El nombre no puede estar en blanco");
+                }
+                empleado.setNombre(dto.getNombre());
             }
-            empleado.setNombre(dto.getNombre());
-        }
-        if (dto.getApellido() != null) {
-            empleado.setApellido(dto.getApellido());
-        }
-        if (dto.getTelefono() != null) empleado.setTelefono(dto.getTelefono());
-        if (dto.getCorreo() != null) empleado.setCorreo(dto.getCorreo());
-        if (dto.getNit() != null) empleado.setNit(dto.getNit());
+            if (dto.getApellido() != null) {
+                empleado.setApellido(dto.getApellido());
+            }
+            if (dto.getTelefono() != null) empleado.setTelefono(dto.getTelefono());
+            if (dto.getCorreo() != null) empleado.setCorreo(dto.getCorreo());
+            if (dto.getNit() != null) empleado.setNit(dto.getNit());
 
-        if (dto.getIdUsuario() != null) {
-            if (usuarioYaAsignado(dto.getIdUsuario(), id)) {
-                throw new ExceptionEmpleadoUsuarioYaAsignado("El usuario con ID " + dto.getIdUsuario() + " ya está asignado a otro registro");
+            if (dto.getIdUsuario() != null) {
+                if (usuarioYaAsignado(dto.getIdUsuario(), id)) {
+                    throw new ExceptionEmpleadoUsuarioYaAsignado(
+                            "El usuario con ID " + dto.getIdUsuario() + " ya está asignado a otro registro"
+                    );
+                }
+
+                UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
+                        .orElseThrow(() -> new ExceptionEmpleadoUsuarioNoEncontrado(
+                                "Usuario no encontrado con ID " + dto.getIdUsuario()
+                        ));
+
+                empleado.setUsuarioEmpleado(usuario);
             }
 
-            UsuarioEntity usuario = usuarioRepo.findById(dto.getIdUsuario())
-                    .orElseThrow(() -> new ExceptionEmpleadoUsuarioNoEncontrado("Usuario no encontrado con ID " + dto.getIdUsuario()));
+            return convertirAEmpleadosDTO(repo.save(empleado));
 
-            empleado.setUsuarioEmpleado(usuario);
+        } catch (DataIntegrityViolationException e) {
+            throw e;
+        } catch (ExceptionEmpleadoUsuarioYaAsignado | ExceptionEmpleadoUsuarioNoEncontrado | ExceptionEmpleadoNoEncontrado e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error inesperado al actualizar parcialmente el empleado: ", e);
+            throw new ExceptionEmpleadoNoRegistrado("Error inesperado: empleado no actualizado");
         }
-
-        return convertirAEmpleadosDTO(repo.save(empleado));
     }
 
-
-
-    public String eliminarEmpleado(Long id){
-       EmpleadosEntity empleado = repo.findById(id)
-               .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("Empleado no encontrado con id: " + id));
+    public String eliminarEmpleado(Long id) {
+        EmpleadosEntity empleado = repo.findById(id)
+                .orElseThrow(() -> new ExceptionEmpleadoNoEncontrado("Empleado no encontrado con id: " + id));
         try {
             repo.delete(empleado);
             return "Empleado eliminado correctamente";
         } catch (DataIntegrityViolationException e) {
-            throw new ExceptionEmpleadoRelacionado("No se pudo eliminar el empleado porque tiene registros relacionados");
+            throw e; // lo maneja ControllerAdvice
+        } catch (Exception e) {
+            log.error("Error inesperado al eliminar el empleado: ", e);
+            throw new ExceptionEmpleadoNoRegistrado("Error inesperado: empleado no eliminado");
         }
     }
 

@@ -1,5 +1,6 @@
 package apiTrackline.proyectoPTC.Controllers.RecoleccionController;
 
+import apiTrackline.proyectoPTC.Exceptions.RecoleccionExceptions.ExceptionRecoleccionNoEncontrado;
 import apiTrackline.proyectoPTC.Exceptions.RecoleccionExceptions.ExceptionRecoleccionNoRegistrada;
 import apiTrackline.proyectoPTC.Exceptions.RecoleccionExceptions.ExceptionRecoleccionRelacionada;
 import apiTrackline.proyectoPTC.Models.DTO.DTORecoleccion;
@@ -67,16 +68,10 @@ public class Recoleccion {
                     "data", respuesta,
                     "message", "Recolección creada correctamente"
             ));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "status", "Error de validación",
+        } catch (ExceptionRecoleccionNoRegistrada e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                    "status", "Error al guardar",
                     "message", e.getMessage()
-            ));
-        } catch (Exception e) {
-            log.error("Error inesperado al agregar recolección", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error interno",
-                    "message", "Error no controlado al registrar recolección"
             ));
         }
     }
@@ -92,16 +87,17 @@ public class Recoleccion {
                     "data", respuesta,
                     "message", "Recolección actualizada correctamente"
             ));
-        } catch (RuntimeException e) {
+        } catch (ExceptionRecoleccionNoEncontrado noEncontrado){
+            log.error("Error al actualizar recoleccion", noEncontrado);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                     "status", "Error",
-                    "message", e.getMessage()
+                    "message", noEncontrado.getMessage()
             ));
-        } catch (Exception e) {
-            log.error("Error inesperado al actualizar la recolección", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error no controlado",
-                    "message", "Error no controlado al actualizar recolección"
+        }
+        catch (ExceptionRecoleccionNoRegistrada e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                    "status", "Error al actualizar",
+                    "message", e.getMessage()
             ));
         }
     }
@@ -117,11 +113,16 @@ public class Recoleccion {
                     "data", respuesta,
                     "message", "Recolección actualizada parcialmente correctamente"
             ));
-        } catch (Exception e) {
-            log.error("Error inesperado al actualizar parcialmente la recolección", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error no controlado",
-                    "message", "Error no controlado al actualizar parcialmente recolección"
+        } catch (ExceptionRecoleccionNoRegistrada e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                    "status", "Error al actualizar parcialmente",
+                    "message", e.getMessage()
+            ));
+        } catch (ExceptionRecoleccionNoEncontrado e){
+            log.error("Error al actualizar parcialmente", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Error",
+                    "message", e.getMessage()
             ));
         }
     }

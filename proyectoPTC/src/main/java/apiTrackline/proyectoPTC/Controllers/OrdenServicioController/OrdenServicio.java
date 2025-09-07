@@ -29,7 +29,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/apiOrdenServicio")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost")
 @Slf4j
 public class OrdenServicio {
 
@@ -59,6 +59,19 @@ public class OrdenServicio {
             ));
         }
     }
+
+    // MÉTODO GET POR ID
+    // RUTA: localhost:8080/apiOrdenServicio/buscarUltimoId
+    @GetMapping("/buscarUltimoId")
+    public ResponseEntity<Long> obtenerUltimoId() {
+        try {
+            Long ultimoId = service.obtenerUltimoIdOrdenServicio();
+            return ResponseEntity.ok(ultimoId);
+        } catch (ExceptionOrdenServicioNoEncontrado e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     // MÉTODO GET - Obtener todos
     // RUTA: localhost:8080/apiOrdenServicio/datosOrdenesServicio

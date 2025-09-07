@@ -43,6 +43,7 @@ public class RecoleccionService {
     }
 
     // Agregar nueva recolección
+    // Agregar nueva recolección
     public DTORecoleccion agregarRecoleccion(DTORecoleccion dto) {
         if (dto == null) {
             throw new IllegalArgumentException("No puedes agregar un registro sin datos");
@@ -59,9 +60,9 @@ public class RecoleccionService {
 
             RecoleccionEntity guardada = repo.save(entity);
             return convertirARecoleccionDTO(guardada);
-        } catch (Exception e) {
-            log.error("Error al registrar la recolección: " + e.getMessage());
-            throw new ExceptionRecoleccionNoRegistrada("Error: recolección no registrada");
+        } catch (DataIntegrityViolationException e) { // ⚡ Nuevo manejo
+            log.error("Violación de integridad al registrar la recolección: " + e.getMessage());
+            throw new ExceptionRecoleccionNoRegistrada("No se pudo registrar la recolección porque hay datos duplicados");
         }
     }
 
@@ -78,7 +79,12 @@ public class RecoleccionService {
         entity.setLugarDestino(dto.getLugarDestino());
         entity.setPaisDestino(dto.getPaisDestino());
 
-        return convertirARecoleccionDTO(repo.save(entity));
+        try {
+            return convertirARecoleccionDTO(repo.save(entity));
+        } catch (DataIntegrityViolationException e) { // ⚡ Nuevo manejo
+            log.error("Violación de integridad al actualizar la recolección: " + e.getMessage());
+            throw new ExceptionRecoleccionNoRegistrada("No se pudo actualizar la recolección porque hay datos relacionados o duplicados");
+        }
     }
 
     // Actualización parcial (PATCH)
@@ -94,8 +100,14 @@ public class RecoleccionService {
         if (dto.getLugarDestino() != null) entity.setLugarDestino(dto.getLugarDestino());
         if (dto.getPaisDestino() != null) entity.setPaisDestino(dto.getPaisDestino());
 
-        return convertirARecoleccionDTO(repo.save(entity));
+        try {
+            return convertirARecoleccionDTO(repo.save(entity));
+        } catch (DataIntegrityViolationException e) { // ⚡ Nuevo manejo
+            log.error("Violación de integridad al aplicar patch en la recolección: " + e.getMessage());
+            throw new ExceptionRecoleccionNoRegistrada("No se pudo aplicar la actualización parcial porque hay datos relacionados o duplicados");
+        }
     }
+
 
     // Eliminar recolección por id
     public String eliminarRecoleccion(Long id) {

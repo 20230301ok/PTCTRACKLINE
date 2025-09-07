@@ -6,6 +6,7 @@ import apiTrackline.proyectoPTC.Models.DTO.DTOViaje;
 import apiTrackline.proyectoPTC.Services.EmpleadosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -110,12 +111,6 @@ public class Empleados {
                     "status", "Error interno",
                     "message", "Error inesperado al registrar el empleado"
             ));
-        } catch (Exception e) {
-            log.error("Error inesperado al agregar el empleado", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error no controlado",
-                    "message", "Error inesperado al registrar empleado"
-            ));
         }
     }
 
@@ -143,12 +138,6 @@ public class Empleados {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                     "status", "Error",
                     "message", e.getMessage()
-            ));
-        } catch (Exception e) {
-            log.error("Error inesperado al actualizar el empleado", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "status", "Error no controlado",
-                    "message", "Error inesperado al actualizar empleado"
             ));
         }
     }

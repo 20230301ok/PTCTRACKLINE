@@ -67,7 +67,7 @@ public class ServicioTransporteService {
             return convertirADTO(creado);
 
         } catch (Exception e) {
-            log.error("Error al registrar el servicio de transporte: {}", e.getMessage());
+            log.error("Error al registrar el servicio de transporte: ", e);
             throw new ExceptionServicioTransporteNoRegistrado("Error: servicio de transporte no registrado");
         }
     }

@@ -483,4 +483,11 @@ public class OrdenServicioService {
                 .orElseThrow(() -> new ExceptionOrdenServicioNoEncontrado("No se encontró el orden servicio con ID: " + id));
         return convertirADTO(entity);
     }
+
+    public Long obtenerUltimoIdOrdenServicio() {
+        return repo.findTopByOrderByIdOrdenServicioDesc()
+                .map(OrdenServicioEntity::getIdOrdenServicio)
+                .orElseThrow(() -> new ExceptionOrdenServicioNoEncontrado("No existe ninguna orden de servicio registrada"));
+    }
+
 }

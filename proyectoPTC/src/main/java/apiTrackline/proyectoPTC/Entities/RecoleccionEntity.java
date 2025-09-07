@@ -24,7 +24,7 @@ public class RecoleccionEntity {
     @Column(name = "RECOLECCIONENTREGA")
     private Boolean recoleccionEntrega;
 
-    @Column(name = "NUMERODOC")
+    @Column(name = "NUMERODOC", unique = true)
     private String numeroDoc;
 
     @Column(name = "LUGARORIGEN")
